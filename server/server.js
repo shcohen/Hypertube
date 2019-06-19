@@ -5,9 +5,10 @@ const passport = require('passport');
 const apiRouter = require('./apiRouter');
 
 // Connexion à la base de données
-mongoose.connect('mongodb://localhost/db').then(() => {
-    console.log('Connected to mongoDB')
-}).catch(e => {
+mongoose.connect('mongodb://localhost/db')
+    .then(() => {
+        console.log('Connected to mongoDB')
+    }).catch(e => {
     console.log('Error while DB connecting');
     console.log(e);
 });
@@ -20,6 +21,8 @@ let urlencodedParser = bodyParser.urlencoded({
 });
 app.use(urlencodedParser);
 app.use(bodyParser.json());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use('/api/', apiRouter);
 
 // Lancement du site
