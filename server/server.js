@@ -2,9 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const passport = require('passport');
-const apiRouter = require('./apiRouter');
+const apiRouter = require('./apiRouter').router;
+const flash = require("connect-flash");
+const session = require('express-session');
 
-// Connexion à la base de données
+// connecting to database
 mongoose.connect('mongodb://localhost/db')
     .then(() => {
         console.log('Connected to mongoDB')
@@ -15,16 +17,32 @@ mongoose.connect('mongodb://localhost/db')
 
 const app = express();
 
-// Body Parser
+// passport configuration
+require('./config/passport')(passport);
+
+// tell the app to parse HTTP body messages
 let urlencodedParser = bodyParser.urlencoded({
     extended: true
 });
 app.use(urlencodedParser);
 app.use(bodyParser.json());
+
+// passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+// flash
+app.use(session({
+    cookie: {maxAge: 60000},
+    secret: 'woot',
+    resave: false,
+    saveUninitialized: false
+}));
+
+// routes
+app.use(flash());
 app.use('/api/', apiRouter);
 
-// Lancement du site
-const API_PORT = process.env.API_PORT || 8080;
-app.listen(API_PORT, () => console.log(`Listening on port ${API_PORT}`));
+// start
+const API_PORT = process.env.API_PORT || 3000;
+app.listen(API_PORT, console.log(`Listening on port ${API_PORT}`));
