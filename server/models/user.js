@@ -12,7 +12,15 @@ let userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    firstname: {
+        type: String,
+        required: true
+    },
+    lastname: {
+        type: String,
+        required: true
+    },
 }, {timestamps: {createdAt: 'created_at'}});
 
 // when the data is send from user.create the .pre will hash the pwd before creating user with schema

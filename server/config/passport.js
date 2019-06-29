@@ -6,20 +6,27 @@ module.exports = (passport) => {
     passport.use('local-signup', new LocalStrategy({
             usernameField: 'email',
             passwordField: 'password',
+            firstnameField: 'firstname',
+            lastnameField: 'lastname',
+            passReqToCallback: true,
             session: false
-        }, (email, password, done) => { // retrieve the data
+        }, (req, email, password, done) => { // retrieve the data
             User.findOne({
                 email: email
             }).then(acc => {
                 if (acc !== null) {
                     console.log('email already taken');
-                    return done(null, false, {message: 'Email already taken'})
-                } else {
-                    User.create({email: email, password: password}) // send the data to schema
-                        .then(() => {
-                            console.log('user created');
-                            return done(null, acc, {message: 'User created'})
-                        })
+                    return done(null, false, req.flash('failureMessage', 'Email already taken'))
+                } else { // send the data to schema
+                    User.create({
+                        email: email,
+                        password: password,
+                        firstname: req.body.firstname,
+                        lastname: req.body.lastname
+                    }).then(() => {
+                        console.log('user created');
+                        return done(null, acc, req.flash('successMessage', 'User created'))
+                    })
                 }
             })
         })
