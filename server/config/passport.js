@@ -8,7 +8,7 @@ module.exports = (passport) => {
             passwordField: 'password',
             firstnameField: 'firstname',
             lastnameField: 'lastname',
-            passReqToCallback: true,
+            passReqToCallback: true, // access the request object in the callback
             session: false
         }, (req, email, password, done) => { // retrieve the data
             User.findOne({
