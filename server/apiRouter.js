@@ -7,10 +7,5 @@ exports.router = (() => {
     /* ACCOUNT */
     apiRouter.route('/account/register').post(userManagement.register);
 
-    // app.get('/', function(req, res){
-    // Get an array of flash messages by passing the key to req.flash()
-    //   res.render('index', { messages: req.flash('info') });
-    //});
-
     return apiRouter;
 })();

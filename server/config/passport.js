@@ -7,18 +7,15 @@ module.exports = (passport) => {
             usernameField: 'email',
             passwordField: 'password',
             session: false
-        }, (email, password, done) => {
+        }, (email, password, done) => { // retrieve the data
             User.findOne({
-                where: {
-                    email: email
-                }
-            }).then(async acc => {
+                email: email
+            }).then(acc => {
                 if (acc !== null) {
-                    console.log('username already taken');
+                    console.log('email already taken');
                     return done(null, false, {message: 'Email already taken'})
                 } else {
-                    let user = new User;
-                    User.create({email: email, password: await user.hashPassword(password)})
+                    User.create({email: email, password: password}) // send the data to schema
                         .then(() => {
                             console.log('user created');
                             return done(null, acc, {message: 'User created'})

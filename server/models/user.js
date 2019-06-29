@@ -15,20 +15,20 @@ let userSchema = new mongoose.Schema({
     }
 }, {timestamps: {createdAt: 'created_at'}});
 
+// when the data is send from user.create the .pre will hash the pwd before creating user with schema
 userSchema.pre('save', function (next) {
-    const user = this;
-    if (this.isModified('password') || this.isNew) {
-        bcrypt.genSalt(10, (err, salt) => {
-            if (err) {
-                return next(err);
+    const user = this; // this = data from sign-up form
+    if (this.isModified('password') || this.isNew) { // check if the password from this is != from model
+        bcrypt.genSalt(10, (error, salt) => {
+            if (error) {
+                return next(error);
             }
-            bcrypt.hash(user.password, salt, null, (err, hash) => {
-                if (err) {
-                    return next(err);
+            bcrypt.hash(user.password, salt, null, (error, hash) => {
+                if (error) {
+                    return next(error);
                 }
                 user.password = hash;
-                console.log(hash);
-                next();
+                next(); // done with pre --> goes to creating schema
             });
         });
     } else {
@@ -36,11 +36,7 @@ userSchema.pre('save', function (next) {
     }
 });
 
-userSchema.methods.hashPassword = (password) => {
-    return bcrypt.hashSync(password, 10);
-};
-
-userSchema.methods.authenticate = function (password, cb) {
+userSchema.methods.authenticate = (password, cb) => {
     bcrypt.compare(password, this.password, (err, isMatch) => {
         if (err) {
             return cb(err);
@@ -49,11 +45,5 @@ userSchema.methods.authenticate = function (password, cb) {
     });
 };
 
-// userSchema.methods.authenticate = (password, input) => {
-// return bcrypt.compare(password, input, (error, result) => {
-//      if (error) throw error;
-//  return result !== false;
-// });
-// };
 
 module.exports = mongoose.model('User', userSchema);
