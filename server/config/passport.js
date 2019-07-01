@@ -5,6 +5,7 @@ module.exports = (passport) => {
     /* local sign-up form */
     passport.use('local-signup', new LocalStrategy({
             usernameField: 'email',
+            userField: 'username',
             passwordField: 'password',
             firstnameField: 'firstname',
             lastnameField: 'lastname',
@@ -16,10 +17,11 @@ module.exports = (passport) => {
             }).then(acc => {
                 if (acc !== null) {
                     console.log('email already taken');
-                    return done(null, false, req.flash('failureMessage', 'Email already taken'))
+                    return done(null, false, req.flash('errorMessage', 'Email already taken'))
                 } else { // send the data to schema
                     User.create({
                         email: email,
+                        username: req.body.username,
                         password: password,
                         firstname: req.body.firstname,
                         lastname: req.body.lastname
@@ -39,5 +41,5 @@ module.exports = (passport) => {
         User.findById(id, (err, user) => {
             done(err, user);
         });
-    }); // used to deserialize the user
+    }); // used to deserialize the user for the session
 };
