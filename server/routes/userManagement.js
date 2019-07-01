@@ -1,7 +1,7 @@
 const passport = require('passport');
 const User = require('../models/user');
 
-module.exports  = {
+module.exports = {
     register: (req, res, next) => {
         console.log('been there');
         let {email, username, password, firstname, lastname} = req.body;
@@ -17,6 +17,17 @@ module.exports  = {
         }
     },
     authenticate: (req, res, next) => {
-        User.authenticate()
+        console.log('been there');
+        let {username, password} = req.body;
+        if (!username || !password) {
+            return res.status(400).send('invalid request')
+        } else {
+            console.log('done that');
+            passport.authenticate('local-signin', {
+                successRedirect: '/home',
+                failureRedirect: '/api/account/login',
+                failureFlash: true
+            })(req, res, next);
+        }
     }
 };

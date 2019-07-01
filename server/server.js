@@ -44,5 +44,5 @@ app.use(flash());
 app.use('/api/', apiRouter);
 
 // start
-const API_PORT = process.env.API_PORT || 5000;
+const API_PORT = process.env.API_PORT || 2000;
 app.listen(API_PORT, console.log(`Listening on port ${API_PORT}`));

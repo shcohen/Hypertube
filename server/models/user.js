@@ -48,13 +48,13 @@ userSchema.pre('save', function (next) {
     }
 });
 
-userSchema.methods.authenticate = (password, cb) => {
-    bcrypt.compare(password, this.password, (err, isMatch) => {
-        if (err) {
-            return cb(err);
-        }
-        cb(null, isMatch);
+userSchema.methods.authenticate = async (password, dbpassword) => {
+    let isLogged = false;
+    await bcrypt.compare(password, dbpassword, (error, res) => {
+        if (error) throw error;
+        isLogged = res;
     });
+    return isLogged
 };
 
 

@@ -14,8 +14,8 @@ module.exports = (passport) => {
         }, (req, email, password, done) => { // retrieve the data
             User.findOne({
                 email: email
-            }).then(acc => {
-                if (acc !== null) {
+            }).then(user => {
+                if (user !== null) {
                     console.log('email already taken');
                     return done(null, false, req.flash('errorMessage', 'Email already taken'))
                 } else { // send the data to schema
@@ -27,19 +27,49 @@ module.exports = (passport) => {
                         lastname: req.body.lastname
                     }).then(() => {
                         console.log('user created');
-                        return done(null, acc, req.flash('successMessage', 'User created'))
+                        return done(null, user, req.flash('successMessage', 'User created'))
                     })
                 }
             })
         })
     );
+
+    passport.use('local-signin', new LocalStrategy({
+            usernameField: 'username',
+            passwordField: 'password',
+            passReqToCallback: true, // access the request object in the callback
+            session: false
+        }, (req, username, password, done) => { // retrieve the data
+            User.findOne({
+                username: username
+            }).then(user => { // check if user exists + user info in database
+                if (!user || username !== user.username) {
+                    console.log('error: not registered');
+                    return done(null, false, req.flash('errorMessage', 'No account found'))
+                } else { // checking password
+                    const Method = new User;
+                    setTimeout(async () => {
+                        let isLogged = await Method.authenticate(password, user.password);
+                        if (isLogged) {
+                            console.log('success: user logged in');
+                            return done(null, user, req.flash('successMessage', 'User logged in'))
+                        } else {
+                            console.log('error: wrong password');
+                            return done(null, false, req.flash('errorMessage', 'Wrong password'))
+                        }
+                    }, 300)
+                }
+            })
+        })
+    );
+
     passport.serializeUser((user, done) => {
         done(null, user.id);
     }); // used to serialize the user for the session
 
     passport.deserializeUser((id, done) => {
-        User.findById(id, (err, user) => {
-            done(err, user);
+        User.findById(id, (error, user) => {
+            done(error, user);
         });
     }); // used to deserialize the user for the session
 };
