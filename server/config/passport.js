@@ -1,4 +1,5 @@
 const LocalStrategy = require('passport-local').Strategy;
+const mailUtils = require('../utils/mailUtils');
 const User = require('../models/user'); // load up the user model
 
 module.exports = (passport) => {
@@ -9,6 +10,7 @@ module.exports = (passport) => {
             passwordField: 'password',
             firstnameField: 'firstname',
             lastnameField: 'lastname',
+            validationField: false,
             passReqToCallback: true, // access the request object in the callback
             session: false
         }, (req, email, password, done) => { // retrieve the data
@@ -24,10 +26,16 @@ module.exports = (passport) => {
                         username: req.body.username,
                         password: password,
                         firstname: req.body.firstname,
-                        lastname: req.body.lastname
+                        lastname: req.body.lastname,
+                        validation: false
                     }).then(() => {
-                        console.log('user created');
-                        return done(null, user, req.flash('successMessage', 'User created'))
+                        if (mailUtils.sendValidationMail(email)) {
+                            console.log('user created');
+                            return done(null, user, req.flash('successMessage', 'User created'))
+                        } else {
+                            console.log('validation email was not sent');
+                            return done(null, false, req.flash('errorMessage', 'Invalid request'))
+                        }
                     })
                 }
             })
@@ -47,17 +55,22 @@ module.exports = (passport) => {
                     console.log('error: not registered');
                     return done(null, false, req.flash('errorMessage', 'No account found'))
                 } else { // checking password
-                    const Method = new User;
-                    setTimeout(async () => {
-                        let isLogged = await Method.authenticate(password, user.password);
-                        if (isLogged) {
-                            console.log('success: user logged in');
-                            return done(null, user, req.flash('successMessage', 'User logged in'))
-                        } else {
-                            console.log('error: wrong password');
-                            return done(null, false, req.flash('errorMessage', 'Wrong password'))
-                        }
-                    }, 300)
+                    if (user.validation) {
+                        const Method = new User;
+                        setTimeout(async () => {
+                            let isLogged = await Method.authenticate(password, user.password);
+                            if (isLogged) {
+                                console.log('success: user logged in');
+                                return done(null, user, req.flash('successMessage', 'User logged in'))
+                            } else {
+                                console.log('error: wrong password');
+                                return done(null, false, req.flash('errorMessage', 'Wrong password'))
+                            }
+                        }, 300)
+                    } else {
+                        console.log('account not confirmed');
+                        return done(null, false, req.flash('errorMessage', 'Account not confirmed'))
+                    }
                 }
             })
         })

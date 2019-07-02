@@ -1,4 +1,7 @@
 const passport = require('passport');
+const crypto = require('crypto');
+const secret = require('../config/private/config');
+const mailUtils = require('../utils/mailUtils');
 const User = require('../models/user');
 
 module.exports = {
@@ -29,5 +32,9 @@ module.exports = {
                 failureFlash: true
             })(req, res, next);
         }
+    },
+    validateAccount: (req, res, next) => {
+        console.log('1');
+
     }
 };
