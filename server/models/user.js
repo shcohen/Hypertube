@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt-nodejs');
+const bcrypt = require('bcrypt');
 
 let userSchema = new mongoose.Schema({
     email: {
@@ -28,6 +28,11 @@ let userSchema = new mongoose.Schema({
     validation: {
         type: Boolean,
         required: true
+    },
+    validationToken: {
+        type: String,
+        unique: true,
+        required: true
     }
 }, {timestamps: {createdAt: 'created_at'}});
 
@@ -39,7 +44,7 @@ userSchema.pre('save', function (next) {
             if (error) {
                 return next(error);
             }
-            bcrypt.hash(user.password, salt, null, (error, hash) => {
+            bcrypt.hash(user.password, salt, (error, hash) => {
                 if (error) {
                     return next(error);
                 }

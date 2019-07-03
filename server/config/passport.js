@@ -10,9 +10,7 @@ module.exports = (passport) => {
             passwordField: 'password',
             firstnameField: 'firstname',
             lastnameField: 'lastname',
-            validationField: false,
             passReqToCallback: true, // access the request object in the callback
-            session: false
         }, (req, email, password, done) => { // retrieve the data
             User.findOne({
                 email: email
@@ -21,21 +19,20 @@ module.exports = (passport) => {
                     console.log('email already taken');
                     return done(null, false, req.flash('errorMessage', 'Email already taken'))
                 } else { // send the data to schema
+                    let validationToken = Math.random().toString(36).substr(2, 9);
                     User.create({
+                        acc_id: Math.random().toString(36).substr(2, 9),
                         email: email,
                         username: req.body.username,
                         password: password,
                         firstname: req.body.firstname,
                         lastname: req.body.lastname,
-                        validation: false
+                        validation: false,
+                        validationToken: validationToken
                     }).then(() => {
-                        if (mailUtils.sendValidationMail(email)) {
-                            console.log('user created');
-                            return done(null, user, req.flash('successMessage', 'User created'))
-                        } else {
-                            console.log('validation email was not sent');
-                            return done(null, false, req.flash('errorMessage', 'Invalid request'))
-                        }
+                        mailUtils.sendValidationMail(email, validationToken);
+                        console.log('user created');
+                        return done(null, user, req.flash('successMessage', 'User created'))
                     })
                 }
             })
