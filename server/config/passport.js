@@ -6,10 +6,7 @@ module.exports = (passport) => {
     /* local sign-up form */
     passport.use('local-signup', new LocalStrategy({
             usernameField: 'email',
-            userField: 'username',
             passwordField: 'password',
-            firstnameField: 'firstname',
-            lastnameField: 'lastname',
             passReqToCallback: true, // access the request object in the callback
         }, (req, email, password, done) => { // retrieve the data
             User.findOne({
@@ -43,7 +40,6 @@ module.exports = (passport) => {
             usernameField: 'username',
             passwordField: 'password',
             passReqToCallback: true, // access the request object in the callback
-            session: false
         }, (req, username, password, done) => { // retrieve the data
             User.findOne({
                 username: username
@@ -54,18 +50,18 @@ module.exports = (passport) => {
                 } else { // checking password
                     if (user.validation) {
                         const Method = new User;
-                        setTimeout(async () => {
-                            let isLogged = await Method.authenticate(password, user.password);
-                            if (isLogged) {
-                                console.log('success: user logged in');
-                                return done(null, user, req.flash('successMessage', 'User logged in'))
-                            } else {
-                                console.log('error: wrong password');
-                                return done(null, false, req.flash('errorMessage', 'Wrong password'))
-                            }
-                        }, 300)
+                        Method.authenticate(password, user.password)
+                            .then(isLogged => {
+                                if (isLogged) {
+                                    console.log('success: user logged in');
+                                    return done(null, user, req.flash('successMessage', 'User logged in'))
+                                } else {
+                                    console.log('error: wrong password');
+                                    return done(null, false, req.flash('errorMessage', 'Wrong password'))
+                                }
+                            })
                     } else {
-                        console.log('account not confirmed');
+                        console.log('error: account not confirmed');
                         return done(null, false, req.flash('errorMessage', 'Account not confirmed'))
                     }
                 }

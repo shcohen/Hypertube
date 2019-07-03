@@ -20,7 +20,7 @@ module.exports = {
         console.log('been there');
         let {email, username, password, firstname, lastname} = req.body;
         if (!email || !username || !password || !firstname || !lastname) {
-            return res.status(400).send('invalid request')
+            return res.status(400).send('error: invalid request')
         } else {
             if (validator.validate(email) === true) {
                 if (schema.validate(password, {list: false})) {
@@ -36,7 +36,7 @@ module.exports = {
                 }
             } else {
                 console.log('invalid email provided');
-                return res.status(400).send('invalid email provided')
+                return res.status(400).send('error: invalid email provided')
             }
         }
     },
@@ -44,7 +44,7 @@ module.exports = {
         console.log('been there');
         let {username, password} = req.body;
         if (!username || !password) {
-            return res.status(400).send('invalid request')
+            return res.status(400).send('error: invalid request')
         } else {
             console.log('done that');
             passport.authenticate('local-signin', {
@@ -54,8 +54,30 @@ module.exports = {
             })(req, res, next);
         }
     },
-    validateAccount: (req, res, next) => {
+    validateAccount: (req, res) => {
         console.log('1');
-
+        let {token} = req.body;
+        if (token) {
+            console.log('2');
+            return User.findOne({
+                validationToken: token
+            }).then(user => {
+                console.log('3');
+                if (user) {
+                    console.log('4');
+                    if (user.validation === true) {
+                        console.log('error: account already confirmed');
+                        return res.status(200).send('error: account already confirmed')
+                    } else {
+                        console.log('5');
+                        return res.status(400).send('success: account is now confirmed')
+                    }
+                } else {
+                    return res.status(400).send('error: no account found')
+                }
+            })
+        } else {
+            return res.status(400).send('error: invalid token provided')
+        }
     }
 };

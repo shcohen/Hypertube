@@ -64,12 +64,12 @@ userSchema.pre('save', function (next) {
 });
 
 userSchema.methods.authenticate = async (password, dbpassword) => {
-    let isLogged = false;
-    await bcrypt.compare(password, dbpassword, (error, res) => {
-        if (error) throw error;
-        isLogged = res;
-    });
-    return isLogged
+    return new Promise((resolve, reject) => {
+        bcrypt.compare(password, dbpassword, (error, res) => {
+            if (error) reject(error);
+            resolve(res);
+        });
+    })
 };
 
 
