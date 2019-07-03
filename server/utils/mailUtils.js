@@ -13,7 +13,7 @@ function mailOptions(email, token) {
         from: 'hypertube-no-reply@gmail.com',
         to: email,
         subject: 'Welcome to Hypertube',
-        text: 'That was easy!' + token
+        html: '<p>Click <a href="http://localhost:3000/validate' + token + '">here</a> to validate your account!</p>'
     };
     return mailOption;
 }
