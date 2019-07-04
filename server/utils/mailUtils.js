@@ -12,7 +12,7 @@ function mailOptions(email, token) {
     let mailOption = {
         from: 'hypertube-no-reply@gmail.com',
         to: email,
-        subject: 'Welcome to Hypertube!',
+        subject: 'Welcome to Hyper!',
         html: '<p>Click <a href="http://localhost:3000/validate' + token + '">here</a> to validate your account!</p>'
     };
     return mailOption;

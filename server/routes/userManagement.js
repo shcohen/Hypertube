@@ -54,6 +54,61 @@ module.exports = {
             })(req, res, next);
         }
     },
+    modify: (req, res) => {
+        console.log('1');
+        let {acc_id, email, username, password, rpassword, firstname, lastname} = req.body;
+        // !acc_id || !email || !username || !password || !rpassword || !firstname || !lastname
+        if (!acc_id || !email || !username || !password || !rpassword || !firstname || !lastname) {
+            return res.status(400).send('error: invalid request')
+        } else {
+            console.log('2');
+            if (password !== rpassword) {
+                console.log('passwords do not match');
+                return res.status(400).send('error: passwords do not match')
+            } else {
+                if (validator.validate(email) === true) {
+                    if (schema.validate(password, {list: false})) {
+                        console.log('3');
+                        User.findOne({
+                            acc_id: acc_id
+                        }, (error, user) => {
+                            if (error) {
+                                console.log('error:', error);
+                                return res.status(400).send('error: invalid request')
+                            } else if (!user) {
+                                console.log('no account found');
+                                return res.status(400).send('error: no account found with this id')
+                            } else {
+                                console.log('3');
+                                email ? user.email = email : null;
+                                username ? user.username = username : null;
+                                password ? user.password = password : null;
+                                firstname ? user.firstname = firstname : null;
+                                lastname ? user.lastname = lastname : null;
+                                user.save((error) => {
+                                    console.log('4');
+                                    if (error) {
+                                        console.log('error:', error);
+                                        return res.status(400).send('error: ', error)
+                                    } else {
+                                        console.log('5');
+                                        console.log('success: user info updated');
+                                        return res.status(200).send('success: user info updated')
+                                    }
+                                })
+                            }
+                        })
+                    } else {
+                        console.log('invalid password provided: missing ' + schema.validate(password, {list: true}));
+                        return res.status(400).send('invalid password provided: missing ' + schema.validate(password, {list: true}))
+                    }
+                } else {
+                    console.log('invalid email provided');
+                    return res.status(400).send('invalid email provided')
+                }
+            }
+        }
+    },
     validateAccount: (req, res) => {
         console.log('1');
         let {token} = req.body;
