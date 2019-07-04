@@ -4,9 +4,9 @@
 
 .triptych__part {
     height: calc(100vh - 4rem);
-    background-color: blueviolet;
+    background-color: var(--bg);
 }
 
 .triptych__part:nth-child(odd) {
-    background-color: darkviolet;
+    background-color: var(--bg-container);
 }
