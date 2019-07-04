@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css?family=Orbitron&display=swap');
+
+/*VARIABLES*/
+
+html {
+    font-family: Helvetica, sans-serif;
+}
+
+/*GLOBAL RULES*/
+
+* {
+    box-sizing: border-box;
+    font-family: inherit;
+    color: var(--color-text);
+}
+
+a {
+    text-decoration: none;
+}
+
+/*BODY CSS*/
+
+#wrapper {
+    position: relative;
+    padding: 4rem 0 10rem 0;
+    min-height: 100vh;
+}
+
+#container {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100vw;
+}
+
+.centered {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+}
+
+.centered > div {
+    width: 100vw;
+    max-width: 70rem;
+}

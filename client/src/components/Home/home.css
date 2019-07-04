@@ -1,0 +1,12 @@
+.triptych {
+    width: 100%;
+}
+
+.triptych__part {
+    height: calc(100vh - 4rem);
+    background-color: blueviolet;
+}
+
+.triptych__part:nth-child(odd) {
+    background-color: darkviolet;
+}

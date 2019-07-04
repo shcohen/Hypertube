@@ -1,0 +1,29 @@
+/*VARIABLES*/
+
+html {
+    --bg: #fcfcfc;
+    --bg-container: #ebebeb;
+
+    --color-headings: #0077ff;
+    --color-text: #333333;
+    --color-borders: #dadada;
+}
+
+html[data-theme="dark"] {
+    --bg: #333333;
+    --bg-container: #434343;
+
+    --color-headings: #3694ff;
+    --color-text: #b5b5b5;
+    --color-borders: #545454;
+}
+
+/*TRANSITIONS*/
+
+html.transition,
+html.transition *,
+html.transition *::before,
+html.transition *::after {
+    transition: all 0.5s !important;
+    transition-delay: 0s !important;
+}

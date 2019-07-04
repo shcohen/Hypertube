@@ -5,8 +5,16 @@ import './home.css';
 class Home extends Component {
   render() {
     return (
-      <div>
-        <h1>Home</h1>
+      <div className="triptych">
+        <div className="triptych__part">
+          One
+        </div>
+        <div className="triptych__part">
+          Two
+        </div>
+        <div className="triptych__part">
+          Three
+        </div>
       </div>
     );
   }
