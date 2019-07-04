@@ -16,7 +16,7 @@ schema // add properties to it
     .has().not().spaces();                          // should not have spaces
 
 module.exports = {
-    register: (req, res, next) => {
+    register: (req, res, next) => { // add username check !!!!!
         console.log('been there');
         let {email, username, password, firstname, lastname} = req.body;
         if (!email || !username || !password || !firstname || !lastname) {
@@ -54,7 +54,7 @@ module.exports = {
             })(req, res, next);
         }
     },
-    modify: (req, res) => {
+    modify: (req, res) => { // add username check
         console.log('1');
         let {acc_id, email, username, password, rpassword, firstname, lastname} = req.body;
         // !acc_id || !email || !username || !password || !rpassword || !firstname || !lastname
@@ -66,8 +66,8 @@ module.exports = {
                 console.log('passwords do not match');
                 return res.status(400).send('error: passwords do not match')
             } else {
-                if (validator.validate(email) === true) {
-                    if (schema.validate(password, {list: false})) {
+                if (schema.validate(password, {list: false})) {
+                    if (validator.validate(email) === true) {
                         console.log('3');
                         User.findOne({
                             acc_id: acc_id
