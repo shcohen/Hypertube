@@ -43,8 +43,11 @@ module.exports = (passport) => {
         }, (req, username, password, done) => { // retrieve the data
             User.findOne({
                 username: username
-            }).then(user => { // check if user exists + user info in database
-                if (!user || username !== user.username) {
+            }).then((user, error) => { // check if user exists + user info in database
+                if (error) {
+                    console.log(error);
+                    return done(null, error)
+                } else if (!user) {
                     console.log('error: not registered');
                     return done(null, false, req.flash('errorMessage', 'No account found'))
                 } else { // checking password
