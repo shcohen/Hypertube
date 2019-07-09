@@ -12,23 +12,23 @@ schema // add properties to it
     .has().not().spaces();                          // should not have spaces
 
 module.exports = {
-    register: (req, res, next) => { // add username check !!!!!
+    register: (req, res, next) => {
         console.log('been there');
         let {email, username, password, firstname, lastname} = req.body;
         if (!email || !username || !password || !firstname || !lastname) {
-            return res.status(400).send('error: invalid request')
+            return res.status(200).send('error: invalid request')
         } else {
             if (validator.validate(email) === true) {
                 if (schema.validate(password, {list: false})) {
                     User.findOne({
                         username: username
-                    }).then((error, user) => {
+                    }).then((user, error) => {
                         if (error) {
                             console.log(error);
-                            return res.status(400).send('error: ', error)
+                            return res.status(200).send('error: ', error)
                         } else if (user) {
                             console.log('username already taken');
-                            return res.status(400).send('username already taken')
+                            return res.status(200).send('username already taken')
                         } else {
                             console.log('done that');
                             passport.authenticate('local-signup', {
@@ -40,11 +40,11 @@ module.exports = {
                     })
                 } else {
                     console.log('invalid password provided: missing ' + schema.validate(password, {list: true}));
-                    return res.status(400).send('invalid password provided: missing ' + schema.validate(password, {list: true}))
+                    return res.status(200).send('invalid password provided: missing ' + schema.validate(password, {list: true}))
                 }
             } else {
                 console.log('invalid email provided');
-                return res.status(400).send('error: invalid email provided')
+                return res.status(200).send('error: invalid email provided')
             }
         }
     },
@@ -52,7 +52,7 @@ module.exports = {
         console.log('been there');
         let {username, password} = req.body;
         if (!username || !password) {
-            return res.status(400).send('error: invalid request')
+            return res.status(200).send('error: invalid request')
         } else {
             console.log('done that');
             passport.authenticate('local-signin', {
@@ -62,11 +62,11 @@ module.exports = {
             })(req, res, next);
         }
     },
-    modify: (req, res) => { // add name check ?
+    modify: (req, res) => { // add html check (dans le sens balise script dans le champ)
         console.log('0');
         let {acc_id, email, username, password, rpassword, firstname, lastname} = req.body;
         if (!acc_id || !email && !username && !password && !rpassword && !firstname && !lastname) {
-            return res.status(400).send('error: invalid request')
+            return res.status(200).send('error: invalid request')
         } else {
             console.log('1');
             let i = 1;
@@ -76,13 +76,16 @@ module.exports = {
                     if (password && rpassword) {
                         if (password !== rpassword) {
                             console.log('passwords do not match');
-                            return res.status(400).send('error: passwords do not match');
+                            return res.status(200).send('error: passwords do not match');
                         } else {
                             if (!schema.validate(password, {list: false})) {
                                 console.log('invalid password provided: missing ' + schema.validate(password, {list: true}));
-                                return res.status(400).send('invalid password provided: missing ' + schema.validate(password, {list: true}))
+                                return res.status(200).send('invalid password provided: missing ' + schema.validate(password, {list: true}))
                             }
                         }
+                    } else {
+                        console.log('missing password or rpassword');
+                        return res.status(200).send('missing password or rpassword')
                     }
                 case 2:
                     console.log('email 1');
@@ -91,7 +94,7 @@ module.exports = {
                             console.log('hello ?');
                         } else {
                             console.log('invalid email provided');
-                            return res.status(400).send('invalid email provided')
+                            return res.status(200).send('invalid email provided')
                         }
                     }
                 case 3:
@@ -102,10 +105,10 @@ module.exports = {
                         }).then((user, error) => {
                             if (error) {
                                 console.log(error);
-                                return res.status(400).send('error: ', error)
+                                return res.status(200).send('error: ', error)
                             } else if (user) {
                                 console.log('username already taken');
-                                return res.status(400).send('username already taken')
+                                return res.status(200).send('username already taken')
                             }
                         })
                     }
@@ -113,14 +116,13 @@ module.exports = {
                     console.log('2');
                     User.findOne({
                         acc_id: acc_id
-                    }).then((error, user) => {
+                    }).then((user, error) => {
                         if (error) {
-                            console.log(acc_id);
                             console.log('error:', error);
-                            return res.status(400).send('error: invalid request')
+                            return res.status(200).send('error: invalid request')
                         } else if (!user) {
                             console.log('no account found');
-                            return res.status(400).send('error: no account found with this id')
+                            return res.status(200).send('error: no account found with this id')
                         } else {
                             console.log('3');
                             email ? user.email = email : null;
@@ -132,7 +134,7 @@ module.exports = {
                                 console.log('4');
                                 if (error) {
                                     console.log('error:', error);
-                                    return res.status(400).send('error: ', error)
+                                    return res.status(200).send('error: ', error)
                                 } else {
                                     console.log('5');
                                     console.log('success: user info updated');
