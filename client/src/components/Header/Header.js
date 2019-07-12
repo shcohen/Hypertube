@@ -1,11 +1,28 @@
 import React, {Component} from 'react';
+import classnames from 'classnames';
 
 import './header.css';
 
 class Header extends Component {
-  toggleMode = () => {
+  state = {
+    hidden: false,
+    old: 0
+  };
+
+  componentDidMount() {
+    // window.onscroll = () => {
+    //   if (window.scrollY > 150 && window.scrollY > this.state.old) {
+    //     this.setState({hidden: true});
+    //   } else {
+    //     this.setState({hidden: false});
+    //   }
+    //   this.setState({old: window.scrollY});
+    // }
+  }
+
+  toggleMode = (e) => {
     document.documentElement.classList.add('transition');
-    if (document.querySelector('input[name=theme]').checked) {
+    if (e.target.checked) {
       document.documentElement.setAttribute('data-theme', 'dark');
     } else {
       document.documentElement.setAttribute('data-theme', 'light');
@@ -17,12 +34,14 @@ class Header extends Component {
 
   render() {
     return (
-      <header>
+      <header className={classnames('', {
+        'hidden': this.state.hidden
+      })}>
         <div>
-
+          HB
         </div>
         <div className="logo">
-          <a className="logo" href="#">H<span className="broken">y</span>pe<span className="broken2">r</span></a>
+          <a className="logo" href="/">H<span className="broken">y</span>pe<span className="broken2">r</span></a>
         </div>
         <div>
           <input className="custom" type="checkbox" name="theme" onChange={this.toggleMode}/>

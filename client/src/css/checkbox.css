@@ -12,8 +12,8 @@ input[type="checkbox"].custom {
     margin: 0;
     padding: 0;
     position: relative;
-    width: 2.5rem;
-    height: 1.3rem;
+    width: 2rem;
+    height: 1.2rem;
     border-radius: 0.65rem;
     border: 1px solid var(--border-input-custom);
     background-color: var(--bg-input-custom);
