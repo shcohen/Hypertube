@@ -6,6 +6,7 @@ exports.router = (() => {
 
     /* TORRENT LIBRARY */
     apiRouter.route('/library/find_movie').post(libraryManagement.findMovies);
+    apiRouter.route('/library/find_movie_info').post(libraryManagement.findMovieInfo);
 
     return apiRouter;
 })();

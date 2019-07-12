@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const apiRouter = require('./apiRouter').router;
 const torrentSearch = require('torrent-search-api');
-const providers = ['1337x', 'KickassTorrents', 'ThePirateBay', 'ExtraTorrent'];
+const providers = ['1337x', 'Rarbg'];
 const app = express();
 
 let urlencodedParser = bodyParser.urlencoded({
