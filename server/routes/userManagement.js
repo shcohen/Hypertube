@@ -1,5 +1,10 @@
 const passport = require('passport');
 const User = require('../models/user');
+const mailsUtils = require('../utils/mailUtils');
+const secret = require('../config/private/config');
+const crypto = require('crypto'),
+    algorithm = secret.algorithm,
+    password = secret.secret;
 const validator = require("email-validator");
 const passwordValidator = require('password-validator');
 const schema = new passwordValidator(); // create a validation schema
@@ -83,7 +88,7 @@ module.exports = {
                                 return res.status(200).send('invalid password provided: missing ' + schema.validate(password, {list: true}))
                             }
                         }
-                    } else {
+                    } else if (!password && rpassword || password && !rpassword){
                         console.log('missing password or rpassword');
                         return res.status(200).send('missing password or rpassword')
                     }
@@ -91,7 +96,7 @@ module.exports = {
                     console.log('email 1');
                     if (email) {
                         if (validator.validate(email) === true) {
-                            console.log('hello ?');
+                            console.log('email: ok')
                         } else {
                             console.log('invalid email provided');
                             return res.status(200).send('invalid email provided')
@@ -145,8 +150,7 @@ module.exports = {
                     })
             }
         }
-    }
-    ,
+    },
     validateAccount: (req, res) => {
         console.log('1');
         let {token} = req.body;
@@ -154,23 +158,54 @@ module.exports = {
             console.log('2');
             return User.findOne({
                 validationToken: token
-            }).then(user => {
+            }).then(user, error => {
                 console.log('3');
                 if (user) {
                     console.log('4');
                     if (user.validation === true) {
                         console.log('error: account already confirmed');
                         return res.status(200).send('error: account already confirmed')
+                    } else if (error) {
+                        console.log('error: ', error);
+                        return res.status(200).send('error: ', error)
                     } else {
                         console.log('5');
-                        return res.status(400).send('success: account is now confirmed')
+                        return res.status(200).send('success: account is now confirmed')
                     }
                 } else {
-                    return res.status(400).send('error: no account found')
+                    return res.status(200).send('error: no account found')
                 }
             })
         } else {
             return res.status(400).send('error: invalid token provided')
         }
+    },
+    sendForgotPassword: (req, res) => {
+        let {email} = req.body;
+        console.log('1');
+        User.findOne({
+            email: email
+        }).then((user, error) => {
+            if (user) {
+
+                console.log('2');
+               let crypted = '123VivalAlgerie';
+                console.log('3');
+
+                mailsUtils.resetMail(email, crypted);
+                console.log('success: reset email sent');
+                return res.status(200).send('success: reset mail sent')
+            } else if (error) {
+                console.log('error: ', error);
+                return res.status(200).send('error: ', error)
+            } else {
+                console.log('error: invalid email provided');
+                return res.status(200).send('error: invalid email provided')
+            }
+        })
+    },
+    resetPassword: (req, res) => {
+
     }
+
 };
