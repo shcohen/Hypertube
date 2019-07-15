@@ -1,24 +1,42 @@
 const axios = require('axios');
 const torrentSearch = require('torrent-search-api');
 const {TMDB_API_KEY_V3, RAPIDAPI_KEY} = require('../config/apiKey');
+const genres = [{"id": 28, "name": "Action"}, {"id": 12, "name": "Adventure"}, {"id": 16, "name": "Animation"},
+    {"id": 35, "name": "Comedy"}, {"id": 80, "name": "Crime"}, {"id": 99, "name": "Documentary"}, {
+        "id": 18,
+        "name": "Drama"
+    },
+    {"id": 10751, "name": "Family"}, {"id": 14, "name": "Fantasy"}, {"id": 36, "name": "History"}, {
+        "id": 27,
+        "name": "Horror"
+    },
+    {"id": 10402, "name": "Music"}, {"id": 9648, "name": "Mystery"}, {"id": 10749, "name": "Romance"}, {
+        "id": 878,
+        "name": "Science Fiction"
+    },
+    {"id": 10770, "name": "TV Movie"}, {"id": 53, "name": "Thriller"}, {"id": 10752, "name": "War"}, {
+        "id": 37,
+        "name": "Western"
+    }];
 
 module.exports = {
     getMovieInfo: async (title, movie) => {
         let res = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY_V3}&query=${title}`);
-            if (res.data.results[0]) {
+        if (res.data.results[0]) {
             movie.title = res.data.results[0].title;
             movie.poster = res.data.results[0].poster_path ? res.data.results[0].poster_path : res.data.results[0].backdrop_path;
             movie.time = res.data.results[0].release_date;
             movie.note = res.data.results[0].vote_average;
             movie.overview = res.data.results[0].overview;
             movie.id = res.data.results[0].id;
-            let result = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=${TMDB_API_KEY_V3}&language=en-US`);
-            if (result.data) {
-                movie.genre = [];
-                result.data.genres.map(genre => {
-                   movie.genre = [...movie.genre, genre.name];
-                });
-            }
+            movie.genre = [];
+            res.data.results[0].genre_ids.map(id => {
+                genres.map(genre => {
+                    if (genre.id === id) {
+                        movie.genre = [...movie.genre, genre.name];
+                    }
+                })
+            });
         }
     },
     getImdbInfo: async id => {
@@ -59,6 +77,6 @@ module.exports = {
         });
     },
     epurMovieObject: movie => {
-        movie.magnet =  undefined;
+        movie.magnet = undefined;
     }
 };
