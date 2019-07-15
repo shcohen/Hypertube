@@ -205,7 +205,46 @@ module.exports = {
         })
     },
     resetPassword: (req, res) => {
-
+        let {password, rpassword, email} = req.body;
+        // decrypt email
+        User.findOne({
+            email: email
+        }).then((user, error) => {
+            if (user) {
+                if (password && rpassword) {
+                    if (password !== rpassword) {
+                        console.log('passwords do not match');
+                        return res.status(200).send('error: passwords do not match');
+                    } else {
+                        if (!schema.validate(password, {list: false})) {
+                            console.log('invalid password provided: missing ' + schema.validate(password, {list: true}));
+                            return res.status(200).send('invalid password provided: missing ' + schema.validate(password, {list: true}))
+                        } else {
+                            user.password = password;
+                            user.save((error) => {
+                                if (error) {
+                                    console.log('error: ', error);
+                                    return res.status(200).send('error: ', error)
+                                } else {
+                                    console.log('success: password updated');
+                                    return res.status(200).send('success: password updated')
+                                }
+                            })
+                        }
+                    }
+                } else if (!password && rpassword || password && !rpassword){
+                    console.log('missing password or rpassword');
+                    return res.status(200).send('missing password or rpassword')
+                }
+            } else if (error) {
+                console.log('error: ', error);
+                return res.status(200).send('error: ', error)
+            } else {
+                console.log('error: invalid email provided');
+                return res.status(200).send('error: invalid email provided')
+            }
+        })
     }
+
 
 };
