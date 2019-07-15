@@ -5,13 +5,20 @@ const {TMDB_API_KEY_V3, RAPIDAPI_KEY} = require('../config/apiKey');
 module.exports = {
     getMovieInfo: async (title, movie) => {
         let res = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY_V3}&query=${title}`);
-        if (res.data.results[0]) {
+            if (res.data.results[0]) {
             movie.title = res.data.results[0].title;
             movie.poster = res.data.results[0].poster_path ? res.data.results[0].poster_path : res.data.results[0].backdrop_path;
             movie.time = res.data.results[0].release_date;
             movie.note = res.data.results[0].vote_average;
             movie.overview = res.data.results[0].overview;
             movie.id = res.data.results[0].id;
+            let result = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=${TMDB_API_KEY_V3}&language=en-US`);
+            if (result.data) {
+                movie.genre = [];
+                result.data.genres.map(genre => {
+                   movie.genre = [...movie.genre, genre.name];
+                });
+            }
         }
     },
     getImdbInfo: async id => {
