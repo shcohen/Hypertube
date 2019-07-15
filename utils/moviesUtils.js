@@ -1,6 +1,6 @@
 const axios = require('axios');
 const torrentSearch = require('torrent-search-api');
-const {TMDB_API_KEY_V3} = require('../config/apiKey');
+const {TMDB_API_KEY_V3, RAPIDAPI_KEY} = require('../config/apiKey');
 
 module.exports = {
     getMovieInfo: async (title, movie) => {
@@ -14,23 +14,19 @@ module.exports = {
             movie.id = res.data.results[0].id;
         }
     },
-    getImdbInfo: async movie_title => {
-        let res = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY_V3}&query=${movie_title}`);
-        if (res.data.results[0]) {
-            return res.data.results[0];
-            // let imdbID = await axios.get(`https://api.themoviedb.org/3/movie/${res.data.results[0].id}/external_ids?api_key=${TMDB_API_KEY_V3}`);
-            // if (imdbID.data.imdb_id) {
-            //     return await axios.get(`https://movie-database-imdb-alternative.p.rapidapi.com/?i=${imdbID.data.imdb_id}&r=json`, {
-            //         headers: {
-            //             "X-RapidAPI-Host": "movie-database-imdb-alternative.p.rapidapi.com",
-            //             "X-RapidAPI-Key": "d55529eb60msh01867715cf76d45p1d6249jsn579987700ad6"
-            //         }
-            //     }).then(res => {
-            //         return res.data;
-            //     })
-            }
-        },
-    // },
+    getImdbInfo: async id => {
+        let imdbID = await axios.get(`https://api.themoviedb.org/3/movie/${id}/external_ids?api_key=${TMDB_API_KEY_V3}`);
+        if (imdbID.data.imdb_id) {
+            return await axios.get(`https://movie-database-imdb-alternative.p.rapidapi.com/?i=${imdbID.data.imdb_id}&r=json`, {
+                headers: {
+                    "X-RapidAPI-Host": "movie-database-imdb-alternative.p.rapidapi.com",
+                    "X-RapidAPI-Key": RAPIDAPI_KEY
+                }
+            }).then(res => {
+                return res.data;
+            })
+        }
+    },
     removeMoviesWithoutInfo: (movies) => {
         return movies.filter((first_movie, i) => {
             return movies.findIndex(second_movie => {

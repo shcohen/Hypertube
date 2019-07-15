@@ -30,10 +30,10 @@ module.exports = {
         }
     },
     findMovieInfo: async (req, res) => {
-        let {search} = req.body;
+        let {id} = req.body;
 
-        if (search !== undefined && search.length) {
-            return res.status(200).send(search);
+        if (id !== undefined && id.length) {
+            return res.status(200).send(await getImdbInfo(id));
         } else {
             return res.status(200).send('Wrong data sent');
         }
