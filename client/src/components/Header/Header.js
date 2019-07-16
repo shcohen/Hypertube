@@ -4,6 +4,8 @@ import classnames from 'classnames';
 
 import './header.css';
 
+import searchIcon from '../../assets/img/search.svg';
+
 class Header extends Component {
   state = {
     hidden: false,
@@ -42,11 +44,11 @@ class Header extends Component {
         <NavLink to="/" exact>
           Accueil
         </NavLink>
-        <NavLink to="/search">
-          Recherche
+        <NavLink to="/trending">
+          Sélection
         </NavLink>
-        <NavLink to="/my-hyper">
-          Mon Hyper
+        <NavLink to="/recherche">
+          Recherche
         </NavLink>
       </React.Fragment>)
     } else {
@@ -56,23 +58,48 @@ class Header extends Component {
     }
   };
 
+  getButtons = () => {
+    if (this.state.loggedIn) {
+      return (<React.Fragment>
+        <div className="search">
+          <button/>
+        </div>
+        <div className="account">
+          <button/>
+        </div>
+        <div className="logout">
+          <button/>
+        </div>
+      </React.Fragment>)
+    } else {
+      return (<React.Fragment>
+        <div>
+          <button className="account"/>
+        </div>
+      </React.Fragment>)
+    }
+  };
+
   render() {
     const {hidden} = this.state;
     const links = this.getLinks();
+    const buttons = this.getButtons();
 
     return (
       <header className={classnames('centered', {
         'hidden': hidden
       })}>
         <div>
+          <div className="logo">
+            <input className="custom" type="checkbox" name="theme" onChange={this.toggleMode}/>
+            <NavLink className="logo" to="/">H<span className="broken">y</span>pe<span
+              className="broken2">r</span></NavLink>
+          </div>
           <div className="left">
             {links}
           </div>
-          <div className="logo">
-            <NavLink className="logo" to="/">H<span className="broken">y</span>pe<span className="broken2">r</span></NavLink>
-          </div>
           <div className="right">
-            <input className="custom" type="checkbox" name="theme" onChange={this.toggleMode}/>
+            {buttons}
           </div>
         </div>
       </header>
