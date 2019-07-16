@@ -3,5 +3,9 @@
     bottom: 0;
     width: 100vw;
     height: 10rem;
-    background-color: green;
+    background-color: white;
+}
+
+html[data-theme="dark"] #footer {
+    background-color: #232323;
 }

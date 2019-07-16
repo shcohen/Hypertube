@@ -4,7 +4,7 @@
 /*VARIABLES*/
 
 html {
-    font-family: Helvetica, sans-serif;
+    font-family: 'Ubuntu', sans-serif;
 }
 
 /*GLOBAL RULES*/
@@ -42,4 +42,8 @@ a {
 .centered > div {
     width: 100vw;
     max-width: 70rem;
+}
+
+i.fas {
+    color: inherit;
 }

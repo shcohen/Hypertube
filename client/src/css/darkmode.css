@@ -7,6 +7,7 @@ html {
     --bg-container-active: #ebebeb;
 
     --color-headings: #0077ff;
+    --color-headings-transparent: rgba(0, 119, 255, 0.5);
     --color-text: #333333;
     --color-text-hover: #131313;
 
@@ -19,7 +20,9 @@ html[data-theme="dark"] {
     --bg-container-hover: #383838;
     --bg-container-active: #434343;
 
-    --color-headings: #3694ff;
+    /*--color-headings: #3694ff;*/
+    --color-headings: #ff7540;
+    --color-headings-transparent: rgba(255, 117, 64, 0.5);
     --color-text: #b5b5b5;
     --color-text-hover: #d5d5d5;
 

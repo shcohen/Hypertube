@@ -4,8 +4,6 @@ import classnames from 'classnames';
 
 import './header.css';
 
-import searchIcon from '../../assets/img/search.svg';
-
 class Header extends Component {
   state = {
     hidden: false,
@@ -44,11 +42,11 @@ class Header extends Component {
         <NavLink to="/" exact>
           Accueil
         </NavLink>
-        <NavLink to="/trending">
-          Sélection
+        <NavLink to="/library">
+          Bibliothèque
         </NavLink>
-        <NavLink to="/recherche">
-          Recherche
+        <NavLink to="/trending">
+          Tendances
         </NavLink>
       </React.Fragment>)
     } else {
@@ -61,11 +59,25 @@ class Header extends Component {
   getButtons = () => {
     if (this.state.loggedIn) {
       return (<React.Fragment>
-        <div className="search">
+        <div className="settings">
           <button/>
+          <div className="dropdown">
+            <div className="dropdown__title">
+              <i className="fas fa-palette"></i> Thème
+            </div>
+            <div className="dropdown__section">
+
+            </div>
+            <div className="dropdown__section">
+
+            </div>
+          </div>
         </div>
         <div className="account">
           <button/>
+          <div className="dropdown">
+
+          </div>
         </div>
         <div className="logout">
           <button/>
