@@ -21,29 +21,41 @@ module.exports = {
             return res.status(200).send('error: invalid request')
         } else {
             if (validator.validate(email) === true) {
-                if (schema.validate(password, {list: false})) {
-                    User.findOne({
-                        username: username
-                    }).then((user, error) => {
-                        if (error) {
-                            console.log(error);
-                            return res.status(200).send('error: ', error)
-                        } else if (user) {
-                            console.log('username already taken');
-                            return res.status(200).send('username already taken')
+                User.find({
+                    email: email
+                }).then((user, error) => {
+                    if (user) {
+                        console.log('email already taken');
+                        return res.status(200).send('email already taken')
+                    } else if (error) {
+                        console.log(error);
+                        return res.status(200).send('error: ', error)
+                    } else {
+                        if (schema.validate(password, {list: false})) {
+                            User.findOne({
+                                username: username
+                            }).then((user, error) => {
+                                if (user) {
+                                    console.log('username already taken');
+                                    return res.status(200).send('username already taken')
+                                } else if (error) {
+                                    console.log(error);
+                                    return res.status(200).send('error: ', error)
+                                } else {
+                                    console.log('done that');
+                                    passport.authenticate('local-signup', {
+                                        successRedirect: '/home',
+                                        failureRedirect: '/api/account/register',
+                                        failureFlash: true
+                                    })(req, res, next);
+                                }
+                            })
                         } else {
-                            console.log('done that');
-                            passport.authenticate('local-signup', {
-                                successRedirect: '/home',
-                                failureRedirect: '/api/account/register',
-                                failureFlash: true
-                            })(req, res, next);
+                            console.log('invalid password provided: missing ' + schema.validate(password, {list: true}));
+                            return res.status(200).send('invalid password provided: missing ' + schema.validate(password, {list: true}))
                         }
-                    })
-                } else {
-                    console.log('invalid password provided: missing ' + schema.validate(password, {list: true}));
-                    return res.status(200).send('invalid password provided: missing ' + schema.validate(password, {list: true}))
-                }
+                    }
+                })
             } else {
                 console.log('invalid email provided');
                 return res.status(200).send('error: invalid email provided')
@@ -92,12 +104,24 @@ module.exports = {
                 case 2:
                     console.log('email 1');
                     if (email) {
-                        if (validator.validate(email) === true) {
-                            console.log('email: ok')
-                        } else {
-                            console.log('invalid email provided');
-                            return res.status(200).send('invalid email provided')
-                        }
+                        User.findOne({
+                            email: email
+                        }).then((user, error) => {
+                            if (user) {
+                                console.log('email already taken');
+                                return res.status(200).send('email already taken')
+                            } else if (error) {
+                                console.log(error);
+                                return res.status(200).send('error: ', error)
+                            } else {
+                                if (validator.validate(email) === true) {
+                                    console.log('email: ok')
+                                } else {
+                                    console.log('invalid email provided');
+                                    return res.status(200).send('invalid email provided')
+                                }
+                            }
+                        })
                     }
                 case 3:
                     console.log('username 1');
@@ -105,12 +129,12 @@ module.exports = {
                         User.findOne({
                             username: username
                         }).then((user, error) => {
-                            if (error) {
-                                console.log(error);
-                                return res.status(200).send('error: ', error)
-                            } else if (user) {
+                            if (user) {
                                 console.log('username already taken');
                                 return res.status(200).send('username already taken')
+                            } else if (error) {
+                                console.log(error);
+                                return res.status(200).send('error: ', error)
                             }
                         })
                     }
@@ -119,12 +143,12 @@ module.exports = {
                     User.findOne({
                         acc_id: acc_id
                     }).then((user, error) => {
-                        if (error) {
-                            console.log('error:', error);
-                            return res.status(200).send('error: invalid request')
-                        } else if (!user) {
+                        if (!user) {
                             console.log('no account found');
                             return res.status(200).send('error: no account found with this id')
+                        } else if (error) {
+                            console.log('error:', error);
+                            return res.status(200).send('error: invalid request')
                         } else {
                             console.log('3');
                             email ? user.email = email : null;
@@ -155,26 +179,26 @@ module.exports = {
             console.log('2');
             return User.findOne({
                 validationToken: token
-            }).then(user, error => {
+            }).then((user, error) => {
                 console.log('3');
                 if (user) {
                     console.log('4');
                     if (user.validation === true) {
                         console.log('error: account already confirmed');
                         return res.status(200).send('error: account already confirmed')
-                    } else if (error) {
-                        console.log('error: ', error);
-                        return res.status(200).send('error: ', error)
                     } else {
                         console.log('5');
                         return res.status(200).send('success: account is now confirmed')
                     }
+                } else if (error) {
+                    console.log('error: ', error);
+                    return res.status(200).send('error: ', error)
                 } else {
                     return res.status(200).send('error: no account found')
                 }
             })
         } else {
-            return res.status(400).send('error: invalid token provided')
+            return res.status(200).send('error: invalid token provided')
         }
     },
     sendForgotPassword: (req, res) => {
@@ -242,11 +266,9 @@ module.exports = {
                 console.log('error: ', error);
                 return res.status(200).send('error: ', error)
             } else {
-                console.log('error: invalid email provided');
-                return res.status(200).send('error: invalid email provided')
+                console.log('error: invalid token provided');
+                return res.status(200).send('error: invalid token provided')
             }
         })
     }
-
-
 };
