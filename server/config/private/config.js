@@ -1,5 +1,4 @@
 module.exports = {
-    algorithm: 'aes-256-ctr',
-    secret: 'FloShaYa42Hype',
-    salt: 'RESET'
+    user: 'hypertube.no.reply@gmail.com',
+    pass: 'FloShaYa42Hype'
 };

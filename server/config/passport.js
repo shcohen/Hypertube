@@ -1,4 +1,6 @@
 const LocalStrategy = require('passport-local').Strategy;
+let FacebookStrategy = require('passport-facebook').Strategy;
+let config = require('../oAuth/config.js');
 const mailUtils = require('../utils/mailUtils');
 const User = require('../models/user'); // load up the user model
 
@@ -7,8 +9,8 @@ module.exports = (passport) => {
     passport.use('local-signup', new LocalStrategy({
             usernameField: 'email',
             passwordField: 'password',
-            passReqToCallback: true, // access the request object in the callback
-        }, (req, email, password, done) => { // retrieve the data
+            passReqToCallback: true // access the request object in the callback
+        }, (req, email, password, done) => { // retrieve data
             User.findOne({
                 email: email
             }).then(user => {
@@ -26,7 +28,9 @@ module.exports = (passport) => {
                         lastname: req.body.lastname,
                         validation: false,
                         validationToken: validationToken,
-                        resetToken: null
+                        resetToken: null,
+                        lang: 'en',
+                        facebookId: null
                     }).then(() => {
                         mailUtils.sendValidationMail(email, validationToken);
                         console.log('user created');
@@ -41,7 +45,7 @@ module.exports = (passport) => {
             usernameField: 'username',
             passwordField: 'password',
             passReqToCallback: true, // access the request object in the callback
-        }, (req, username, password, done) => { // retrieve the data
+        }, (req, username, password, done) => { // retrieve data
             User.findOne({
                 username: username
             }).then((user, error) => { // check if user exists + user info in database
@@ -72,6 +76,29 @@ module.exports = (passport) => {
             })
         })
     );
+    /* facebook form */
+    passport.use('facebook', new FacebookStrategy({
+            clientID: config.facebook.app_id,
+            clientSecret: config.facebook.app_secret,
+            callbackURL: config.facebook.callback,
+            profileFields: ['id', 'email', 'first_name', 'last_name', 'profile_pic'],
+            passReqToCallback: true // access the request object in the callback
+        }, (req, accessToken, refreshToken, profile, done) => { // retrieve data
+            console.log(req.body);
+            User.findOrCreate({
+                facebookId: profile.id
+            }).then((user, error) => {
+                console.log(user);
+                if (error) {
+                    return done(error)
+                } else if (!user) {
+                    return done(null, false, req.flash('errorMessage', 'Account not found'))
+                } else {
+                    return done(null, user, req.flash('successMessage', 'User logged in'))
+                }
+            });
+        }
+    ));
 
     passport.serializeUser((user, done) => {
         done(null, user.id);

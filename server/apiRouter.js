@@ -1,5 +1,6 @@
 const express = require('express');
 const userManagement = require('./routes/userManagement');
+const strategies = require('./oAuth/strategies');
 
 exports.router = (() => {
     const apiRouter = express.Router();
@@ -11,6 +12,10 @@ exports.router = (() => {
     apiRouter.route('/account/modify').post(userManagement.modify);
     apiRouter.route('/account/forgot_password').post(userManagement.sendForgotPassword);
     apiRouter.route('/account/reset_password').post(userManagement.resetPassword);
+
+    /* STRATEGIES */
+    apiRouter.route('/account/facebook').post(strategies.facebook);
+    apiRouter.route('/account/facebook/callback').post(strategies.facebookAuth);
 
     return apiRouter;
 })();

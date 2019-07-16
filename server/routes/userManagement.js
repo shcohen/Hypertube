@@ -24,7 +24,8 @@ module.exports = {
                 User.find({
                     email: email
                 }).then((user, error) => {
-                    if (user) {
+                    if (user.length) {
+                        console.log(user);
                         console.log('email already taken');
                         return res.status(200).send('email already taken')
                     } else if (error) {
@@ -97,7 +98,7 @@ module.exports = {
                                 return res.status(200).send('invalid password provided: missing ' + schema.validate(password, {list: true}))
                             }
                         }
-                    } else if (!password && rpassword || password && !rpassword){
+                    } else if (!password && rpassword || password && !rpassword) {
                         console.log('missing password or rpassword');
                         return res.status(200).send('missing password or rpassword')
                     }
@@ -258,7 +259,7 @@ module.exports = {
                             })
                         }
                     }
-                } else if (!password && rpassword || password && !rpassword){
+                } else if (!password && rpassword || password && !rpassword) {
                     console.log('missing password or rpassword');
                     return res.status(200).send('missing password or rpassword')
                 }

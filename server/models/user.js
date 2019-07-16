@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-let userSchema = new mongoose.Schema({
+let userSchema = new mongoose.Schema({ // missing profile picture
     acc_id: {
         type: String,
         unique: true,
@@ -41,9 +41,16 @@ let userSchema = new mongoose.Schema({
         required: true
     },
     resetToken: {
-      type: String,
-      unique: true
+        type: String,
+        unique: true
     },
+    lang: {
+        type: String
+    },
+    facebookId: {
+        type: String,
+        unique: true
+    }
 }, {timestamps: {createdAt: 'created_at'}});
 
 // when the data is send from user.create the .pre will hash the pwd before creating user with schema

@@ -1,10 +1,11 @@
 const nodemailer = require('nodemailer');
+const credentials = require('../config/private/config');
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'hypertube.no.reply@gmail.com',
-        pass: 'FloShaYa42Hype'
+        user: credentials.user,
+        pass: credentials.pass
     }
 });
 
@@ -18,13 +19,13 @@ function mailOptions(email, token) {
     return mailOption;
 }
 
-let resetMail = (email, code) => {
+let resetMail = (email, token) => {
     let mail = {
         from: 'hypertube.no.reply.42@gmail.com',
         to: email,
         subject: 'Forgot your password? Let\'s get you a new one.',
         html: '<p>You are receiving this e-mail because you requested a password reset for your Hyper account. Click ' +
-            '<a href="http://localhost:3000/reset/' + code + '">here</a> ' +
+            '<a href="http://localhost:3000/reset/' + token + '">here</a> ' +
             'to set up a new password. If you are not the author of this request, please contact our support team.</p>'
     };
     return mail;
@@ -37,18 +38,18 @@ module.exports = {
                 console.log(error);
                 return false
             } else {
-                console.log('success: email sent');
+                console.log('success: validation mail sent');
                 return true
             }
         });
     },
-    resetMail: (email, code) => {
-        transporter.sendMail(resetMail(email, code), (error) => {
+    resetMail: (email, token) => {
+        transporter.sendMail(resetMail(email, token), (error) => {
             if (error) {
                 console.log(error);
                 return false
             } else {
-                console.log('success: email sent');
+                console.log('success: reset password mail sent');
                 return true
             }
         });
