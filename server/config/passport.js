@@ -25,7 +25,8 @@ module.exports = (passport) => {
                         firstname: req.body.firstname,
                         lastname: req.body.lastname,
                         validation: false,
-                        validationToken: validationToken
+                        validationToken: validationToken,
+                        resetToken: null
                     }).then(() => {
                         mailUtils.sendValidationMail(email, validationToken);
                         console.log('user created');
@@ -35,7 +36,7 @@ module.exports = (passport) => {
             })
         })
     );
-
+    /* local sign-in form */
     passport.use('local-signin', new LocalStrategy({
             usernameField: 'username',
             passwordField: 'password',

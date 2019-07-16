@@ -39,7 +39,11 @@ let userSchema = new mongoose.Schema({
         type: String,
         unique: true,
         required: true
-    }
+    },
+    resetToken: {
+      type: String,
+      unique: true
+    },
 }, {timestamps: {createdAt: 'created_at'}});
 
 // when the data is send from user.create the .pre will hash the pwd before creating user with schema

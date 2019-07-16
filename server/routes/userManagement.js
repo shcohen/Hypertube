@@ -1,10 +1,7 @@
 const passport = require('passport');
 const User = require('../models/user');
 const mailsUtils = require('../utils/mailUtils');
-const secret = require('../config/private/config');
-const crypto = require('crypto'),
-    algorithm = secret.algorithm,
-    password = secret.secret;
+const uuid = require('uuid');
 const validator = require("email-validator");
 const passwordValidator = require('password-validator');
 const schema = new passwordValidator(); // create a validation schema
@@ -187,14 +184,20 @@ module.exports = {
             email: email
         }).then((user, error) => {
             if (user) {
-
                 console.log('2');
-               let crypted = '123VivalAlgerie';
-                console.log('3');
-
-                mailsUtils.resetMail(email, crypted);
-                console.log('success: reset email sent');
-                return res.status(200).send('success: reset mail sent')
+                const token = uuid.v4();
+                user.resetToken = token;
+                user.save((error) => {
+                    if (error) {
+                        console.log('error:', error);
+                        return res.status(200).send('error: ', error)
+                    } else {
+                        console.log('3');
+                        mailsUtils.resetMail(email, token);
+                        console.log('success: reset email sent');
+                        return res.status(200).send('success: reset mail sent')
+                    }
+                })
             } else if (error) {
                 console.log('error: ', error);
                 return res.status(200).send('error: ', error)
@@ -205,10 +208,9 @@ module.exports = {
         })
     },
     resetPassword: (req, res) => {
-        let {password, rpassword, email} = req.body;
-        // decrypt email
+        let {password, rpassword, resetToken} = req.body;
         User.findOne({
-            email: email
+            resetToken: resetToken
         }).then((user, error) => {
             if (user) {
                 if (password && rpassword) {

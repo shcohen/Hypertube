@@ -9,7 +9,7 @@ passport.use('facebook', new FacebookStrategy({
     clientID        : config.facebook.clientID,
     clientSecret    : config.facebook.clientSecret,
     callbackURL     : config.facebook.callbackURL,
-    profileFields: ['id', 'email', 'name', 'profile_pic']
+    profileFields: ['id', 'email', 'first_name', 'last_name', 'profile_pic']
 },
     function(accessToken, refreshToken, profile, cb) {
         User.findOrCreate({ facebookId: profile.id }, function (err, user) {
