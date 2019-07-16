@@ -176,3 +176,56 @@ html[data-theme="dark"] a.logo span.broken2 {
         text-shadow: inherit;
     }
 }
+
+header .left {
+    justify-self: left;
+    padding-left: 2rem;
+}
+
+header .right {
+    justify-self: right;
+    padding-right: 2rem;
+}
+
+header .left > a {
+    position: relative;
+    margin-right: 0.5rem;
+    padding: 0.4rem 0.5rem 0.4rem 0.5rem;
+    border-radius: 0.25rem;
+    border: 1px solid transparent;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 300;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+header .left > a:hover {
+    background-color: var(--bg-container-hover);
+    color: var(--color-text-hover);
+}
+
+header .left > a:active {
+    background-color: var(--bg-container-active);
+}
+
+header .left > a.active {
+    color: var(--color-headings) !important;
+    /*text-shadow: 0 3px 10px var(--color-headings);*/
+}
+
+header .left > a::after {
+    content: "";
+    position: absolute;
+    bottom: 0.1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 2px;
+    background-color: var(--color-headings);
+    opacity: 0;
+    transition: opacity 0.2s, width 0.2s;
+}
+
+header .left > a.active::after {
+    width: 60%;
+    opacity: 0.7;
+}

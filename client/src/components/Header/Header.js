@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {NavLink} from 'react-router-dom';
 import classnames from 'classnames';
 
 import './header.css';
@@ -38,15 +39,15 @@ class Header extends Component {
   getLinks = () => {
     if (this.state.loggedIn) {
       return (<React.Fragment>
-        <span>
+        <NavLink to="/" exact>
           Accueil
-        </span>
-        <span>
+        </NavLink>
+        <NavLink to="/search">
           Recherche
-        </span>
-        <span>
+        </NavLink>
+        <NavLink to="/my-hyper">
           Mon Hyper
-        </span>
+        </NavLink>
       </React.Fragment>)
     } else {
       return (<React.Fragment>
@@ -64,13 +65,13 @@ class Header extends Component {
         'hidden': hidden
       })}>
         <div>
-          <div>
+          <div className="left">
             {links}
           </div>
           <div className="logo">
-            <a className="logo" href="/">H<span className="broken">y</span>pe<span className="broken2">r</span></a>
+            <NavLink className="logo" to="/">H<span className="broken">y</span>pe<span className="broken2">r</span></NavLink>
           </div>
-          <div>
+          <div className="right">
             <input className="custom" type="checkbox" name="theme" onChange={this.toggleMode}/>
           </div>
         </div>

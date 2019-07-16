@@ -3,18 +3,26 @@
 html {
     --bg: #fcfcfc;
     --bg-container: #ebebeb;
+    --bg-container-hover: #efefef;
+    --bg-container-active: #ebebeb;
 
     --color-headings: #0077ff;
     --color-text: #333333;
+    --color-text-hover: #131313;
+
     --color-borders: #dadada;
 }
 
 html[data-theme="dark"] {
     --bg: #333333;
     --bg-container: #434343;
+    --bg-container-hover: #383838;
+    --bg-container-active: #434343;
 
     --color-headings: #3694ff;
     --color-text: #b5b5b5;
+    --color-text-hover: #d5d5d5;
+
     --color-borders: #545454;
 }
 
@@ -26,4 +34,8 @@ html.transition *::before,
 html.transition *::after {
     transition: all 0.5s !important;
     transition-delay: 0s !important;
+}
+
+html[data-theme="dark"] body {
+    background-color: var(--bg);
 }
