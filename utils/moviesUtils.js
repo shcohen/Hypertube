@@ -55,8 +55,8 @@ module.exports = {
     removeMoviesWithoutInfo: (movies) => {
         return movies.filter((first_movie, i) => {
             return movies.findIndex(second_movie => {
-                if (first_movie.note && second_movie.note)
-                    return second_movie.note === first_movie.note;
+                if (first_movie.id && second_movie.id)
+                    return second_movie.id === first_movie.id;
             }) === i;
         });
     },
@@ -71,12 +71,19 @@ module.exports = {
     removeTitleAndQualityDoublons: (movies) => {
         return movies.filter((first_movie, i) => {
             return movies.findIndex(second_movie => {
-                if (first_movie.title && second_movie.title && first_movie.quality && second_movie.quality)
-                    return second_movie.title === first_movie.title && second_movie.quality === first_movie.quality;
+                if (first_movie.title && second_movie.title && first_movie.torrent && second_movie.torrent)
+                    return second_movie.title === first_movie.title && second_movie.torrent[0].quality === first_movie.torrent[0].quality;
             }) === i;
         });
     },
     epurMovieObject: movie => {
         movie.magnet = undefined;
-    }
+    },
+    regroupTorrent: async movie => {
+        let final = movie.shift();
+        await Promise.all(movie.map(movie => {
+            final.torrent = [...final.torrent, movie.torrent[0]];
+        }));
+        return final;
+    },
 };
