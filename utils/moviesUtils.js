@@ -84,6 +84,9 @@ module.exports = {
         await Promise.all(movie.map(movie => {
             final.torrent = [...final.torrent, movie.torrent[0]];
         }));
+        await final.torrent.sort((a, b) => {
+            return b.quality - a.quality;
+        });
         return final;
     },
 };
