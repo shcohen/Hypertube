@@ -46,7 +46,7 @@ module.exports = {
         return res.status(200).send('OK');
     },
     updateTrends: () => {
-        return trendsSchema.countDocuments(async (err, count) => {
+        return trendsSchema.count(async (err, count) => {
             if (!err) {
                 let query = await axios.get(`https://api.themoviedb.org/3/trending/movie/week?api_key=${TMDB_API_KEY_V3}`);
                 if (query.data.results) {
@@ -62,7 +62,7 @@ module.exports = {
                                 release_date: movie.Released
                             })
                         } else {
-                            await trendsSchema.updateMany({
+                            await trendsSchema.update({
                                 title: movie.Title,
                                 poster: movie.Poster,
                                 genre: movie.Genre,

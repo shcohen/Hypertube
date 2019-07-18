@@ -12,6 +12,7 @@ exports.router = (() => {
 
     /* TORRENT */
     apiRouter.route('/torrent/get_torrent').post(torrentManagement.findTorrent);
+    apiRouter.route('/torrent/download_torrent/:magnet').get(torrentManagement.torrentManager);
 
     return apiRouter;
 })();
