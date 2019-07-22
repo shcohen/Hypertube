@@ -40,7 +40,7 @@ app.use('/api', apiRouter);
 
 app.use('/', (req, res) => {
     res.writeHead(200, { "Content-Type": "text/html" });
-    res.end('<video src="http://localhost:3000/api/torrent/download_torrent/bWFnbmV0Oj94dD11cm46YnRpaDozOTAzMDA0ODIzRTAyRjQ2RDNDM0VFMUEwMTJBRjU4QUIyRDlDMEQ4JmRuPVkrdHUrbWFtJTI2YWFjdXRlJTNCK3RhbWJpJTI2ZWFjdXRlJTNCbitEVkRSaXArWHZpZCtMS1JHJnRyPWh0dHAlM0ElMkYlMkZleG9kdXMuMTMzN3gub3JnJTJGYW5ub3VuY2UmdHI9aHR0cCUzQSUyRiUyRm5lbWVzaXMuMTMzN3gub3JnJTJGYW5ub3VuY2UmdHI9aHR0cCUzQSUyRiUyRnBvdzcuY29tJTNBODAlMkZhbm5vdW5jZSZ0cj1odHRwJTNBJTJGJTJGdHJhY2tlci5wdWJsaWNidC5jb20lMkZhbm5vdW5jZSZ0cj1odHRwJTNBJTJGJTJGZ2VuZXNpcy4xMzM3eC5vcmclM0ExMzM3JTJGYW5ub3VuY2UmdHI9aHR0cCUzQSUyRiUyRjEwLnJhcmJnLmNvbSUzQTgwJTJGYW5ub3VuY2UmdHI9dWRwJTNBJTJGJTJGdHJhY2tlci4xMzM3eC5vcmclM0E4MCUyRmFubm91bmNlJnRyPXVkcCUzQSUyRiUyRnRyYWNrZXIuemVyMGRheS50byUzQTEzMzclMkZhbm5vdW5jZSZ0cj11ZHAlM0ElMkYlMkZ0cmFja2VyLmxlZWNoZXJzLXBhcmFkaXNlLm9yZyUzQTY5NjklMkZhbm5vdW5jZSZ0cj11ZHAlM0ElMkYlMkZjb3BwZXJzdXJmZXIudGslM0E2OTY5JTJGYW5ub3VuY2UK" controls></video>');
+    res.end('<video src="http://localhost:3000/api/torrent/download_torrent/" controls></video>');
 });
 
 const API_PORT = process.env.API_PORT || 3000;

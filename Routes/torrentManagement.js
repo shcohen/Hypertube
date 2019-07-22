@@ -1,33 +1,52 @@
 const torrentSearch = require('torrent-search-api');
 const crypto = require('crypto');
 const mime = require('mime');
+const fs = require('fs');
 const ffmpeg = require('fluent-ffmpeg');
-ffmpeg.setFfmpegPath('/usr/local/Cellar/ffmpeg/HEAD-4373bb4_1/bin/ffmpeg');
+ffmpeg.setFfmpegPath('/Users/yadouble/.brew/Cellar/ffmpeg/4.1.4_1/bin/ffmpeg');
 const pump = require('pump');
 const torrentStream = require('torrent-stream');
-const {removeTitleAndQualityDoublons, regroupTorrent} = require('../utils/moviesUtils');
+const {removeTitleAndQualityDoublons, regroupTorrent, verifyTitle} = require('../utils/moviesUtils');
 
 module.exports = {
     findTorrent: async (req, res) => {
         let {title} = req.body;
 
         if (title !== undefined && title.length) {
-            let movies = await torrentSearch.search(title, 'Movies');
-            await movies.sort((a, b) => {
-                return b.seeds - a.seeds;
-            });
-            await Promise.all(movies.map(async movie => {
-                let found = await movie.title.match(/[0-9]+(?=p)/gm);
-                movie.title = title;
-                movie.torrent = [{quality: found ? found[0] : undefined, magnet: await torrentSearch.getMagnet(movie)}];
-            }));
-            let result = await removeTitleAndQualityDoublons(movies);
-            res.status(200).send(await regroupTorrent(result));
+            if (await verifyTitle(title)) {
+                let search = await torrentSearch.search(title, 'Movies');
+                if (search.length) {
+                    await search.sort((a, b) => {
+                        return b.seeds - a.seeds;
+                    });
+                    let movies = search.filter(movie => {
+                        let found = movie.title.match(/^([A-Za-z:))\- .])+[1-9]{0,1}(?!0|9|8|7)(?!\()|^([0-9 ])+[A-Za-z:))\- .]*[1-9]{0,1}(?!0|9|8|7)(?!\()/gm);
+                        let torrentName = found ? found[0].replace(/[:]/gm, '').replace(/[.-]/g, ' ').toLowerCase().trim() : undefined;
+                        let tmpTitle = title.replace(/[:]/gm, '').replace(/[.-]/g, ' ').toLowerCase().trim();
+                        return torrentName ? torrentName === tmpTitle : undefined;
+                    });
+                    await Promise.all(movies.map(async movie => {
+                        let found = await movie.title.match(/[0-9]+(?=p)/gm);
+                        movie.title = title;
+                        movie.torrent = [{
+                            quality: found ? found[0] : undefined,
+                            magnet: await torrentSearch.getMagnet(movie)
+                        }];
+                    }));
+                    let result = await removeTitleAndQualityDoublons(movies);
+                    res.status(200).send(await regroupTorrent(result));
+                } else {
+                    return res.status(200).send('Wrong data sent');
+                }
+            } else {
+                return res.status(200).send('Wrong data sent');
+            }
         } else {
             return res.status(200).send('Wrong data sent');
         }
     },
-    streamVideoWithConversion: (res, file, range, engine) => {
+    streamVideoWithConversion: (res, file, range) => {
+        console.log(file.path);
         console.log('Started video conversion');
         let parts = range.replace(/bytes=/, "").split("-");
         console.log('Parts extracted !', parts);
@@ -38,12 +57,17 @@ module.exports = {
         let stream = file.createReadStream({start, end});
         console.log('Stream created !');
         let video = ffmpeg(stream)
-            .videoCodec('libx264')
-            .audioCodec('aac')
-            .format('mp4')
-            .inputOption(['-movflags frag_keyframe+faststart'])
-            .on('progress', function (progress) {
-                console.log('Processing: ' + progress.percent + '% done');
+            .format('webm')
+            .videoCodec('libvpx')
+            .audioCodec('libvorbis')
+            .videoBitrate(1024)
+            .audioBitrate(128)
+            .outputOption(['-cpu-used 2',
+                '-deadline realtime',
+                '-error-resilient 1',
+                '-threads 4'])
+            .on('progress', () => {
+                console.log('Processing...');
             })
             .on('error', function (err, stdout, stderr) {
                 console.log('Cannot process video: ' + err.message);
@@ -53,22 +77,17 @@ module.exports = {
             .on('end', function () {
                 console.log('Processing finished successfully');
             });
-        res.on('close', () => {
-            engine.remove(true, () => { console.log('Engine cleared') } );
-            engine.destroy();
-            console.log('Engine cleared !');
-        });
+        // .saveToFile('/tmp/torrentStream/');
         const head = {
-            'Accept-Ranges': 'bytes',
-            'Content-Range': `bytes ${start}-${end}/${file.length}`,
-            'Content-Length': parseInt(end - start) + 1,
-            'Content-Type': 'video/mp4',
+            'Cache-Control': 'no-cache, no-store',
+            'Content-Length': file.length,
+            'Content-Type': 'video/webm'
         };
-        res.writeHead(206, head);
+        res.writeHead(200, head);
         console.log('Header writted !');
         pump(video, res);
     },
-    streamVideoWithoutConversion: (res, file, range, engine) => {
+    streamVideoWithoutConversion: (res, file, range) => {
         console.log('Started streaming process !');
         let parts = range.replace(/bytes=/, "").split("-");
         console.log('Parts extracted !', parts);
@@ -77,11 +96,6 @@ module.exports = {
         let end = parts && parts[1] ? parseInt(parts[1], 10) : file.length - 1;
         console.log('End extracted !', end);
         let stream = file.createReadStream({start, end});
-        res.on('close', () => {
-            engine.remove(true, () => { console.log('Engine cleared') } );
-            engine.destroy();
-            console.log('Engine cleared !');
-        });
         const head = {
             'Accept-Ranges': 'bytes',
             'Content-Range': `bytes ${start}-${end}/${file.length}`,
@@ -98,21 +112,20 @@ module.exports = {
         engine.on('ready', () => {
             engine.files.forEach(file => {
                 if (mime.getType(file.path) === 'video/mp4' || mime.getType(file.path) === 'video/ogg' || mime.getType(file.path) === 'video/webm') {
+                    fileSize = file.length;
                     file.select();
-                    module.exports.streamVideoWithoutConversion(res, file, range, engine);
+                    module.exports.streamVideoWithoutConversion(res, file, range);
                 } else if ((new RegExp(/video/)).test(mime.getType(file.path))) {
+                    fileSize = file.length;
                     file.select();
-                    module.exports.streamVideoWithConversion(res, file, range, engine);
+                    module.exports.streamVideoWithConversion(res, file, range, directoryName);
                 } else {
                     file.deselect();
                 }
             });
-            engine.on('torrent', () => {
-                console.log('data fetched');
-            });
             engine.on('download', () => {
                 console.log(Math.round((engine.swarm.downloaded / fileSize) * 100) + '% downloaded');
-            })
+            });
         });
     },
     torrentManager: async (req, res) => {
