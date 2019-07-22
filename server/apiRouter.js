@@ -14,8 +14,8 @@ exports.router = (() => {
     apiRouter.route('/account/reset_password').post(userManagement.resetPassword);
 
     /* STRATEGIES */
-    apiRouter.route('/account/facebook').post(strategies.facebook);
-    apiRouter.route('/account/facebook/callback').post(strategies.facebookAuth);
+    apiRouter.route('/account/google/').get(strategies.google);
+    apiRouter.route('/home').get(strategies.googleRedirect);
 
     return apiRouter;
 })();

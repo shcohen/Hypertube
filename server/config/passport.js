@@ -1,5 +1,5 @@
 const LocalStrategy = require('passport-local').Strategy;
-let FacebookStrategy = require('passport-facebook').Strategy;
+const GoogleStrategy = require('passport-google-oauth20');
 let config = require('../oAuth/config.js');
 const mailUtils = require('../utils/mailUtils');
 const User = require('../models/user'); // load up the user model
@@ -30,11 +30,17 @@ module.exports = (passport) => {
                         validationToken: validationToken,
                         resetToken: null,
                         lang: 'en',
-                        facebookId: null
-                    }).then(() => {
-                        mailUtils.sendValidationMail(email, validationToken);
-                        console.log('user created');
-                        return done(null, user, req.flash('successMessage', 'User created'))
+                        googleId: null,
+                        profilePic: null
+                    }).then((isCreated) => {
+                        if (!isCreated) {
+                            console.log('error while creating user');
+                            return done(null, false, req.flash('errorMessage', 'User not created'))
+                        } else {
+                            mailUtils.sendValidationMail(email, validationToken);
+                            console.log('user created');
+                            return done(null, user, req.flash('successMessage', 'User created'))
+                        }
                     })
                 }
             })
@@ -76,29 +82,62 @@ module.exports = (passport) => {
             })
         })
     );
-    /* facebook form */
-    passport.use('facebook', new FacebookStrategy({
-            clientID: config.facebook.app_id,
-            clientSecret: config.facebook.app_secret,
-            callbackURL: config.facebook.callback,
-            profileFields: ['id', 'email', 'first_name', 'last_name', 'profile_pic'],
-            passReqToCallback: true // access the request object in the callback
-        }, (req, accessToken, refreshToken, profile, done) => { // retrieve data
-            console.log(req.body);
-            User.findOrCreate({
-                facebookId: profile.id
-            }).then((user, error) => {
-                console.log(user);
-                if (error) {
-                    return done(error)
-                } else if (!user) {
-                    return done(null, false, req.flash('errorMessage', 'Account not found'))
-                } else {
-                    return done(null, user, req.flash('successMessage', 'User logged in'))
-                }
-            });
-        }
-    ));
+    /* google form */
+    passport.use('google', new GoogleStrategy({
+        clientID: config.google.clientID,
+        clientSecret: config.google.clientSecret,
+        callbackURL: '/home',
+        passReqToCallback: true
+    }, (req, accessToken, refreshToken, profile, done) => {
+            console.log("done that");
+            console.log(profile._json);
+            console.log(accessToken);
+            console.log(refreshToken);
+            if (!profile) {
+                console.log('error: missing profile data');
+                return done(null, false, req.flash('errorMessage', 'Missing profile data'))
+            } else {
+                User.findOne({
+                    googleId: profile.id,
+                    email: profile._json.email,
+                    username: profile.displayName.replace(/\s/g, "")
+                }).then((user, error) => {
+                    if (user) {
+                        console.log('user info already taken');
+                        return done(null, false, req.flash('errorMessage', 'User already taken'))
+                    } else if (error) {
+                        console.log(error);
+                        return done(null, error);
+                    } else {
+                        let validationToken = Math.random().toString(36).substr(2, 9);
+                        User.create({
+                            acc_id: Math.random().toString(36).substr(2, 9),
+                            email: profile._json.email,
+                            username: profile.displayName.replace(/\s/g, ""),
+                            password: 'Password124',
+                            firstname: profile._json.given_name,
+                            lastname: profile._json.family_name,
+                            validation: profile._json.email_verified,
+                            validationToken: validationToken,
+                            resetToken: null,
+                            lang: profile._json.locale,
+                            googleId: profile.id,
+                            profilePic: profile._json.picture
+                        }).then((isCreated) => {
+                            if (!isCreated) {
+                                console.log('error while creating user');
+                                 return done(null, user, req.flash('errorMessage', 'User not created'))
+                            } else {
+                                console.log('user created');
+                                return done(null, user, req.flash('successMessage', 'User created'))
+                            }
+                        })
+                    }
+                })
+            }
+        })
+    );
+
 
     passport.serializeUser((user, done) => {
         done(null, user.id);

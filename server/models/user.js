@@ -47,9 +47,12 @@ let userSchema = new mongoose.Schema({ // missing profile picture
     lang: {
         type: String
     },
-    facebookId: {
+    googleId: {
         type: String,
         unique: true
+    },
+    profilePic: {
+        type: String
     }
 }, {timestamps: {createdAt: 'created_at'}});
 

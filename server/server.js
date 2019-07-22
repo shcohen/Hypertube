@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 const apiRouter = require('./apiRouter').router;
 const flash = require("connect-flash");
+const path = require('path');
 const session = require('express-session');
 
 // connecting to database
@@ -16,6 +17,7 @@ mongoose.connect('mongodb://localhost/db')
 });
 
 const app = express();
+//app.use('/home', express.static(path.join(__dirname, 'template')));
 
 // passport configuration
 require('./config/passport')(passport);
@@ -44,5 +46,5 @@ app.use(flash());
 app.use('/api/', apiRouter);
 
 // start
-const API_PORT = process.env.API_PORT || 6000;
+const API_PORT = process.env.API_PORT || 8080;
 app.listen(API_PORT, console.log(`Listening on port ${API_PORT}`));
