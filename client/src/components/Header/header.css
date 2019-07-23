@@ -48,8 +48,8 @@ html[data-theme="light"] a.logo span {
     color: var(--color-text);
 }
 
-html[data-theme="dark"] a.logo,
-html[data-theme="dark"] a.logo span {
+html[data-theme="dark"] a.logo.neon,
+html[data-theme="dark"] a.logo.neon span {
     color: white;
     font-weight: bold;
     animation: neon 2s infinite ease-in-out, rainbow 30s infinite linear;
@@ -94,7 +94,7 @@ html[data-theme="dark"] a.logo span {
     }
 }
 
-html[data-theme="dark"] a.logo span.broken {
+html[data-theme="dark"] a.logo.neon span.broken {
     color: white;
     animation: broken 4s infinite;
 }
@@ -138,7 +138,7 @@ html[data-theme="dark"] a.logo span.broken {
     }
 }
 
-html[data-theme="dark"] a.logo span.broken2 {
+html[data-theme="dark"] a.logo.neon span.broken2 {
     color: white;
     animation: broken2 8s infinite alternate;
 }
@@ -246,6 +246,43 @@ header .right > div {
     margin-left: 0.5rem;
     width: 1.9rem;
     height: 1.9rem;
+}
+
+/*MOBILE VERSION*/
+
+@media screen and (max-width: 800px) {
+    #wrapper {
+        padding: 5.5rem 0 10rem 0 !important;
+    }
+
+    header {
+        height: 5.5rem;
+    }
+
+    header.hidden {
+        transform: translateY(-6rem);
+    }
+
+    header.centered > div {
+        height: 5rem;
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: "logo buttons" "links links";
+    }
+
+    header div.logo {
+        grid-area: logo;
+        padding-left: 1rem;
+    }
+
+    header .right {
+        grid-area: buttons;
+        padding-right: 1rem;
+    }
+
+    header .left {
+        grid-area: links;
+        transform: translateY(-0.3rem);
+    }
 }
 
 /*BUTTONS*/
@@ -412,6 +449,7 @@ header .right :not(.logout).opened .dropdown {
     margin-bottom: 0.7rem;
     outline: none;
     box-shadow: 0 0 0 1px var(--bg-container), 0 0 0 2px var(--color-borders);
+    cursor: pointer;
 }
 
 .dropdown__section .color-picker input:checked {

@@ -1,6 +1,7 @@
 html {
     --bg-input-custom: whitesmoke;
-    --bg-input-custom-checked: #3fdc54;
+    /*--bg-input-custom-checked: #3fdc54;*/
+    --bg-input-custom-checked: var(--color-headings);
     --border-input-custom: var(--color-borders);
     --shadow-input-custom: lightgrey;
 }
@@ -12,9 +13,9 @@ input[type="checkbox"].custom {
     margin: 0;
     padding: 0;
     position: relative;
-    width: 2rem;
-    height: 1.2rem;
-    border-radius: 0.65rem;
+    width: 28px;
+    height: 18px;
+    border-radius: 9px;
     border: 1px solid var(--border-input-custom);
     background-color: var(--bg-input-custom);
     outline: none;
@@ -26,12 +27,13 @@ input[type="checkbox"].custom {
 input[type="checkbox"].custom::before {
     position: absolute;
     content: "";
-    top: 0.1rem;
-    bottom: 0.1rem;
-    left: 0.1rem;
-    right: 0.9rem;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 12px;
+    left: 2px;
+    right: 11px;
     box-sizing: border-box !important;
-    border-radius: 0.55rem;
+    border-radius: 6px;
     border: 1px solid var(--border-input-custom);
     background-color: var(--bg);
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.1);
@@ -48,8 +50,8 @@ input[type="checkbox"].custom:checked {
 }
 
 input[type="checkbox"].custom:checked::before {
-    left: 0.9rem;
-    right: 0.1rem;
+    left: 11px;
+    right: 2px;
     box-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
     transition: left 0.4s, right 0.2s !important;
 }
