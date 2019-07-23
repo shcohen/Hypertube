@@ -16,6 +16,8 @@ exports.router = (() => {
     /* STRATEGIES */
     apiRouter.route('/account/google/').get(strategies.google);
     apiRouter.route('/home').get(strategies.googleRedirect);
+    apiRouter.route('/account/github').get(strategies.github);
+    apiRouter.route('/account/github/redirect').get(strategies.githubRedirect);
 
     return apiRouter;
 })();

@@ -1,5 +1,6 @@
 const LocalStrategy = require('passport-local').Strategy;
 const GoogleStrategy = require('passport-google-oauth20');
+const GithubStrategy = require('passport-github2');
 let config = require('../oAuth/config.js');
 const mailUtils = require('../utils/mailUtils');
 const User = require('../models/user'); // load up the user model
@@ -31,6 +32,7 @@ module.exports = (passport) => {
                         resetToken: null,
                         lang: 'en',
                         googleId: null,
+                        accessToken: null,
                         profilePic: null
                     }).then((isCreated) => {
                         if (!isCreated) {
@@ -83,28 +85,23 @@ module.exports = (passport) => {
         })
     );
     /* google form */
-    passport.use('google', new GoogleStrategy({
-        clientID: config.google.clientID,
-        clientSecret: config.google.clientSecret,
-        callbackURL: '/home',
-        passReqToCallback: true
-    }, (req, accessToken, refreshToken, profile, done) => {
+    passport.use('google', new GoogleStrategy({ // activer le redirect depuis juste /home en api/home
+            clientID: config.google.clientID,
+            clientSecret: config.google.clientSecret,
+            callbackURL: '/home',
+            passReqToCallback: true
+        }, (req, accessToken, refreshToken, profile, done) => {
             console.log("done that");
-            console.log(profile._json);
-            console.log(accessToken);
-            console.log(refreshToken);
             if (!profile) {
                 console.log('error: missing profile data');
                 return done(null, false, req.flash('errorMessage', 'Missing profile data'))
             } else {
                 User.findOne({
                     googleId: profile.id,
-                    email: profile._json.email,
-                    username: profile.displayName.replace(/\s/g, "")
                 }).then((user, error) => {
                     if (user) {
-                        console.log('user info already taken');
-                        return done(null, false, req.flash('errorMessage', 'User already taken'))
+                        console.log('success: user logged in');
+                        return done(null, user, req.flash('successMessage', 'User logged in'))
                     } else if (error) {
                         console.log(error);
                         return done(null, error);
@@ -113,8 +110,8 @@ module.exports = (passport) => {
                         User.create({
                             acc_id: Math.random().toString(36).substr(2, 9),
                             email: profile._json.email,
-                            username: profile.displayName.replace(/\s/g, ""),
-                            password: 'Password124',
+                            username: profile.displayName.replace(/\s/g, "") + Math.random().toString().substr(5, 3),
+                            password: 'P' + Math.random().toString(36).substr(2, 11),
                             firstname: profile._json.given_name,
                             lastname: profile._json.family_name,
                             validation: profile._json.email_verified,
@@ -122,16 +119,70 @@ module.exports = (passport) => {
                             resetToken: null,
                             lang: profile._json.locale,
                             googleId: profile.id,
+                            githubId: null,
+                            accessToken: accessToken,
                             profilePic: profile._json.picture
                         }).then((isCreated) => {
                             if (!isCreated) {
                                 console.log('error while creating user');
-                                 return done(null, user, req.flash('errorMessage', 'User not created'))
+                                return done(null, user, req.flash('errorMessage', 'User not created'))
                             } else {
-                                console.log('user created');
+                                console.log('success: user created');
                                 return done(null, user, req.flash('successMessage', 'User created'))
                             }
                         })
+                    }
+                })
+            }
+        })
+    );
+
+    passport.use('github', new GithubStrategy({
+            clientID: config.github.clientID,
+            clientSecret: config.github.clientSecret,
+            callbackURL: '/api/account/github/redirect',
+            passReqToCallback: true
+        }, (req, accessToken, refreshToken, profile, done) => {
+            console.log('done that');
+            if (!profile) {
+                console.log('error: missing profile data');
+                return done(null, false, req.flash('errorMessage', 'Missing profile data'))
+            } else {
+                User.findOne({
+                    githubId: profile.id,
+                }).then((user, error) => {
+                    if (user) {
+                        console.log('success: user logged in');
+                        return done(null, user, req.flash('successMessage', 'User logged in'))
+                    } else if (error) {
+                        console.log(error);
+                        return done(null, error);
+                    } else {
+                        let validationToken = Math.random().toString(36).substr(2, 9);
+                        User.create({
+                            acc_id: Math.random().toString(36).substr(2, 9),
+                            email: profile._json.email,
+                            username: profile._json.login + Math.random().toString().substr(5, 3),
+                            password: 'P' + Math.random().toString(36).substr(2, 11),
+                            firstname: profile._json.name.split(" ")[0],
+                            lastname: profile._json.name.split(" ")[1],
+                            validation: true,
+                            validationToken: validationToken,
+                            resetToken: null,
+                            lang: 'en',
+                            googleId: null,
+                            githubId: profile._json.id,
+                            accessToken: accessToken,
+                            profilePic: profile._json.avatar_url
+                        }).then((isCreated) => {
+                            if (!isCreated) {
+                                console.log('error while creating user');
+                                return done(null, user, req.flash('errorMessage', 'User not created'))
+                            } else {
+                                console.log('success: user created');
+                                return done(null, user, req.flash('successMessage', 'User created'))
+                            }
+                        });
                     }
                 })
             }

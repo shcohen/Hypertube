@@ -17,7 +17,7 @@ mongoose.connect('mongodb://localhost/db')
 });
 
 const app = express();
-//app.use('/home', express.static(path.join(__dirname, 'template')));
+app.use('/', express.static(path.join(__dirname, 'template')));
 
 // passport configuration
 require('./config/passport')(passport);
