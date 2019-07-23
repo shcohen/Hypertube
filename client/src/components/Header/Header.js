@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {NavLink} from 'react-router-dom';
 import classnames from 'classnames';
 
+import RightButtons from './RightButtons';
+
 import './header.css';
 
 class Header extends Component {
@@ -24,18 +26,6 @@ class Header extends Component {
     }
   }
 
-  toggleMode = (e) => {
-    document.documentElement.classList.add('transition');
-    if (e.target.checked) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-      document.documentElement.setAttribute('data-theme', 'light');
-    }
-    setTimeout(() => {
-      document.documentElement.classList.remove('transition');
-    }, 500);
-  };
-
   getLinks = () => {
     if (this.state.loggedIn) {
       return (<React.Fragment>
@@ -56,46 +46,9 @@ class Header extends Component {
     }
   };
 
-  getButtons = () => {
-    if (this.state.loggedIn) {
-      return (<React.Fragment>
-        <div className="settings">
-          <button/>
-          <div className="dropdown">
-            <div className="dropdown__title">
-              <i className="fas fa-palette"></i> Thème
-            </div>
-            <div className="dropdown__section">
-
-            </div>
-            <div className="dropdown__section">
-
-            </div>
-          </div>
-        </div>
-        <div className="account">
-          <button/>
-          <div className="dropdown">
-
-          </div>
-        </div>
-        <div className="logout">
-          <button/>
-        </div>
-      </React.Fragment>)
-    } else {
-      return (<React.Fragment>
-        <div>
-          <button className="account"/>
-        </div>
-      </React.Fragment>)
-    }
-  };
-
   render() {
     const {hidden} = this.state;
     const links = this.getLinks();
-    const buttons = this.getButtons();
 
     return (
       <header className={classnames('centered', {
@@ -103,7 +56,6 @@ class Header extends Component {
       })}>
         <div>
           <div className="logo">
-            <input className="custom" type="checkbox" name="theme" onChange={this.toggleMode}/>
             <NavLink className="logo" to="/">H<span className="broken">y</span>pe<span
               className="broken2">r</span></NavLink>
           </div>
@@ -111,7 +63,7 @@ class Header extends Component {
             {links}
           </div>
           <div className="right">
-            {buttons}
+            <RightButtons/>
           </div>
         </div>
       </header>
