@@ -78,11 +78,7 @@ module.exports = {
     },
     verifyTitle: async title => {
         let res = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY_V3}&query=${title}`);
-        console.log(res.data.results[0].title);
         return res.data.results ? title === res.data.results[0].title : false
-    },
-    epurMovieObject: movie => {
-        movie.magnet = undefined;
     },
     regroupTorrent: async movie => {
         let final = movie.shift();

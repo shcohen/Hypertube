@@ -2,7 +2,7 @@ const torrentSearch = require('torrent-search-api');
 const accentRemover = require('remove-accents');
 const axios = require('axios');
 const trendsSchema = require('../models/trends');
-const {getImdbInfo, epurMovieObject, removeTitleAndQualityDoublons, removeDuplicatesMovies, getMovieInfo, removeMoviesWithoutInfo} = require('../utils/moviesUtils');
+const {getImdbInfo, removeDuplicatesMovies, getMovieInfo, removeMoviesWithoutInfo} = require('../utils/moviesUtils');
 const {TMDB_API_KEY_V3} = require('../config/apiKey');
 
 module.exports = {
@@ -69,7 +69,7 @@ module.exports = {
                                 note: movie.imdbRating,
                                 imdbID: movie.imdbID,
                                 release_date: movie.Released
-                        })
+                            })
                         }
                     });
                 } else {
