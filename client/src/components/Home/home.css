@@ -1,12 +1,95 @@
+/*TRYPTICH*/
+
 .triptych {
+    position: relative;
     width: 100%;
+    height: calc(100vh - var(--header-height));
+    overflow: hidden;
 }
 
 .triptych__part {
-    height: calc(100vh - 4rem);
+    height: calc(100vh - var(--header-height));
     background-color: var(--bg);
 }
 
 .triptych__part:nth-child(odd) {
     background-color: var(--bg-container);
 }
+
+/*SCROLLING*/
+
+.triptych__scroll {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 1rem;
+    z-index: 2;
+}
+
+.triptych__scroll:hover {
+    opacity: 1;
+}
+
+
+
+.triptych__scroll button {
+    width: 3rem;
+    height: 3rem;
+    background: transparent url("../../assets/img/home-down-arrow.svg") center no-repeat;
+    background-size: 3rem;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: transform 0.4s;
+}
+
+.triptych__scroll button.rotated {
+    transform: rotate(180deg);
+}
+
+.triptych > .triptych__part {
+    transition: transform 1s ease-out;
+}
+
+.triptych.zero > .triptych__part {
+    transform: translateY(0);
+}
+
+.triptych.one > .triptych__part {
+    transform: translateY(calc(-100vh + var(--header-height)));
+}
+
+.triptych.two > .triptych__part {
+    transform: translateY(calc(-200vh + 2 * var(--header-height)));
+}
+
+.triptych__scroll .with-toolbox {
+    width: 3rem;
+    height: 3rem;
+    transform: translateY(3rem);
+    z-index: 3;
+    cursor: pointer;
+}
+
+.triptych__scroll .with-toolbox:hover + button {
+    opacity: 1;
+}
+
+/*FIRST PART*/
+
+/*GALLERY*/
+
+.gallery__container {
+    position: relative;
+}
+
+.gallery {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+

@@ -4,7 +4,7 @@ header {
     position: fixed;
     top: 0;
     width: 100%;
-    height: 4rem;
+    height: var(--header-height);
     z-index: 100;
     background-color: var(--bg);
     box-shadow: 0 -40px 16px 32px rgba(0, 0, 0, 0.5) !important;
@@ -251,16 +251,8 @@ header .right > div {
 /*MOBILE VERSION*/
 
 @media screen and (max-width: 800px) {
-    #wrapper {
-        padding: 5.5rem 0 10rem 0 !important;
-    }
-
-    header {
-        height: 5.5rem;
-    }
-
     header.hidden {
-        transform: translateY(-6rem);
+        transform: translateY(calc(-1 * var(--header-height) - 0.5rem));
     }
 
     header.centered > div {

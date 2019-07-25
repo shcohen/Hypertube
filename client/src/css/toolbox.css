@@ -1,0 +1,41 @@
+.with-toolbox {
+    position: relative;
+}
+
+.with-toolbox:hover .toolbox {
+    display: block;
+}
+
+.toolbox {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    width: auto;
+    height: auto;
+    white-space: nowrap;
+    padding: 0.3rem 0.4rem;
+    background-color: black;
+    color: white;
+    font-size: 0.8rem;
+    border-radius: 0.2rem;
+}
+
+.toolbox::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 90%);
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0.5rem 0.5rem 0 0.5rem;
+    border-color: black transparent transparent transparent;
+}
+
+.toolbox::selection {
+    background-color: transparent;
+    color: inherit;
+}

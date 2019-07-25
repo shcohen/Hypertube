@@ -11,6 +11,7 @@ import './css/normalize.css';
 import './css/darkmode.css';
 import './css/global.css';
 import './css/checkbox.css';
+import './css/toolbox.css';
 
 class App extends Component {
 
