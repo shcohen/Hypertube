@@ -27,4 +27,15 @@ module.exports = {
             failureFlash: true
         })(req, res, next)
     },
+    fortyTwo: (req, res, next) => { // load login window
+        passport.authenticate('42')(req, res, next)
+    },
+    fortyTwoRedirect: (req, res, next) => { // load data
+        console.log('been there');
+        passport.authenticate('42', {
+            successRedirect: '/', // if user already exists --> get logged in
+            failureRedirect: '/api/account/register', // if user is created
+            failureFlash: true
+        })(req, res, next)
+    }
 };

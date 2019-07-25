@@ -2,6 +2,8 @@ const passport = require('passport');
 const User = require('../models/user');
 const mailsUtils = require('../utils/mailUtils');
 const uuid = require('uuid');
+const multer = require('multer');
+const upload = multer({dest: 'uploads/'});
 const validator = require("email-validator");
 const passwordValidator = require('password-validator');
 const schema = new passwordValidator(); // create a validation schema
@@ -14,10 +16,35 @@ schema // add properties to it
     .has().not().spaces();                          // should not have spaces
 
 module.exports = {
-    register: (req, res, next) => {
+    validateImage: (type, tmpBuffer) => {
+        let magic = [];
+        let Buffer = JSON.parse(JSON.stringify(tmpBuffer));
+        let extractMagic = null;
+        switch (type) {
+            case 'image/jpeg':
+                extractMagic = Buffer.data.toString().split(',').join(' ').substr(0, 8).split(' ');
+                extractMagic.pop();
+                for (let i = 0; i < extractMagic.length; i++) {
+                    magic[i] = parseInt(extractMagic[i]).toString(16);
+                }
+                return magic.join(' ') === 'ff d8';
+            case 'image/png':
+                extractMagic = Buffer.data.toString().split(',').join(' ').substr(0, 24).split(' ');
+                for (let i = 0; i < extractMagic.length; i++) {
+                    magic[i] = parseInt(extractMagic[i]).toString(16);
+                }
+                return magic.join(' ') === '89 50 4e 47 d a 1a a';
+            default:
+                return false;
+        }
+    },
+    register: (req, res, next) => { // add html check
         console.log('been there');
         let {email, username, password, firstname, lastname} = req.body;
-        if (!email || !username || !password || !firstname || !lastname) {
+        let {profilePic} = req.file;
+        if (!email || !username || !password || !firstname || !lastname || !profilePic) {
+            console.log(req.body);
+            console.log(req.file);
             return res.status(200).send('error: invalid request')
         } else {
             if (validator.validate(email) === true) {
@@ -43,12 +70,14 @@ module.exports = {
                                     console.log(error);
                                     return res.status(200).send('error: ', error)
                                 } else {
-                                    console.log('done that');
-                                    passport.authenticate('local-signup', {
-                                        successRedirect: '/home',
-                                        failureRedirect: '/api/account/register',
-                                        failureFlash: true
-                                    })(req, res, next);
+                                   //if (validateImage(profilePic.mimetype, profilePic.data)) {
+                                       console.log('done that');
+                                       passport.authenticate('local-signup', {
+                                           successRedirect: '/home',
+                                           failureRedirect: '/api/account/register',
+                                           failureFlash: true
+                                       })(req, res, next);
+                                  // }
                                 }
                             })
                         } else {
@@ -80,7 +109,8 @@ module.exports = {
     modify: (req, res) => { // add html check (dans le sens balise script dans le champ)
         console.log('0');
         let {acc_id, email, username, password, rpassword, firstname, lastname} = req.body;
-        if (!acc_id || !email && !username && !password && !rpassword && !firstname && !lastname) {
+        let {profilePic} = req.file;
+        if (!acc_id || !email && !username && !password && !rpassword && !firstname && !lastname && !profilePic) {
             return res.status(200).send('error: invalid request')
         } else {
             console.log('1');
@@ -138,6 +168,13 @@ module.exports = {
                                 return res.status(200).send('error: ', error)
                             }
                         })
+                    }
+                case 4:
+                    console.log('picture 1');
+                    if (profilePic) {
+                       if (validateImage(profilePic.mimetype)) {
+                           console.log('picture updated')
+                       }
                     }
                 default:
                     console.log('2');

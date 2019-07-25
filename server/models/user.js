@@ -52,6 +52,9 @@ let userSchema = new mongoose.Schema({ // missing profile picture validation
     githubId: {
         type: String
     },
+    fortyTwoId:{
+        type: String
+    },
     accessToken: {
         type: String
     },
