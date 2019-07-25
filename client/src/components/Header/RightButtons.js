@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import classnames from 'classnames';
 
+import cookies from '../../utils/cookies';
+
 class RightButtons extends Component {
   state = {
     loggedIn: true,
@@ -9,19 +11,18 @@ class RightButtons extends Component {
   };
 
   componentDidMount() {
-    const tab = document.cookie.split(';');
-    let obj = {};
-    let tab2 = [];
-    tab.forEach(elem => {
-      tab2 = elem.split('=');
-      obj = {...obj, [tab2[0].trim()]:tab2[1].trim()}
-    });
-    document.documentElement.style.setProperty('--color-headings', obj.color);
-    document.documentElement.style.setProperty('--color-headings-transparent', obj.transparent);
-    document.documentElement.setAttribute('data-theme', obj.theme);
-    this.setState({
-      theme: obj.theme
-    });
+    if (cookies.get('color')) {
+      document.documentElement.style.setProperty('--color-headings', cookies.get('color'));
+    }
+    if (cookies.get('transparent')) {
+      document.documentElement.style.setProperty('--color-headings-transparent', cookies.get('transparent'));
+    }
+    if (cookies.get('theme')) {
+      document.documentElement.setAttribute('data-theme', cookies.get('theme'));
+      this.setState({
+        theme: cookies.get('theme')
+      });
+    }
   }
 
   openDropdown = (n) => {
@@ -39,18 +40,15 @@ class RightButtons extends Component {
 
   toggleMode = (e) => {
     document.documentElement.classList.add('transition');
-    const d = new Date();
-    d.setTime(d.getTime() + (7 * 24 * 60 * 60 * 1000));
-    const expires = "expires=" + d.toUTCString();
     if (e.target.checked) {
       document.documentElement.setAttribute('data-theme', 'dark');
-      document.cookie = "theme=dark;" + expires + ";path=/";
+      cookies.set('theme', 'dark');
       this.setState({
         theme: 'dark'
       });
     } else {
       document.documentElement.setAttribute('data-theme', 'light');
-      document.cookie = "theme=light;" + expires + ";path=/";
+      cookies.set('theme', 'light');
       this.setState({
         theme: 'light'
       });
@@ -72,11 +70,8 @@ class RightButtons extends Component {
     // const color = getComputedStyle(document.documentElement).getPropertyValue('--color-headings');
     document.documentElement.style.setProperty('--color-headings', e.target.value);
     document.documentElement.style.setProperty('--color-headings-transparent', e.target.value + '80');
-    const d = new Date();
-    d.setTime(d.getTime() + (7 * 24 * 60 * 60 * 1000));
-    const expires = "expires=" + d.toUTCString();
-    document.cookie = "color=" + e.target.value + ";" + expires + ";path=/";
-    document.cookie = "transparent=" + e.target.value + "80;" + expires + ";path=/";
+    cookies.set('color', e.target.value);
+    cookies.set('transparent', e.target.value + '80');
   };
 
   render() {
@@ -97,7 +92,8 @@ class RightButtons extends Component {
             </div>
             <div className="dropdown__section dark-mode">
               Mode sombre
-              <input className="custom" type="checkbox" name="theme" onChange={this.toggleMode} checked={theme === 'dark'}/>
+              <input className="custom" type="checkbox" name="theme" onChange={this.toggleMode}
+                     checked={theme === 'dark'}/>
             </div>
             <div className="dropdown__section dark-mode">
               Effet néon
@@ -147,7 +143,8 @@ class RightButtons extends Component {
             </div>
             <div className="dropdown__section dark-mode">
               Mode sombre
-              <input className="custom" type="checkbox" name="theme" onChange={this.toggleMode} checked={theme === 'dark'}/>
+              <input className="custom" type="checkbox" name="theme" onChange={this.toggleMode}
+                     checked={theme === 'dark'}/>
             </div>
             <div className="dropdown__section dark-mode">
               Effet néon
