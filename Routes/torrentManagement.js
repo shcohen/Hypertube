@@ -49,6 +49,25 @@ module.exports = {
             return res.status(200).send('Wrong data sent');
         }
     },
+    streamVideoFromFile: (res, file, range, directoryName) => {
+        console.log('Started streaming process from file !');
+        let parts = range.replace(/bytes=/, "").split("-");
+        console.log('Parts extracted !', parts);
+        let start = parts ? parseInt(parts[0], 10) : 0;
+        console.log('Start extracted !', start);
+        let end = parts && parts[1] ? parseInt(parts[1], 10) : file.length - 1;
+        console.log('End extracted !', end);
+        let stream = fs.createReadStream(`/tmp/torrentStream/${directoryName}/${file.path}`, {start, end});
+        const head = {
+            'Accept-Ranges': 'bytes',
+            'Content-Range': `bytes ${start}-${end}/${file.length}`,
+            'Content-Length': parseInt(end - start) + 1,
+            'Content-Type': 'video/mp4',
+        };
+        res.writeHead(206, head);
+        console.log('Header writted !');
+        pump(stream, res);
+    },
     streamVideoWithConversion: (res, file, range) => {
         console.log(file.path);
         console.log('Started video conversion');
@@ -126,37 +145,46 @@ module.exports = {
         console.log('Header writted !');
         pump(stream, res);
     },
-    getSubtitles: (res, file, directoryName) => {
-        let fileName = file.name.split('.');
-        fileName.pop();
-        fileName = fileName.join().replace(/[,]/gm, '.') + '.FR.srt';
-        OpenSubtitles.search({
-            sublanguageid: 'fre',
-            path: '/tmp/torrentStream/' + directoryName + '/' + file.path,
-            filename: file.name,
-        }).then(async data => {
-            let srt = await axios.get(data.fr.url);
-            fs.readdir('/tmp/torrentStream/' + directoryName, (err, dir) => {
-                fs.writeFile('/tmp/torrentStream/' + directoryName + '/' + dir[0] + '/' + fileName, srt.data, () => {
+    processSubtitles: (res, file, directoryName, movieId, subs) => {
+       !fs.existsSync('/tmp/Subtitles') ? fs.mkdirSync('/tmp/Subtitles') : undefined;
+        if (fs.existsSync(`/tmp/Subtitles/${movieId}.${subs.language}.srt`)) {
+            console.log('Bonsoir');
+            let srtPath = `/tmp/Subtitles/${movieId}.${subs.language}.srt`;
+            let srt = fs.createReadStream(srtPath);
+            pump(srt, res);
+        } else {
+            OpenSubtitles.search({
+                sublanguageid: subs.language,
+                path: '/tmp/torrentStream/' + directoryName + '/' + file.path,
+                filename: file.name,
+            }).then(async data => {
+                let srt = await axios.get(data.fr.url);
+                let srtPath = `/tmp/Subtitles/${movieId}.${subs.language}.srt`;
+                fs.writeFile(srtPath, srt.data, () => {
                     console.log('File created !');
+                    let srt = fs.createReadStream(srtPath);
+                    pump(srt, res);
                 });
             });
-        });
-    },
-    isMovieDownloaded: (file, filePath) => {
-        fs.stat(filePath, (err, stats) => {
-            if (err) return false;
-            return stats.size === file.length;
-        })
-    },
-    streamingCenter: (res, file, range, directoryName, options) => {
-        if (options.convert === false && options.subs.status === false) {
-            module.exports.streamVideoWithoutConversion(res, file, range, 0, 0)
-        } else if (options.convert === false && options.subs.status === true) {
-
         }
     },
-    torrentDownloader: (res, range, directoryName, decoded, movieTitle, options, srt) => {
+    isMovieDownloaded: async (file, filePath) => {
+        let fileStat = fs.statSync(filePath);
+        return fileStat.size === file.length;
+    },
+    streamingCenter: (res, file, range, directoryName, filePath, movieId, options) => {
+        // if (fs.existsSync(filePath) && options.subs.status) {
+        //     module.exports.processSubtitles(res, file, directoryName, movieId, options.subs);
+        // }
+        if (options.convert === false && options.downloaded === false) {
+            module.exports.streamVideoWithoutConversion(res, file, range, 0, 0)
+        } else if (options.convert === true) {
+            module.exports.streamVideoWithConversion(res, file, range);
+        } else if (options.convert === false && options.downloaded === true) {
+            module.exports.streamVideoFromFile(res, file, range, directoryName);
+        }
+    },
+    torrentDownloader: (res, range, directoryName, decoded, movieId, options, srt) => {
         let engine = torrentStream(decoded, options);
         let fileSize;
         engine.on('ready', () => {
@@ -164,19 +192,21 @@ module.exports = {
                 let mimeType = mime.getType(file.path);
                 if (mimeType === 'video/mp4' || mimeType === 'video/ogg' || mimeType === 'video/webm') {
                     let filePath = '/tmp/torrentStream/' + directoryName + '/' + file.path;
-                    let mongoData = await subtitleSchema.findOne({film: movieTitle, language: srt.language});
-                    console.log(mongoData);
-                    if (module.exports.isMovieDownloaded(file, filePath)) {
-                        console.log('TORRENT FULLY DOWN');
+                    if (await module.exports.isMovieDownloaded(file, filePath) === true) {
+                        console.log('TORRENT FULLY DOWNLOADED');
+                        module.exports.streamingCenter(res, file, range, directoryName, filePath, movieId, {
+                            convert: false,
+                            subs: srt,
+                            downloaded: true
+                        });
                     } else {
-                        console.log(file.name);
                         fileSize = file.length;
-                        if (fs.existsSync(filePath)) {
-                            let mongoData = await subtitleSchema.findOne({film: movieTitle, language: srt.language});
-                            console.log(mongoData);
-                        }
+                        module.exports.streamingCenter(res, file, range, directoryName, filePath, movieId, {
+                            convert: false,
+                            subs: srt,
+                            downloaded: false
+                        });
                     }
-                    module.exports.streamingCenter(res, file, range, directoryName, {convert: false, subs: srt});
                 } else if ((new RegExp(/video/)).test(mimeType)) {
                     fileSize = file.length;
                     // module.exports.getSubtitles(res, file, directoryName);
@@ -189,10 +219,13 @@ module.exports = {
             engine.on('download', () => {
                 console.log(Math.round((engine.swarm.downloaded / fileSize) * 100) + '% downloaded');
             });
+            engine.on('idle', () => {
+                console.log('Movie fully downloaded !');
+            })
         });
     },
     torrentManager: async (req, res) => {
-        let {movieTitle, magnet} = req.params;
+        let {movieId, magnet} = req.params;
         let {range} = req.headers;
 
         if (magnet !== undefined && magnet.length || range === undefined) {
@@ -207,7 +240,7 @@ module.exports = {
                     tracker: true,
                     path: `/tmp/torrentStream/${directoryName}`
                 };
-                module.exports.torrentDownloader(res, range, directoryName, decoded, movieTitle, options, {
+                module.exports.torrentDownloader(res, range, directoryName, decoded, movieId, options, {
                     status: false,
                     language: 'fre'
                 });

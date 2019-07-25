@@ -1,6 +1,7 @@
 const express = require('express');
 const libraryManagement = require('./Routes/libraryManagement');
 const torrentManagement = require('./Routes/torrentManagement');
+const subtitleManagement = require('./Routes/subtitleManagement');
 
 exports.router = (() => {
     const apiRouter = express.Router();
@@ -12,7 +13,10 @@ exports.router = (() => {
 
     /* TORRENT */
     apiRouter.route('/torrent/get_torrent').post(torrentManagement.findTorrent);
-    apiRouter.route('/torrent/download_torrent/:movieTitle/:magnet').get(torrentManagement.torrentManager);
+    apiRouter.route('/torrent/download_torrent/:movieId/:magnet').get(torrentManagement.torrentManager);
 
+
+    /* SUBTITLES */
+    apiRouter.route('/subtitles/get_subtitles/:movieId').get(subtitleManagement.subtitleManager);
     return apiRouter;
 })();
