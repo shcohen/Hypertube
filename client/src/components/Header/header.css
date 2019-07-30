@@ -9,6 +9,7 @@ header {
     background-color: var(--bg);
     box-shadow: 0 -40px 16px 32px rgba(0, 0, 0, 0.5) !important;
     transition: transform 0.5s;
+    align-items: center;
 }
 
 header.centered > div {

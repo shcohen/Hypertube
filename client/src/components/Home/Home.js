@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import classnames from 'classnames';
 
+import Gallery from './Gallery';
+
 import './home.css';
 
 class Home extends Component {
@@ -32,8 +34,26 @@ class Home extends Component {
           })}/>
         </div>
         <div className="triptych__part gallery__container">
-          <div className="gallery">
-
+          <Gallery/>
+          <div className="triptych__panel centered">
+            <div className="triptych__grid">
+              <div className="left-side">
+                <div className="ls__title-bar">
+                  <a className="logo">HYPER</a>
+                </div>
+                <div className="ls__content">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores corporis dicta fuga praesentium quisquam quod, rerum saepe vero. Quibusdam, quis.
+                </div>
+              </div>
+              <div className="right-side">
+                <div className="rs__title-bar">
+                  dsadadsa
+                </div>
+                <div className="rs__content">
+                  dfadsadad
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div className="triptych__part">
