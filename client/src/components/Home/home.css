@@ -112,15 +112,16 @@
 
 .right-side {
     background-color: var(--bg-container-hover);
-    border-radius: 0.5rem;
+    border-radius: 1.5rem;
     overflow: hidden;
-    border: 1px solid var(--color-borders);
+    border: 1px dotted var(--color-borders);
 }
 
 .rs__title-bar {
     padding: 1rem;
     background-color: var(--bg);
-    border-bottom: 1px dotted var(--color-borders);
+    border-bottom: 2px solid var(--color-borders);
+    border-radius: 1.5rem;
 }
 
 .rs__content {
@@ -130,7 +131,5 @@
 /*LEFT ONE*/
 
 .left-side {
-    width: 80%;
-    height: 100%;
-    background-color: #00000080;
 }
+
