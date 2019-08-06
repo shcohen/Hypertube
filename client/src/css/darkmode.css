@@ -12,6 +12,7 @@ html {
     --color-text-hover: #131313;
 
     --color-borders: #dadada;
+    --color-borders-hover: #cacaca;
 }
 
 html[data-theme="dark"] {
@@ -27,6 +28,7 @@ html[data-theme="dark"] {
     --color-text-hover: #d5d5d5;
 
     --color-borders: #505050;
+    --color-borders-hover: #606060;
 }
 
 /*TRANSITIONS*/

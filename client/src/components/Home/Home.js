@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import classnames from 'classnames';
 
 import Gallery from './Gallery';
+import HomeForm from './HomeForm';
 
 import './home.css';
 
@@ -45,17 +46,10 @@ class Home extends Component {
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores corporis dicta fuga praesentium quisquam quod, rerum saepe vero. Quibusdam, quis.
                 </p>
                 <p className="ls__content signatures">
-                  signature
+                  Shana Yannis Florent
                 </p>
               </div>
-              <div className="right-side">
-                <div className="rs__title-bar">
-                  dsadadsa
-                </div>
-                <div className="rs__content">
-                  dfadsadad
-                </div>
-              </div>
+              <HomeForm/>
             </div>
           </div>
         </div>

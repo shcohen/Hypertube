@@ -109,35 +109,19 @@
 }
 
 /*RIGHT ONE*/
-
-.right-side {
-    background-color: var(--bg-container-hover);
-    border-radius: 1.5rem;
-    overflow: hidden;
-    border: 1px dotted var(--color-borders);
-}
-
-.rs__title-bar {
-    padding: 1rem;
-    background-color: var(--bg);
-    border-bottom: 2px solid var(--color-borders);
-    border-radius: 1.5rem;
-}
-
-.rs__content {
-    padding: 1rem;
-}
+/*go to home form*/
 
 /*LEFT ONE*/
 
 .left-side {
     width: 25rem;
+    max-width: 90vw;
     text-align: center;
 }
 
 .ls__title-bar a.logo {
     position: relative;
-    font-size: 5rem;
+    font-size: 4rem;
     color: var(--color-text-hover);
 }
 
@@ -163,4 +147,6 @@
 
 .ls__content.signatures {
     font-family: myTN, sans-serif;
+    font-size: 1.5rem;
+    text-align: right;
 }

@@ -9,9 +9,9 @@ class GalleryRow extends Component {
     const {row} = this.props;
     const gallery = document.querySelector('.gallery');
     const div = document.querySelector('.gallery__row.r' + row);
-    this.setState({
-      offset: (div.offsetTop + 1) % gallery.offsetHeight
-    })
+    // this.setState({
+    //   offset: (div.offsetTop + 1) % gallery.offsetHeight
+    // })
   }, 50);
 
   componentWillUnmount() {
