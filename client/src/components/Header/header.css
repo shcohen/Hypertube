@@ -346,7 +346,7 @@ header .right .dropdown {
     overflow: hidden;
     border-radius: calc(3px + 0.95rem);
     background-color: var(--bg-container);
-    transition: width 0.2s 0.4s ease-out, height 0.4s ease-out, opacity 0.15s 0.45s;
+    /*transition: width 0.2s 0.4s ease-out, height 0.4s ease-out, opacity 0.15s 0.45s;*/
     opacity: 0;
     box-shadow: 0 0 14px -3px rgba(0, 0, 0, 0.2);
     border: 1px solid var(--color-borders);
@@ -362,14 +362,14 @@ header .right :not(.logout).opened button {
     /*background-color: transparent;*/
     box-shadow: none;
     opacity: 0.7 !important;
-    filter: invert(1);
+    /*filter: invert(1);*/
 }
 
 header .right :not(.logout).opened .dropdown {
     width: 12rem;
     height: 20rem;
     z-index: 102;
-    transition: width 0.2s ease-in, height 0.4s 0.3s ease-in, opacity 0.15s;
+    /*transition: width 0.2s ease-in, height 0.4s 0.3s ease-in, opacity 0.15s;*/
     opacity: 1;
 }
 
