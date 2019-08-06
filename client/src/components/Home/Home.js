@@ -41,9 +41,12 @@ class Home extends Component {
                 <div className="ls__title-bar">
                   <a className="logo">HYPER</a>
                 </div>
-                <div className="ls__content">
+                <p className="ls__content">
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores corporis dicta fuga praesentium quisquam quod, rerum saepe vero. Quibusdam, quis.
-                </div>
+                </p>
+                <p className="ls__content signatures">
+                  signature
+                </p>
               </div>
               <div className="right-side">
                 <div className="rs__title-bar">

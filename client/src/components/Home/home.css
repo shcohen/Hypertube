@@ -131,5 +131,36 @@
 /*LEFT ONE*/
 
 .left-side {
+    width: 25rem;
+    text-align: center;
 }
 
+.ls__title-bar a.logo {
+    position: relative;
+    font-size: 5rem;
+    color: var(--color-text-hover);
+}
+
+.ls__title-bar a.logo::after {
+    content: "";
+    position: absolute;
+    bottom: 0.05rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 4px;
+    border-radius: 2px;
+    background-color: var(--color-headings);
+    opacity: 0.7;
+    transition: opacity 0.2s, width 0.2s;
+}
+
+.ls__content {
+    margin-top: 2rem;
+    font-size: 1.1rem;
+    line-height: 1.5rem;
+}
+
+.ls__content.signatures {
+    font-family: myTN, sans-serif;
+}

@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Orbitron&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Ubuntu:300,300i,400,400i,500,500i,700,700i&display=swap');
+@font-face {
+    font-family: myTn;
+    src: url("/client/src/assets/fonts/");
+}
 
 /*VARIABLES*/
 
