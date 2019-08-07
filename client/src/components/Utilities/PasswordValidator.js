@@ -15,22 +15,22 @@ const PasswordValidator = (args) => {
       <div className={classnames('pwd-val__line', {
         'valid': length
       })}>
-        <i className="fas fa-check"></i> Au moins 8 caractères
+        <i className="fas fa-check"/> Au moins 8 caractères
       </div>
       <div className={classnames('pwd-val__line', {
         'valid': min
       })}>
-        <i className="fas fa-check"></i> Au moins 1 lettre minuscule
+        <i className="fas fa-check"/> Au moins 1 lettre minuscule
       </div>
       <div className={classnames('pwd-val__line', {
         'valid': maj
       })}>
-        <i className="fas fa-check"></i> Au moins 1 lettre majuscule
+        <i className="fas fa-check"/> Au moins 1 lettre majuscule
       </div>
       <div className={classnames('pwd-val__line', {
         'valid': num
       })}>
-        <i className="fas fa-check"></i> Au moins 1 chiffre
+        <i className="fas fa-check"/> Au moins 1 chiffre
       </div>
     </div>
   );

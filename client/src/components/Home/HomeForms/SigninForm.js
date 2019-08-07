@@ -8,10 +8,14 @@ const SigninForm = () => {
     username: '',
     password: '',
     confirm: '',
-    emailError: 'emai pas bon',
+    firstname: '',
+    lastname: '',
+    emailError: 'Email invalide.',
     usernameError: '',
     passwordError: '',
-    confirmError: ''
+    confirmError: '',
+    firstnameError: '',
+    lastnameError: '',
   });
 
   const onInputChange = (e) => {
@@ -27,6 +31,10 @@ const SigninForm = () => {
       <label>Nom d'utilisateur</label><br/>
       <input name="username" type="text" placeholder="ex : YannisCohen007" onChange={onInputChange} value={formData.username}/><br/>
       {formData.usernameError !== '' && <p><i className="fas fa-times"/> {formData.usernameError}</p>}
+      <label>Prénom et nom</label><br/>
+      <input className="half" name="firstname" type="text" placeholder="ex : Florent" onChange={onInputChange} value={formData.firstname}/>
+      <input className="half last" name="lastname" type="text" placeholder="ex : Klein" onChange={onInputChange} value={formData.lastname}/><br/>
+      {(formData.firstnameError !== '' || formData.lastnameError !== '') && <p><i className="fas fa-times"/> {formData.firstnameError}{formData.lastnameError}</p>}
       <label>Mot de passe</label><br/>
       <div className="pwd-validator">
         <input name="password" type="password" placeholder="Choisissez un mot de passe fort" onChange={onInputChange} value={formData.password}/><br/>
