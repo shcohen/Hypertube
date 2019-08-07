@@ -8,6 +8,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    filter: blur(8px);
+    opacity: 0.35;
 }
 
 .gallery__row {
@@ -37,10 +39,15 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    filter: blur(8px);
-    opacity: 0.35;
 }
 
 .gallery__image:nth-child(odd) {
     transform: translateY(-50%);
+}
+
+@media screen and (max-width: 800px) {
+    .gallery {
+        transform: scale(2) translate(-25%, -25%);
+        filter: blur(3px);
+    }
 }

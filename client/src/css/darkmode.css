@@ -16,10 +16,10 @@ html {
 }
 
 html[data-theme="dark"] {
-    --bg: #333333;
-    --bg-container: #434343;
-    --bg-container-hover: #383838;
-    --bg-container-active: #434343;
+    --bg: #222222;
+    --bg-container: #272727;
+    --bg-container-hover: #323232;
+    --bg-container-active: #303030;
 
     /*--color-headings: #3694ff;*/
     --color-headings: #ff7540;

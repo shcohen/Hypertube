@@ -1,9 +1,17 @@
 import React, {useState} from 'react';
 
+import PasswordValidator from '../../Utilities/PasswordValidator';
+
 const SigninForm = () => {
   let [formData, setFormData] = useState({
-    login: '',
-    password: ''
+    email: '',
+    username: '',
+    password: '',
+    confirm: '',
+    emailError: 'emai pas bon',
+    usernameError: '',
+    passwordError: '',
+    confirmError: ''
   });
 
   const onInputChange = (e) => {
@@ -12,12 +20,22 @@ const SigninForm = () => {
 
   return (
     <form>
-      <label>Email ou nom d'utilisateur</label><br/>
-      <input name="login" type="text" placeholder="example@hyper.com" onChange={onInputChange} value={formData.login}/><br/>
-      <p></p>
+      <h4>Bienvenue ! Renseignez quelques informations pour vous inscrire :</h4>
+      <label>Adresse email</label><br/>
+      <input name="email" type="email" placeholder="ex : example@hyper.com" onChange={onInputChange} value={formData.email}/><br/>
+      {formData.emailError !== '' && <p><i className="fas fa-times"/> {formData.emailError}</p>}
+      <label>Nom d'utilisateur</label><br/>
+      <input name="username" type="text" placeholder="ex : YannisCohen007" onChange={onInputChange} value={formData.username}/><br/>
+      {formData.usernameError !== '' && <p><i className="fas fa-times"/> {formData.usernameError}</p>}
       <label>Mot de passe</label><br/>
-      <input name="password" type="password" placeholder="Votre mot de passe" onChange={onInputChange} value={formData.password}/><br/>
-      <p></p>
+      <div className="pwd-validator">
+        <input name="password" type="password" placeholder="Choisissez un mot de passe fort" onChange={onInputChange} value={formData.password}/><br/>
+        <PasswordValidator password={formData.password}/>
+      </div>
+      {formData.passwordError !== '' && <p><i className="fas fa-times"/> {formData.passwordError}</p>}
+      <label>Confirmation du mot de passe</label><br/>
+      <input name="password" type="password" placeholder="Réécrivez le mot de passe choisi" onChange={onInputChange} value={formData.confirm}/><br/>
+      {formData.confirmError !== '' && <p><i className="fas fa-times"/> {formData.confirmError}</p>}
       <input type="submit"/>
     </form>
   );

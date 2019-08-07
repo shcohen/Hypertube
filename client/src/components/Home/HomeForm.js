@@ -34,9 +34,20 @@ class HomeForm extends Component {
             Connexion
           </button>
         </div>
+        <hr/>
         <div className="hf__content">
           {step === 0 && <SigninForm/>}
           {step === 1 && <LoginForm/>}
+        </div>
+        <hr className="or"/>
+        <div className="hf__content">
+          <h4>Vous pouvez vous connecter avec vos réseaux sociaux :</h4>
+          <div className="hf__socials">
+            <button className="custom twitter"/>
+            <button className="custom google"/>
+            <button className="custom api42"/>
+            <button className="custom github"/>
+          </div>
         </div>
       </div>
     );

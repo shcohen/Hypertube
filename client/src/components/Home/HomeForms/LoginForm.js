@@ -14,17 +14,18 @@ const LoginForm = () => {
 
   const onFormSubmit = (e) => {
     if (!validation.login(formData)) {
-      alert('non non non');
+      console.log('non non non');
     }
     e.preventDefault();
   };
 
   return (
     <form onSubmit={onFormSubmit}>
+      <h4>Vous pouvez vous connecter avec vos identifiants :</h4>
       <label>Email ou nom d'utilisateur</label><br/>
-      <input name="login" type="text" placeholder="example@hyper.com" onChange={onInputChange} value={formData.login}/><br/>
-      <p>Erreur</p>
-      <label>Mot de passe</label><br/>
+      <input name="login" type="text" placeholder="Votre email ou nom d'utilisateur" onChange={onInputChange} value={formData.login}/><br/>
+      <p> Erreur</p>
+      <label>Mot de passe (oublié ?)</label><br/>
       <input name="password" type="password" placeholder="Votre mot de passe" onChange={onInputChange} value={formData.password}/><br/>
       <p></p>
       <input type="submit"/>

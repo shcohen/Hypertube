@@ -40,7 +40,7 @@ class Home extends Component {
             <div className="triptych__grid">
               <div className="left-side">
                 <div className="ls__title-bar">
-                  <a className="logo">HYPER</a>
+                  <a className="logo" href="#HYPER">HYPER</a>
                 </div>
                 <p className="ls__content">
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores corporis dicta fuga praesentium quisquam quod, rerum saepe vero. Quibusdam, quis.

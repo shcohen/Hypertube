@@ -9,14 +9,17 @@
     box-shadow: 0 0 16px -8px #00000080;
 }
 
+.right-side hr {
+    width: calc(100% - 3rem);
+    margin: 0 auto;
+    opacity: 0.5;
+}
+
 .hf__tabs {
-    margin: 0.5rem 0;
+    margin: 0.75rem auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
     width: 70%;
-    position: relative;
-    left: 50%;
-    transform: translateX(-50%);
     align-items: center;
     justify-items: center;
 }
@@ -41,11 +44,11 @@
     color: var(--color-headings) !important;
 }
 
-.hf__tab:not(.active) {
-    background-color: var(--bg-container-hover);
-    border-radius: 1rem;
-    opacity: 0.8;
-}
+/*.hf__tab:not(.active) {*/
+    /*background-color: var(--bg-container-hover);*/
+    /*border-radius: 1rem;*/
+    /*opacity: 0.8;*/
+/*}*/
 
 .hf__tab::after {
     content: "";
@@ -68,7 +71,7 @@
 /*LOGIN AND SIGNIN*/
 
 .hf__content {
-    padding: 1.5rem;
+    padding: 1rem 1.5rem;
 }
 
 .hf__content form > * {
@@ -81,55 +84,63 @@
 
 .hf__content form input:not([type="submit"]) {
     width: 100%;
-    height: 2rem;
-    border-radius: 0.3rem;
-    background-color: var(--bg-container-hover);
-    border: 1px solid var(--color-borders);
-    padding: 0 0.5rem;
-    outline: none;
-    font-size: 0.8rem;
-}
-
-.hf__content form input:not([type="submit"]):hover {
-    border: 1px solid var(--color-borders-hover);
-    background-color: var(--bg-container);
-}
-
-.hf__content form input:not([type="submit"]):focus {
-    border: 1px solid var(--color-headings);
-    box-shadow: 0 0 3px 0 var(--color-headings);
-    background-color: var(--bg-container);
 }
 
 .hf__content form input[type="submit"] {
     position: relative;
     left: 50%;
     transform: translateX(-50%);
-    padding: 0.5rem 2rem;
-    border-radius: 2rem;
-    outline: none;
-    background-color: var(--bg-container);
-    background-size: 1.2rem;
-    background-position: center;
-    background-repeat: no-repeat;
-    border: none;
-    cursor: pointer;
-    /*opacity: 0.7;*/
-    box-shadow: 0 0 0 0 transparent;
-    transition: opacity 0.2s, box-shadow 0.2s;
-}
-
-.hf__content form input[type="submit"]:hover {
-    opacity: 1;
-}
-
-.hf__content form input[type="submit"]:active {
-    box-shadow: 0 0 0 3px var(--color-headings-transparent);
-    transition: box-shadow 0s;
+    margin: 0.25rem 0;
 }
 
 .hf__content form p {
     margin: -0.1rem 0 0.5rem 0;
     font-size: 0.75rem;
-    color: var(--color-headings)
+    /*color: var(--color-headings);*/
+    color: red;
+}
+
+.hf__content h4 {
+    margin: 0.25rem 0 1rem 0;
+    color: var(--color-text-hover);
+    font-weight: 300;
+    font-size: 0.8rem;
+    text-align: center;
+    opacity: 0.5;
+    line-height: 1.1rem;
+}
+
+/*SOCIALS*/
+
+.hf__socials {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    margin: 0.25rem 0;
+}
+
+.hf__socials button {
+    width: 22%;
+    padding: 0 !important;
+    height: 2rem;
+}
+
+.hf__socials button.google {
+    background: url("../../assets/img/button-google.jpg") center no-repeat;
+    background-size: 135%;
+}
+
+.hf__socials button.api42 {
+    background: black url("../../assets/img/button-42.svg") center no-repeat;
+    background-size: 30%;
+}
+
+.hf__socials button.github {
+    background: #24292e url("../../assets/img/button-github.svg") center no-repeat;
+    background-size: 25%;
+}
+
+.hf__socials button.twitter {
+    background: #1da1f2 url("../../assets/img/button-twitter.svg") center no-repeat;
+    background-size: 25%;
 }
