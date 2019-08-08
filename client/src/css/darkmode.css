@@ -4,7 +4,7 @@ html {
     --bg: #fcfcfc;
     --bg-container: #ebebeb;
     --bg-container-hover: #efefef;
-    --bg-container-active: #ebebeb;
+    --bg-container-active: #efefef;
 
     --color-headings: #0077ff;
     --color-headings-transparent: #0077ff80;
@@ -18,8 +18,8 @@ html {
 html[data-theme="dark"] {
     --bg: #222222;
     --bg-container: #272727;
-    --bg-container-hover: #323232;
-    --bg-container-active: #303030;
+    --bg-container-hover: #202020;
+    --bg-container-active: #181818;
 
     /*--color-headings: #3694ff;*/
     --color-headings: #ff7540;

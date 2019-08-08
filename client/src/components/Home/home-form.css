@@ -87,8 +87,8 @@
 }
 
 .hf__content form input:not([type="submit"]).half {
-    width: 47.5%;
-    margin-right: 5%;
+    width: 49%;
+    margin-right: 2%;
 }
 
 .hf__content form input:not([type="submit"]).half.last {
