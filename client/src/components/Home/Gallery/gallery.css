@@ -50,4 +50,9 @@
         transform: scale(2) translate(-25%, -25%);
         filter: blur(3px);
     }
+    
+    .gallery__image:first-child,
+    .gallery__image:last-child {
+        display: none;
+    }
 }

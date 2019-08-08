@@ -2,23 +2,28 @@ import React, {Component} from 'react';
 
 class Row extends Component {
   state = {
-    offset: false
+    offset: false,
+    timeout: null
   };
 
-  timeout = setInterval(() => {
-    const {row} = this.props;
+  componentDidMount() {
+    const row = this.props.row;
     const gallery = document.querySelector('.gallery');
     const div = document.querySelector('.gallery__row.r' + row);
-    if (!gallery || !div) {
-      return;
-    }
     this.setState({
-      offset: (div.offsetTop + 1) % gallery.offsetHeight
-    })
-  }, 100);
+      timeout: setInterval(() => {
+        if (!gallery || !div) {
+          return;
+        }
+        this.setState({
+          offset: (div.offsetTop + 1) % gallery.offsetHeight
+        })
+      }, 100)
+    });
+  }
 
   componentWillUnmount() {
-    clearInterval(this.timeout);
+    clearInterval(this.state.timeout);
   }
 
   render() {
