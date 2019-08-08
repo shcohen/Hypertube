@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import classnames from 'classnames';
+import queryString from 'query-string';
 
 import Login from './Login';
 import Register from './Register';
 import ForgotPassword from './ForgotPassword';
+import ChangePassword from './ChangePassword';
 
 import './home-forms.css';
 
@@ -11,6 +13,16 @@ class Forms extends Component {
   state = {
     step: 0
   };
+
+  componentWillMount() {
+    const params = queryString.parse(this.props.location.search);
+    if (params.action === 'forgot-password') {
+      this.setState({
+        step: 3,
+        params: params
+      });
+    }
+  }
 
   goToStep = (s) => {
     this.setState({
@@ -40,6 +52,7 @@ class Forms extends Component {
           {step === 0 && <Register/>}
           {step === 1 && <Login goToForgotPwd={() => this.goToStep(2)}/>}
           {step === 2 && <ForgotPassword/>}
+          {step === 3 && <ChangePassword/>}
         </div>
         <hr className="or"/>
         <div className="hf__content">

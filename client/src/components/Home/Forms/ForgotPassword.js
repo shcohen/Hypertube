@@ -23,7 +23,7 @@ const ForgotPassword = () => {
              placeholder="L'adresse email liée à votre compte"
              onChange={onInputChange}
              value={formData.email}/><br/>
-      {formData.loginError !== '' && <p><i className="fas fa-times"/> {formData.loginError}</p>}
+      {formData.emailError !== '' && <p><i className="fas fa-times"/> {formData.emailError}</p>}
       <input type="submit" value="Envoyer"/>
     </form>
   );

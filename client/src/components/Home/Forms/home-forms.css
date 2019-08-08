@@ -82,6 +82,12 @@
     font-size: 0.9rem;
 }
 
+.hf__content form label span {
+    font-size: 0.7rem;
+    color: var(--color-headings-transparent);
+    cursor: pointer;
+}
+
 .hf__content form input:not([type="submit"]) {
     width: 100%;
 }

@@ -97,7 +97,8 @@ const Register = () => {
              placeholder="Réécrivez le mot de passe choisi"
              minLength="1"
              maxLength="64"
-             pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,64}$"
+             pattern={'^' + formData.password + '$'}
+             // pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,64}$"
              required
              onChange={onInputChange}
              value={formData.confirm}/><br/>

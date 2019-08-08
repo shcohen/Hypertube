@@ -113,7 +113,7 @@ form input:not([type="submit"]):not([type="radio"]):not([type="checkbox"]):focus
 }
 
 form input.validation:valid {
-    padding-right: 2rem;
+    padding-right: 2rem !important;
     background-image: url("../assets/img/input-valid.svg");
     background-position: calc(100% - 0.5rem);
     background-repeat: no-repeat;

@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
 
-import validation from '../../../utils/validation';
-
 const Login = (props) => {
   let [formData, setFormData] = useState({
     login: '',
@@ -16,9 +14,6 @@ const Login = (props) => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-    if (!validation.login(formData)) {
-      console.log('non non non');
-    }
   };
 
   return (
@@ -28,6 +23,9 @@ const Login = (props) => {
       <input name="login"
              type="text"
              placeholder="Votre email ou nom d'utilisateur"
+             minLength="1"
+             maxLength="64"
+             required
              onChange={onInputChange}
              value={formData.login}/><br/>
       {formData.loginError !== '' && <p><i className="fas fa-times"/> {formData.loginError}</p>}
@@ -35,6 +33,9 @@ const Login = (props) => {
       <input name="password"
              type="password"
              placeholder="Votre mot de passe"
+             minLength="1"
+             maxLength="64"
+             required
              onChange={onInputChange}
              value={formData.password}/><br/>
       {formData.passwordError !== '' && <p><i className="fas fa-times"/> {formData.passwordError}</p>}

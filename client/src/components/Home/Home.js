@@ -50,7 +50,7 @@ class Home extends Component {
                   Shana Yannis Florent
                 </p>
               </div>
-              <Forms/>
+              <Forms location={this.props.location}/>
             </div>
           </div>
         </div>
