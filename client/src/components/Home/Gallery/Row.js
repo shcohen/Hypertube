@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-class GalleryRow extends Component {
+class Row extends Component {
   state = {
     offset: false
   };
@@ -41,4 +41,4 @@ class GalleryRow extends Component {
   }
 }
 
-export default GalleryRow;
+export default Row;

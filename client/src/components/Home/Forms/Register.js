@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 
 import PasswordValidator from '../../Utilities/PasswordValidator';
 
-const SigninForm = () => {
+const Register = () => {
   let [formData, setFormData] = useState({
     email: '',
     username: '',
@@ -30,7 +30,8 @@ const SigninForm = () => {
     <form onSubmit={onFormSubmit}>
       <h4>Bienvenue ! Renseignez quelques informations pour vous inscrire :</h4>
       <label>Adresse email</label><br/>
-      <input name="email"
+      <input className="validation"
+             name="email"
              type="email"
              placeholder="ex : example@hyper.com"
              minLength="1"
@@ -40,7 +41,8 @@ const SigninForm = () => {
              value={formData.email}/><br/>
       {formData.emailError !== '' && <p><i className="fas fa-times"/> {formData.emailError}</p>}
       <label>Nom d'utilisateur</label><br/>
-      <input name="username"
+      <input className="validation"
+             name="username"
              type="text"
              placeholder="ex : YannisCohen007"
              minLength="1"
@@ -51,7 +53,7 @@ const SigninForm = () => {
              value={formData.username}/><br/>
       {formData.usernameError !== '' && <p><i className="fas fa-times"/> {formData.usernameError}</p>}
       <label>Prénom et nom</label><br/>
-      <input className="half"
+      <input className="validation half"
              name="firstname"
              type="text"
              placeholder="ex : Florent"
@@ -61,7 +63,7 @@ const SigninForm = () => {
              required
              onChange={onInputChange}
              value={formData.firstname}/>
-      <input className="half last"
+      <input className="validation half last"
              name="lastname"
              type="text"
              placeholder="ex : Klein"
@@ -75,7 +77,8 @@ const SigninForm = () => {
       <p><i className="fas fa-times"/> {formData.firstnameError}{formData.lastnameError}</p>}
       <label>Mot de passe</label><br/>
       <div className="pwd-validator">
-        <input name="password"
+        <input className="validation"
+               name="password"
                type="password"
                placeholder="Choisissez un mot de passe fort"
                minLength="1"
@@ -88,7 +91,8 @@ const SigninForm = () => {
       </div>
       {formData.passwordError !== '' && <p><i className="fas fa-times"/> {formData.passwordError}</p>}
       <label>Confirmation du mot de passe</label><br/>
-      <input name="password"
+      <input className="validation"
+             name="confirm"
              type="password"
              placeholder="Réécrivez le mot de passe choisi"
              minLength="1"
@@ -98,9 +102,9 @@ const SigninForm = () => {
              onChange={onInputChange}
              value={formData.confirm}/><br/>
       {formData.confirmError !== '' && <p><i className="fas fa-times"/> {formData.confirmError}</p>}
-      <input type="submit"/>
+      <input type="submit" value="S'inscrire"/>
     </form>
   );
 };
 
-export default SigninForm;
+export default Register;

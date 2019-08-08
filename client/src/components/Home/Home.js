@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
+import {NavLink} from 'react-router-dom';
 import classnames from 'classnames';
 
-import Gallery from './Gallery';
-import HomeForm from './HomeForm';
+import Gallery from './Gallery/Gallery';
+import Forms from './Forms/Forms';
 
 import './home.css';
 
@@ -40,7 +41,7 @@ class Home extends Component {
             <div className="triptych__grid">
               <div className="left-side">
                 <div className="ls__title-bar">
-                  <a className="logo" href="#HYPER">HYPER</a>
+                  <NavLink className="logo" to="/#HYPER">HYPER</NavLink>
                 </div>
                 <p className="ls__content">
                   Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores corporis dicta fuga praesentium quisquam quod, rerum saepe vero. Quibusdam, quis.
@@ -49,7 +50,7 @@ class Home extends Component {
                   Shana Yannis Florent
                 </p>
               </div>
-              <HomeForm/>
+              <Forms/>
             </div>
           </div>
         </div>

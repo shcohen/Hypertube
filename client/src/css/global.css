@@ -112,7 +112,7 @@ form input:not([type="submit"]):not([type="radio"]):not([type="checkbox"]):focus
     background-color: var(--bg-container-active);
 }
 
-form input:not([type="submit"]):not([type="radio"]):not([type="checkbox"]):valid {
+form input.validation:valid {
     padding-right: 2rem;
     background-image: url("../assets/img/input-valid.svg");
     background-position: calc(100% - 0.5rem);

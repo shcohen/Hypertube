@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import classnames from 'classnames';
 
-import LoginForm from './HomeForms/LoginForm';
-import SigninForm from './HomeForms/SigninForm';
+import Login from './Login';
+import Register from './Register';
+import ForgotPassword from './ForgotPassword';
 
-import './home-form.css';
+import './home-forms.css';
 
-class HomeForm extends Component {
+class Forms extends Component {
   state = {
     step: 0
   };
@@ -36,8 +37,9 @@ class HomeForm extends Component {
         </div>
         <hr/>
         <div className="hf__content">
-          {step === 0 && <SigninForm/>}
-          {step === 1 && <LoginForm/>}
+          {step === 0 && <Register/>}
+          {step === 1 && <Login goToForgotPwd={() => this.goToStep(2)}/>}
+          {step === 2 && <ForgotPassword/>}
         </div>
         <hr className="or"/>
         <div className="hf__content">
@@ -54,4 +56,4 @@ class HomeForm extends Component {
   }
 }
 
-export default HomeForm;
+export default Forms;

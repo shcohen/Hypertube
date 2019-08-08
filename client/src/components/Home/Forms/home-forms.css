@@ -99,7 +99,7 @@
     position: relative;
     left: 50%;
     transform: translateX(-50%);
-    margin: 0.25rem 0;
+    margin: 0.5rem 0;
 }
 
 .hf__content form p {
@@ -135,21 +135,21 @@
 }
 
 .hf__socials button.google {
-    background: url("../../assets/img/button-google.jpg") center no-repeat;
+    background: url("../../../assets/img/button-google.jpg") center no-repeat;
     background-size: 135%;
 }
 
 .hf__socials button.api42 {
-    background: black url("../../assets/img/button-42.svg") center no-repeat;
+    background: black url("../../../assets/img/button-42.svg") center no-repeat;
     background-size: 30%;
 }
 
 .hf__socials button.github {
-    background: #24292e url("../../assets/img/button-github.svg") center no-repeat;
+    background: #24292e url("../../../assets/img/button-github.svg") center no-repeat;
     background-size: 25%;
 }
 
 .hf__socials button.twitter {
-    background: #1da1f2 url("../../assets/img/button-twitter.svg") center no-repeat;
+    background: #1da1f2 url("../../../assets/img/button-twitter.svg") center no-repeat;
     background-size: 25%;
 }

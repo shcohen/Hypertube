@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import GalleryRow from './GalleryRow';
+import Row from './Row';
 
 import './gallery.css';
 
@@ -102,7 +102,7 @@ class Gallery extends Component {
     return (shown &&
       <div className="gallery" style={{height: `calc(32vw * ${movies.length})`}}>
         {movies.map((moviesList, i) => {
-          return (<GalleryRow key={i} row={i} movies={moviesList}/>)
+          return (<Row key={i} row={i} movies={moviesList}/>)
         })}
       </div>
     );
