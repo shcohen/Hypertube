@@ -13,7 +13,7 @@ exports.router = (() => {
 
     /* TORRENT */
     apiRouter.route('/torrent/get_torrent').post(torrentManagement.findTorrent);
-    apiRouter.route('/torrent/download_torrent/:movieId/:magnet').get(torrentManagement.torrentManager);
+    apiRouter.route('/torrent/download_torrent').get(torrentManagement.torrentManager);
 
 
     /* SUBTITLES */

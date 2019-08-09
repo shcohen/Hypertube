@@ -11,6 +11,7 @@ const OS = require('opensubtitles-api');
 const OpenSubtitles = new OS({useragent: 'TemporaryUserAgent', ssl: true});
 const subtitleSchema = require('../models/subtitles');
 const {removeTitleAndQualityDoublons, regroupTorrent, verifyTitle} = require('../utils/moviesUtils');
+const {subtitleManager} = require('./subtitleManagement');
 
 module.exports = {
     findTorrent: async (req, res) => {
@@ -145,37 +146,16 @@ module.exports = {
         console.log('Header writted !');
         pump(stream, res);
     },
-    processSubtitles: (res, file, directoryName, movieId, subs) => {
-       !fs.existsSync('/tmp/Subtitles') ? fs.mkdirSync('/tmp/Subtitles') : undefined;
-        if (fs.existsSync(`/tmp/Subtitles/${movieId}.${subs.language}.srt`)) {
-            console.log('Bonsoir');
-            let srtPath = `/tmp/Subtitles/${movieId}.${subs.language}.srt`;
-            let srt = fs.createReadStream(srtPath);
-            pump(srt, res);
-        } else {
-            OpenSubtitles.search({
-                sublanguageid: subs.language,
-                path: '/tmp/torrentStream/' + directoryName + '/' + file.path,
-                filename: file.name,
-            }).then(async data => {
-                let srt = await axios.get(data.fr.url);
-                let srtPath = `/tmp/Subtitles/${movieId}.${subs.language}.srt`;
-                fs.writeFile(srtPath, srt.data, () => {
-                    console.log('File created !');
-                    let srt = fs.createReadStream(srtPath);
-                    pump(srt, res);
-                });
-            });
+    isMovieDownloaded: async (file, filePath) => {
+        try {
+            fs.accessSync(filePath);
+            let fileStat = fs.statSync(filePath);
+            return fileStat.size === file.length;
+        } catch {
+            return false;
         }
     },
-    isMovieDownloaded: async (file, filePath) => {
-        let fileStat = fs.statSync(filePath);
-        return fileStat.size === file.length;
-    },
     streamingCenter: (res, file, range, directoryName, filePath, movieId, options) => {
-        // if (fs.existsSync(filePath) && options.subs.status) {
-        //     module.exports.processSubtitles(res, file, directoryName, movieId, options.subs);
-        // }
         if (options.convert === false && options.downloaded === false) {
             module.exports.streamVideoWithoutConversion(res, file, range, 0, 0)
         } else if (options.convert === true) {
@@ -201,6 +181,7 @@ module.exports = {
                         });
                     } else {
                         fileSize = file.length;
+                        // subtitleManager(movieId);
                         module.exports.streamingCenter(res, file, range, directoryName, filePath, movieId, {
                             convert: false,
                             subs: srt,
@@ -225,7 +206,7 @@ module.exports = {
         });
     },
     torrentManager: async (req, res) => {
-        let {movieId, magnet} = req.params;
+        let {movieId, magnet} = req.query;
         let {range} = req.headers;
 
         if (magnet !== undefined && magnet.length || range === undefined) {
