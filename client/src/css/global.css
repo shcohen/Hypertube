@@ -27,6 +27,7 @@ a {
 
 html {
     --header-height: 4rem;
+    --footer-height: 10rem;
 }
 
 @media screen and (max-width: 800px) {
@@ -37,7 +38,7 @@ html {
 
 #wrapper {
     position: relative;
-    padding: var(--header-height) 0 10rem 0;
+    padding: var(--header-height) 0 var(--footer-height) 0;
     min-height: 100vh;
 }
 

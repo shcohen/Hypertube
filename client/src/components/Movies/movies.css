@@ -1,7 +1,22 @@
-.movies {
+/*MOVIES PAGE*/
+
+#movies {
+    position: relative;
     width: 100%;
-    background-color: var(--bg-container);
+    min-height: calc(100vh - var(--header-height ) - var(--footer-height));
 }
+
+.movies {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-container);
+    transition: filter 0.2s;
+}
+
+/*SEARCH BAR*/
 
 .search-bar {
     display: block;
@@ -17,6 +32,7 @@
     padding: 1rem;
     text-align: center;
     background-color: var(--bg);
+    font-size: 1.4rem;
 }
 
 .search-bar:hover {
@@ -27,5 +43,92 @@
     border: 1px solid var(--color-headings);
     box-shadow: 0 0 0 3px var(--color-headings-transparent), 0 12px 48px -8px #00000080;
     background-color: var(--bg-container-active);
+}
 
+/*SIDEBAR*/
+
+.sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20rem;
+    max-width: 90%;
+    height: 100%;
+    z-index: 2;
+    transform: translateX(-100%);
+    transition: transform 0.4s;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+}
+
+.sidebar:hover {
+    transform: translateX(0);
+}
+
+.sidebar:hover ~ .movies {
+    filter: blur(4px);
+}
+
+.sidebar__container {
+    background-color: var(--bg);
+    position: relative;
+    width: 90%;
+    height: 95%;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    box-shadow: 0 0 16px -8px #00000080;
+}
+
+.sidebar__icon {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translate(100%, -50%);
+    width: 4rem;
+    height: 4rem;
+    background: url("../../assets/img/sidebar-arrow-right.svg") center no-repeat;
+    background-size: 2rem;
+    transition: opacity 0.2s;
+    opacity: 0.3;
+    /*filter: brightness(150%);*/
+}
+
+html[data-theme="dark"] .sidebar__icon {
+    opacity: 0.6;
+}
+
+.sidebar:hover .sidebar__icon {
+    opacity: 0;
+}
+
+.sidebar__scrollable {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 1rem;
+}
+
+/*SIDEBAR CONTENT*/
+
+.sidebar__title {
+    position: relative;
+    padding: 0.4rem 0.6rem;
+    margin: 0 auto 1rem auto;
+    width: fit-content;
+    font-weight: 300;
+    color: var(--color-headings) !important;
+}
+
+.sidebar__title::after {
+    content: "";
+    position: absolute;
+    bottom: 0.1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 2px;
+    background-color: var(--color-headings);
+    transition: opacity 0.2s, width 0.2s;
+    width: 60%;
+    opacity: 0.7;
 }
