@@ -32,11 +32,11 @@ class Header extends Component {
         <NavLink to="/" exact>
           Accueil
         </NavLink>
-        <NavLink to="/library">
-          Bibliothèque
+        <NavLink to="/movies">
+          Tous les films
         </NavLink>
-        <NavLink to="/trending">
-          Tendances
+        <NavLink to="/account">
+          Mon compte
         </NavLink>
       </React.Fragment>)
     } else {
