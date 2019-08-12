@@ -25,7 +25,7 @@ module.exports = {
         if (res.data.results[0]) {
             movie.title = res.data.results[0].title;
             movie.poster = res.data.results[0].poster_path ? res.data.results[0].poster_path : res.data.results[0].backdrop_path;
-            movie.time = res.data.results[0].release_date;
+            movie.time = res.data.results[0].release_date.substr(0, 4);
             movie.note = res.data.results[0].vote_average;
             movie.overview = res.data.results[0].overview;
             movie.id = res.data.results[0].id;
