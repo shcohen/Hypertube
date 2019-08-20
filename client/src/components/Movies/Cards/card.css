@@ -32,7 +32,6 @@
     transform: translate(-50%, -50%);
     width: 100%;
     height: 100%;
-    background-image: url("https://images-na.ssl-images-amazon.com/images/I/41Al9falobL._SY450_.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -71,6 +70,7 @@
     text-align: center;
     background-color: var(--bg);
     text-overflow: ellipsis;
+    white-space: nowrap;
     overflow: hidden;
     transition: background-color 0.2s, color 0.2s;
 }
@@ -105,4 +105,10 @@
     margin: 0 0.2rem -.2rem 0;
     background: url("../../../assets/img/movie-card-star.svg") center no-repeat;
     background-size: 1rem;
+}
+
+@media screen and (max-width: 800px) {
+    .movie__poster-infos {
+        opacity: 1;
+    }
 }

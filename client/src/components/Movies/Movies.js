@@ -1,11 +1,31 @@
 import React, {Component} from 'react';
+import axios from 'axios';
 
-import SearchBar from './SearchBar';
+import SearchBar from './SearchBar/SearchBar';
 import Card from './Cards/Card';
 
 import './movies.css';
 
 class Movies extends Component {
+  state = {
+    movies: [],
+    title: ''
+  };
+
+  submitForm = () => {
+    console.log(this.state.title);
+    axios.post('/api/library/find_movie', {name: this.state.title})
+      .then((res) => {
+        console.log(res.data);
+        this.setState({
+          movies: res.data
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  };
+
   render() {
     return (
       <div id="movies">
@@ -37,16 +57,11 @@ class Movies extends Component {
           </div>
         </div>
         <div className="movies">
-          <SearchBar/>
+          <SearchBar changeTitle={(t) => this.setState({title: t})} submitForm={this.submitForm}/>
           <div className="movie__cards">
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
-            <Card/>
+            {this.state.movies.map((movie, i) => (
+              <Card key={i} movie={movie}/>
+            ))}
           </div>
         </div>
       </div>

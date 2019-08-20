@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 
-import {sleep, asyncForEach} from '../../utils/f';
+import {sleep, asyncForEach} from '../../../utils/f';
+
+import './search-bar.css';
 
 class SearchBar extends Component {
   state = {
@@ -74,12 +76,18 @@ class SearchBar extends Component {
     const {auto, dash} = this.state;
 
     return (
-      <input name="title"
-             className="search-bar"
-             type="text"
-             placeholder={auto + (dash ? '|' : ' ')}
-             minLength="1"
-             maxLength="32"/>
+      <form className="custom" onSubmit={(e) => {
+        e.preventDefault();
+        this.props.submitForm();
+      }}>
+        <input name="title"
+               className="search-bar"
+               type="text"
+               placeholder={auto + (dash ? '|' : ' ')}
+               minLength="1"
+               maxLength="32"
+               onChange={(e) => this.props.changeTitle(e.target.value)}/>
+      </form>
     );
   }
 }

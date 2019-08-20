@@ -2,20 +2,20 @@ import React from 'react';
 
 import './card.css';
 
-const Card = () => {
+const Card = (props) => {
+
+  console.log(props.movie);
   return (
     <div className="movie__card">
       <div className="movie__poster">
-        <div className="movie__poster-background">
-
-        </div>
+        <div className="movie__poster-background" style={{backgroundImage: `url("https://image.tmdb.org/t/p/original${props.movie.poster}")`}}/>
         <div className="movie__poster-infos">
-          <div className="movie__poster-info">2018</div>
-          <div className="movie__poster-info rating">5<span>/10</span></div>
+          <div className="movie__poster-info">{props.movie.time}</div>
+          <div className="movie__poster-info rating">{props.movie.note}<span>/10</span></div>
         </div>
       </div>
       <div className="movie__title">
-        Spiderman
+        {props.movie.title}
       </div>
     </div>
   );
