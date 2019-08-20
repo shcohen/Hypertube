@@ -17,8 +17,7 @@ module.exports = {
             let movies = search.filter(movie => {
                 let found = movie.title.match(/^([A-Za-z:))\- .])+[1-9]{0,1}(?!0|9|8|7)(?!\()|^([0-9 ])+[A-Za-z:))\- .]*[1-9]{0,1}(?!0|9|8|7)(?!\()|[0-9]+(?=p)/gm);
                 movie.title = found ? found[0].replace(/[:]/gm, '').replace(/[.-]/g, ' ').toLowerCase().trim() : undefined;
-                name = name.replace(/[:]/gm, '').replace(/[.-]/g, ' ');
-                return movie.title ? !movie.title.indexOf(name) : undefined;
+                return movie.title;
             });
             await movies.sort((a, b) => {
                 return b.seeds - a.seeds;
