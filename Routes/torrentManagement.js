@@ -181,7 +181,7 @@ module.exports = {
                         });
                     } else {
                         fileSize = file.length;
-                        // subtitleManager(movieId);
+                        subtitleManager(movieId);
                         module.exports.streamingCenter(res, file, range, directoryName, filePath, movieId, {
                             convert: false,
                             subs: srt,
