@@ -3,26 +3,34 @@ import axios from 'axios';
 
 import SearchBar from './SearchBar/SearchBar';
 import Card from './Cards/Card';
+import Loading from './../Utilities/Loading/Loading';
 
 import './movies.css';
 
 class Movies extends Component {
   state = {
     movies: [],
-    title: ''
+    title: '',
+    loading: false
   };
 
   submitForm = () => {
-    console.log(this.state.title);
+    this.setState({
+      loading: true
+    });
     axios.post('/api/library/find_movie', {name: this.state.title})
       .then((res) => {
         console.log(res.data);
         this.setState({
-          movies: res.data
+          movies: res.data,
+          loading: false
         });
       })
       .catch((err) => {
         console.log(err);
+        this.setState({
+          loading: false
+        });
       })
   };
 
@@ -63,6 +71,9 @@ class Movies extends Component {
               <Card key={i} movie={movie}/>
             ))}
           </div>
+          {this.state.loading && <div className="movie__loading">
+            <Loading/>
+          </div>}
         </div>
       </div>
     );

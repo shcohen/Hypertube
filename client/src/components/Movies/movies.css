@@ -109,3 +109,16 @@ html[data-theme="dark"] .sidebar__icon {
     height: fit-content;
     padding-bottom: 1rem;
 }
+
+/*LOADING*/
+
+.movie__loading {
+    margin: 1rem auto;
+    width: 100%;
+    text-align: center;
+}
+
+.movie__loading svg {
+    width: 5rem;
+    height: 5rem;
+}
