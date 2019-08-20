@@ -29,7 +29,7 @@ module.exports = {
             result = await removeMoviesWithoutInfo(result);
             return res.status(200).send(result);
         } else {
-            return res.status(200).send('Wrong data sent');
+            return res.status(200).send([]);
         }
     },
     findMovieInfo: async (req, res) => {
