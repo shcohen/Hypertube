@@ -45,6 +45,10 @@
     background-color: var(--bg-container-active);
 }
 
+.search-bar::placeholder {
+    opacity: .5;
+}
+
 /*SIDEBAR*/
 
 .sidebar {

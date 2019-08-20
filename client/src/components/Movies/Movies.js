@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import SearchBar from './SearchBar';
+
 import './movies.css';
 
 class Movies extends Component {
@@ -34,11 +36,7 @@ class Movies extends Component {
           </div>
         </div>
         <div className="movies">
-          <input name="title"
-                 className="search-bar"
-                 type="text"
-                 minLength="1"
-                 maxLength="32"/>
+          <SearchBar/>
         </div>
       </div>
     );
