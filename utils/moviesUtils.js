@@ -53,7 +53,7 @@ module.exports = {
                 })
             });
             return {imdbId: res.data.imdb_id, genres: newGenres};
-            // return {imdbId: res.data.imdb_id, genres: newGenres};
+            // $$$$$$$$$$
             // return await axios.get(`https://movie-database-imdb-alternative.p.rapidapi.com/?i=${imdbID.data.imdb_id}&r=json`, {
             //     headers: {
             //         "X-RapidAPI-Host": "movie-database-imdb-alternative.p.rapidapi.com",
@@ -62,6 +62,7 @@ module.exports = {
             // }).then(res => {
             //     return res.data;
             // })
+            // $$$$$$$$$$
         }
     },
     removeMoviesWithoutInfo: (movies) => {

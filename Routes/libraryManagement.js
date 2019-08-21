@@ -10,7 +10,7 @@ module.exports = {
         let {name, quantity} = req.body;
         let movies = [];
 
-        if (name && name.length && quantity) {
+        if (name && name.length) {
             movies = await module.exports.findMovies(name, parseInt(quantity));
         } else {
             movies = await module.exports.getTrends();
@@ -21,7 +21,7 @@ module.exports = {
     findMovies: async (name, quantity) => {
         if (name !== undefined && name.length) {
             name = await accentRemover(name.replace(/[:-]/gm, '').toLowerCase().trim());
-            let search = await torrentSearch.search(name, 'Movies', quantity);
+            let search = await torrentSearch.search(name, 'Movies');
             let movies = search.filter(movie => {
                 let found = movie.title.match(/^([A-Za-z:))\- .])+[1-9]{0,1}(?!0|9|8|7)(?!\()|^([0-9 ])+[A-Za-z:))\- .]*[1-9]{0,1}(?!0|9|8|7)(?!\()|[0-9]+(?=p)/gm);
                 movie.title = found ? found[0].replace(/[:]/gm, '').replace(/[.-]/g, ' ').toLowerCase().trim() : undefined;
@@ -30,12 +30,14 @@ module.exports = {
             await movies.sort((a, b) => {
                 return b.seeds - a.seeds;
             });
+            console.log(movies.length);
             let result = await removeDuplicatesMovies(movies);
+            console.log(result.length);
             await Promise.all(result.map(async movie => {
                 await getMovieInfo(movie.title, movie);
             }));
             result = await removeMoviesWithoutInfo(result);
-            return result;
+            return result.slice(0, quantity);
         } else {
             return [];
         }

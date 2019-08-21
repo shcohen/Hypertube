@@ -18,7 +18,7 @@ mongoose.connect('mongodb+srv://root:root@hypertube-yfmfl.mongodb.net/test?retry
     console.log('Error while DB connecting');
     console.log(e);
 });
-new CronJob('* * * * *', () => {
+new CronJob('* 1 * * *', () => {
     if (updateTrends() === -1) {
         console.log('Failed to update trends');
     } else {
