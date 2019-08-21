@@ -18,9 +18,10 @@ class Movies extends Component {
 
   submitForm = () => {
     this.setState({
-      loadingSearch: true
+      loadingSearch: true,
+      quantity: 30
     });
-    axios.post('/api/library/find_movie', {name: this.state.title, ...this.state})
+    axios.post('/api/library/find_movie', {...this.state, name: this.state.title, quantity: 15})
       .then((res) => {
         console.log(res.data);
         this.setState({
@@ -36,14 +37,35 @@ class Movies extends Component {
       })
   };
 
+  infiniteScroll = () => {
+    if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+      this.setState({
+        loadingInfinite: true
+      });
+      axios.post('/api/library/find_movie', {...this.state, name: this.state.title})
+        .then((res) => {
+          console.log(res.data);
+          this.setState({
+            movies: res.data,
+            quantity: this.state.quantity + 15,
+            loadingInfinite: false
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          this.setState({
+            loadingInfinite: false
+          });
+        });
+    }
+  };
+
   componentDidMount() {
-    window.onscroll = () => {
-      console.log('test');
-    };
+    window.addEventListener('scroll', this.infiniteScroll);
   }
 
   componentWillUnmount() {
-    window.onscroll = undefined;
+    window.removeEventListener('scroll', this.infiniteScroll);
   }
 
   render() {
