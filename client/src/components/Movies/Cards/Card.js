@@ -20,7 +20,7 @@ const Card = (props) => {
           <div className="toolbox">Aller sur la page du film</div>
         </div>
         <div className="movie__poster-infos">
-          <div className="movie__poster-info">{props.movie.time}</div>
+          <div className="movie__poster-info">{props.movie.date}</div>
           <div className="movie__poster-info rating">{props.movie.note}<span>/10</span></div>
         </div>
       </div>
