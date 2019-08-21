@@ -7,7 +7,7 @@ exports.router = (() => {
     const apiRouter = express.Router();
 
     /* MOVIE LIBRARY */
-    apiRouter.route('/library/find_movie').post(libraryManagement.findMovies);
+    apiRouter.route('/library/find_movie').post(libraryManagement.libraryManager);
     apiRouter.route('/library/find_movie_info').post(libraryManagement.findMovieInfo);
     apiRouter.route('/library/get_trends').get(libraryManagement.updateTrends);
 
