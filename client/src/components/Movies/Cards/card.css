@@ -64,7 +64,7 @@
     flex-grow: 0;
     flex-shrink: 0;
     flex-wrap: wrap;
-    padding: 1rem 0 0 1rem;
+    padding: 1rem;
 }
 
 .movie__poster:hover .movie__poster-infos {
