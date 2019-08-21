@@ -9,6 +9,8 @@
     flex-grow: 0;
 }
 
+/*POSTER PART*/
+
 .movie__poster {
     position: relative;
     width: 100%;
@@ -24,6 +26,8 @@
 .movie__poster:hover {
     box-shadow: 0 0 20px -4px #00000080;
 }
+
+/*BACKGROUND POSTER*/
 
 .movie__poster-background {
     position: absolute;
@@ -44,6 +48,8 @@
     width: 110%;
     height: 110%;
 }
+
+/*INFOS*/
 
 .movie__poster-infos {
     position: absolute;
@@ -77,25 +83,6 @@
     }
 }
 
-.movie__title {
-    width: fit-content;
-    max-width: 90%;
-    margin: 0.5rem auto;
-    height: 2rem;
-    padding: 0.5rem 0.7rem;
-    border-radius: 2rem;
-    text-align: center;
-    background-color: var(--bg);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    transition: background-color 0.2s, color 0.2s;
-}
-
-.movie__poster:hover ~ .movie__title {
-    background-color: var(--color-headings);
-    color: white;
-}
 
 .movie__poster-info {
     margin: 0.75rem;
@@ -126,4 +113,45 @@
 
 .movie__poster-info.genre {
     margin: 0 0.5rem 0.5rem 0;
+}
+
+/*TITLE*/
+
+.movie__title {
+    width: fit-content;
+    max-width: 90%;
+    margin: 0.5rem auto;
+    height: 2rem;
+    padding: 0.5rem 0.7rem;
+    border-radius: 2rem;
+    text-align: center;
+    background-color: var(--bg);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.movie__poster:hover ~ .movie__title {
+    background-color: var(--color-headings);
+    color: white;
+}
+
+/*MORE BUTTON*/
+
+.movie__poster-more {
+    position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 6rem;
+    height: 6rem;
+    border-radius: 3rem;
+    background: #000000c0 url("../../../assets/img/movie-popcorn.svg") center no-repeat;
+    background-size: 4rem;
+    opacity: 0;
+}
+
+.movie__poster:hover .movie__poster-more {
+    opacity: 1;
 }

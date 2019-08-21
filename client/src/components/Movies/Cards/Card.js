@@ -4,17 +4,20 @@ import './card.css';
 
 const Card = (props) => {
 
-  console.log(props.movie);
-  return (
+  return (props.movie &&
     <div className="movie__card">
       <div className="movie__poster">
-        <div className="movie__poster-background" style={props.movie.poster && {backgroundImage: `url("https://image.tmdb.org/t/p/w500${props.movie.poster}")`}}/>
+        <div className="movie__poster-background"
+             style={props.movie.poster && {backgroundImage: `url("https://image.tmdb.org/t/p/w500${props.movie.poster}")`}}/>
         <div className="movie__poster-infos top">
-          {props.movie.genre.map((genre) => (
-            <div className="movie__poster-info genre">
+          {props.movie.genre && props.movie.genre.map((genre, i) => (
+            <div key={i} className="movie__poster-info genre">
               {genre}
             </div>
           ))}
+        </div>
+        <div className="movie__poster-more with-toolbox">
+          <div className="toolbox">Aller sur la page du film</div>
         </div>
         <div className="movie__poster-infos">
           <div className="movie__poster-info">{props.movie.time}</div>
