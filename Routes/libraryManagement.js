@@ -72,7 +72,7 @@ module.exports = {
                                     genre: info.genres,
                                     note: movie.vote_average,
                                     imdbID: info.imdbId,
-                                    release_date: movie.release_date.substr(0, 4)
+                                    date: movie.release_date.substr(0, 4)
                                 })
                             } else {
                                 await trendsSchema.update({
@@ -81,7 +81,7 @@ module.exports = {
                                     genre: info.genres,
                                     note: movie.vote_average,
                                     imdbID: info.imdbId,
-                                    release_date: movie.release_date.substr(0, 4)
+                                    date: movie.release_date.substr(0, 4)
                                 })
                             }
                         }
