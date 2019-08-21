@@ -151,7 +151,7 @@ module.exports = {
             fs.accessSync(filePath);
             let fileStat = fs.statSync(filePath);
             return fileStat.size === file.length;
-        } catch {
+        } catch (err) {
             return false;
         }
     },
