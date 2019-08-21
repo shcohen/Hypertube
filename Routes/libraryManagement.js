@@ -2,16 +2,16 @@ const torrentSearch = require('torrent-search-api');
 const accentRemover = require('remove-accents');
 const axios = require('axios');
 const trendsSchema = require('../models/trends');
-const {getImdbInfo, removeDuplicatesMovies, getMovieInfo, removeMoviesWithoutInfo} = require('../utils/moviesUtils');
+const {getImdbIdAndGenre, removeDuplicatesMovies, getMovieInfo, removeMoviesWithoutInfo} = require('../utils/moviesUtils');
 const {TMDB_API_KEY_V3} = require('../config/apiKey');
 
 module.exports = {
     findMovies: async (req, res) => {
-        let {name} = req.body;
+        let {name, quantity} = req.body;
 
         if (name !== undefined && name.length) {
             name = await accentRemover(name.replace(/[:-]/gm, '').toLowerCase().trim());
-            let search = await torrentSearch.search(name, 'Movies');
+            let search = await torrentSearch.search(name, 'Movies', parseInt(quantity));
             // let search2 = await torrentSearch.search(['ThePirateBay'], name, 'Videos');
             // search = [...search, ...search2];
             let movies = search.filter(movie => {
@@ -49,27 +49,28 @@ module.exports = {
             if (!err) {
                 let query = await axios.get(`https://api.themoviedb.org/3/trending/movie/week?api_key=${TMDB_API_KEY_V3}`);
                 if (query.data.results) {
-                    query.data.results.map(async el => {
-                        let movie = await getImdbInfo(el.id);
-                        if (count === 0) {
-                            await trendsSchema.create({
-                                title: movie.Title,
-                                poster: movie.Poster,
-                                genre: movie.Genre,
-                                note: movie.imdbRating,
-                                imdbID: movie.imdbID,
-                                release_date: movie.Released
-                            })
-                        } else {
-                            await trendsSchema.update({
-                                title: movie.Title,
-                                poster: movie.Poster,
-                                genre: movie.Genre,
-                                note: movie.imdbRating,
-                                imdbID: movie.imdbID,
-                                release_date: movie.Released
-                            })
-                        }
+                    query.data.results.map(async movie => {
+                        let info = await getImdbIdAndGenre(movie.id, movie.genre_ids);
+                        console.log(info);
+                        // if (count === 0) {
+                        //     await trendsSchema.create({
+                        //         title: movie.Title,
+                        //         poster: movie.Poster,
+                        //         genre: movie.Genre,
+                        //         note: movie.imdbRating,
+                        //         imdbID: movie.imdbID,
+                        //         release_date: movie.Released
+                        //     })
+                        // } else {
+                        //     await trendsSchema.update({
+                        //         title: movie.Title,
+                        //         poster: movie.Poster,
+                        //         genre: movie.Genre,
+                        //         note: movie.imdbRating,
+                        //         imdbID: movie.imdbID,
+                        //         release_date: movie.Released
+                        //     })
+                        // }
                     });
                 } else {
                     return -1;
