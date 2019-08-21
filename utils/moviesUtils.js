@@ -25,21 +25,26 @@ module.exports = {
     getMovieInfo: async (title, movie) => {
         let res = await limitedRequest.get(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY_V3}&query=${title}`);
         if (res.data.results[0]) {
-            movie.title = res.data.results[0].title;
-            movie.poster = res.data.results[0].poster_path ? res.data.results[0].poster_path : res.data.results[0].backdrop_path;
-            movie.date = res.data.results[0].release_date.substr(0, 4);
-            movie.note = res.data.results[0].vote_average;
-            movie.overview = res.data.results[0].overview;
-            movie.id = res.data.results[0].id;
-            movie.genre = [];
-            res.data.results[0].genre_ids.map(id => {
-                genres.map(genre => {
-                    if (genre.id === id) {
-                        movie.genre = [...movie.genre, genre.name];
-                    }
-                })
-            });
+            console.log(title + ' vs ' + res.data.results[0].title);
+                // movie.title = res.data.results[0].title;
+                // movie.poster = res.data.results[0].poster_path ? res.data.results[0].poster_path : res.data.results[0].backdrop_path;
+                // movie.date = res.data.results[0].release_date.substr(0, 4);
+                // movie.note = res.data.results[0].vote_average;
+                // movie.overview = res.data.results[0].overview;
+                // movie.id = res.data.results[0].id;
+                // movie.genre = [];
+                // res.data.results[0].genre_ids.map(id => {
+                //     genres.map(genre => {
+                //         if (genre.id === id) {
+                //             movie.genre = [...movie.genre, genre.name];
+                //         }
+                //     })
+                // });
         }
+    },
+    getAllMovies: async name => {
+        let result = await limitedRequest.get(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY_V3}&language=en-US&query=${name}`);
+        return result.data.results;
     },
     getImdbIdAndGenre: async (id, genres_id) => {
         let res = await limitedRequest.get(`https://api.themoviedb.org/3/movie/${id}/external_ids?api_key=${TMDB_API_KEY_V3}`);

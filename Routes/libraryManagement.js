@@ -2,7 +2,7 @@ const torrentSearch = require('torrent-search-api');
 const accentRemover = require('remove-accents');
 const axios = require('axios');
 const trendsSchema = require('../models/trends');
-const {getImdbIdAndGenre, removeDuplicatesMovies, getMovieInfo, removeMoviesWithoutInfo} = require('../utils/moviesUtils');
+const {getAllMovies, getImdbIdAndGenre, removeDuplicatesMovies, getMovieInfo, removeMoviesWithoutInfo} = require('../utils/moviesUtils');
 const {TMDB_API_KEY_V3} = require('../config/apiKey');
 
 module.exports = {
@@ -10,13 +10,16 @@ module.exports = {
         let {name, quantity} = req.body;
         let movies = [];
 
-        if (name && name.length) {
-            movies = await module.exports.findMovies(name, parseInt(quantity));
+        if (name && name.length && quantity) {
+            movies = await module.exports.findMoviesTEST(name, parseInt(quantity));
         } else {
             movies = await module.exports.getTrends();
         }
-        // console.log(movies);
         return res.status(200).send(movies);
+    },
+    findMoviesTEST: async (name, quantity) => {
+        let result = await axios.get(`https://yts.lt/api/v2/list_movies.json?query_term=${name}`);
+        return result.data.data.movies.slice(0, quantity);
     },
     findMovies: async (name, quantity) => {
         if (name !== undefined && name.length) {
@@ -25,18 +28,17 @@ module.exports = {
             let movies = search.filter(movie => {
                 let found = movie.title.match(/^([A-Za-z:))\- .])+[1-9]{0,1}(?!0|9|8|7)(?!\()|^([0-9 ])+[A-Za-z:))\- .]*[1-9]{0,1}(?!0|9|8|7)(?!\()|[0-9]+(?=p)/gm);
                 movie.title = found ? found[0].replace(/[:]/gm, '').replace(/[.-]/g, ' ').toLowerCase().trim() : undefined;
+                console.log(movie.title);
                 return movie.title;
             });
             await movies.sort((a, b) => {
                 return b.seeds - a.seeds;
             });
-            console.log(movies.length);
             let result = await removeDuplicatesMovies(movies);
-            console.log(result.length);
             await Promise.all(result.map(async movie => {
                 await getMovieInfo(movie.title, movie);
             }));
-            result = await removeMoviesWithoutInfo(result);
+            // result = await removeMoviesWithoutInfo(result);
             return result.slice(0, quantity);
         } else {
             return [];
@@ -72,7 +74,7 @@ module.exports = {
                                     genre: info.genres,
                                     note: movie.vote_average,
                                     imdbID: info.imdbId,
-                                    release_date: movie.release_date.substr(0, 4)
+                                    date: movie.release_date.substr(0, 4)
                                 })
                             } else {
                                 await trendsSchema.update({
@@ -81,7 +83,7 @@ module.exports = {
                                     genre: info.genres,
                                     note: movie.vote_average,
                                     imdbID: info.imdbId,
-                                    release_date: movie.release_date.substr(0, 4)
+                                    date: movie.release_date.substr(0, 4)
                                 })
                             }
                         }
