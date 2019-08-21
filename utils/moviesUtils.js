@@ -1,6 +1,8 @@
 const axios = require('axios');
 const torrentSearch = require('torrent-search-api');
+const rateLimit = require('axios-rate-limit');
 const {TMDB_API_KEY_V3, RAPIDAPI_KEY} = require('../config/apiKey');
+const limitedRequest = rateLimit(axios.create(), {maxRequests: 39, perMilliseconds: 10000});
 const genres = [{"id": 28, "name": "Action"}, {"id": 12, "name": "Adventure"}, {"id": 16, "name": "Animation"},
     {"id": 35, "name": "Comedy"}, {"id": 80, "name": "Crime"}, {"id": 99, "name": "Documentary"}, {
         "id": 18,
@@ -21,7 +23,7 @@ const genres = [{"id": 28, "name": "Action"}, {"id": 12, "name": "Adventure"}, {
 
 module.exports = {
     getMovieInfo: async (title, movie) => {
-        let res = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY_V3}&query=${title}`);
+        let res = await limitedRequest.get(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY_V3}&query=${title}`);
         if (res.data.results[0]) {
             movie.title = res.data.results[0].title;
             movie.poster = res.data.results[0].poster_path ? res.data.results[0].poster_path : res.data.results[0].backdrop_path;
@@ -40,7 +42,7 @@ module.exports = {
         }
     },
     getImdbInfo: async id => {
-        let imdbID = await axios.get(`https://api.themoviedb.org/3/movie/${id}/external_ids?api_key=${TMDB_API_KEY_V3}`);
+        let imdbID = await limitedRequest.get(`https://api.themoviedb.org/3/movie/${id}/external_ids?api_key=${TMDB_API_KEY_V3}`);
         if (imdbID.data.imdb_id) {
             return await axios.get(`https://movie-database-imdb-alternative.p.rapidapi.com/?i=${imdbID.data.imdb_id}&r=json`, {
                 headers: {
@@ -77,7 +79,7 @@ module.exports = {
         });
     },
     verifyTitle: async title => {
-        let res = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY_V3}&query=${title}`);
+        let res = await limitedRequest.get(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY_V3}&query=${title}`);
         return res.data.results ? title === res.data.results[0].title : false
     },
     regroupTorrent: async movie => {
