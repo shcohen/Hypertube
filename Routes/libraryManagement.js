@@ -18,8 +18,9 @@ module.exports = {
         return res.status(200).send(movies);
     },
     findMoviesTEST: async (name, quantity) => {
-        let result = await axios.get(`https://yts.lt/api/v2/list_movies.json?query_term=${name}`);
-        return result.data.data.movies.slice(0, quantity);
+        let result = await axios.get(`https://yts.lt/api/v2/list_movies.json?query_term=${name}`).data.data;
+        if (result && result.length)
+        return result.slice(0, quantity);
     },
     findMovies: async (name, quantity) => {
         if (name !== undefined && name.length) {
