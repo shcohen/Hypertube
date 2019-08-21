@@ -7,6 +7,7 @@ import Root from './components/Root';
 import Home from './components/Home/Home';
 import Error from './components/Error/Error';
 import Movies from './components/Movies/Movies';
+import MoviePage from './components/MoviePage/MoviePage';
 
 import './css/normalize.css';
 import './css/darkmode.css';
@@ -24,6 +25,7 @@ class App extends Component {
             <Switch>
               <Route path={'/'} exact component={Home}/>
               <Route path={'/movies'} exact component={Movies}/>
+              <Route path={'/movie/:id'} exact component={MoviePage}/>
               <Route component={Error}/>
             </Switch>
           </Root>
