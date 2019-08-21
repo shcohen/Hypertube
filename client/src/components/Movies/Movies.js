@@ -13,15 +13,15 @@ class Movies extends Component {
     title: '',
     loadingSearch: false,
     loadingInfinite: false,
-    quantity: 45
+    quantity: 20
   };
 
   submitForm = () => {
     this.setState({
       loadingSearch: true,
-      quantity: 45
+      quantity: 20
     });
-    axios.post('/api/library/find_movie', {...this.state, name: this.state.title, quantity: 30})
+    axios.post('/api/library/find_movie', {...this.state, name: this.state.title, quantity: 10})
       .then((res) => {
         console.log(res.data);
         this.setState({
@@ -47,7 +47,7 @@ class Movies extends Component {
           console.log(res.data);
           this.setState({
             movies: res.data,
-            quantity: this.state.quantity + 15,
+            quantity: this.state.quantity + 10,
             loadingInfinite: false
           });
         })

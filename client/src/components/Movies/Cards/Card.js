@@ -8,9 +8,9 @@ const Card = (props) => {
     <div className="movie__card">
       <div className="movie__poster">
         <div className="movie__poster-background"
-             style={props.movie.poster && {backgroundImage: `url("https://image.tmdb.org/t/p/w500${props.movie.poster}")`}}/>
+             style={props.movie.medium_cover_image && {backgroundImage: `url("${props.movie.large_cover_image}")`}}/>
         <div className="movie__poster-infos top">
-          {props.movie.genre && props.movie.genre.map((genre, i) => (
+          {props.movie.genres && props.movie.genres.map((genre, i) => (
             <div key={i} className="movie__poster-info genre">
               {genre}
             </div>
@@ -20,8 +20,8 @@ const Card = (props) => {
           <div className="toolbox">Aller sur la page du film</div>
         </div>
         <div className="movie__poster-infos">
-          <div className="movie__poster-info">{props.movie.date}</div>
-          <div className="movie__poster-info rating">{props.movie.note}<span>/10</span></div>
+          <div className="movie__poster-info">{props.movie.year}</div>
+          <div className="movie__poster-info rating">{props.movie.rating}<span>/10</span></div>
         </div>
       </div>
       <div className="movie__title">
