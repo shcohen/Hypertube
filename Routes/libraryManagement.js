@@ -10,7 +10,7 @@ module.exports = {
         let {name, quantity} = req.body;
         let movies = [];
 
-        if (name && name.length && quantity) {
+        if (name && name.length) {
             movies = await module.exports.findMovies(name, parseInt(quantity));
         } else {
             movies = await module.exports.getTrends();

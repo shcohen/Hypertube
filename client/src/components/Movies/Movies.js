@@ -62,6 +62,7 @@ class Movies extends Component {
 
   componentDidMount() {
     window.addEventListener('scroll', this.infiniteScroll);
+    this.submitForm();
   }
 
   componentWillUnmount() {
