@@ -3,7 +3,9 @@ const User = require('../models/user');
 const mailsUtils = require('../utils/mailUtils');
 const uuid = require('uuid');
 const multer = require('multer');
+const xss = require('xss');
 const upload = multer({dest: 'uploads/'});
+const Joi = require('@hapi/joi');
 const validator = require("email-validator");
 const passwordValidator = require('password-validator');
 const schema = new passwordValidator(); // create a validation schema
@@ -38,13 +40,17 @@ module.exports = {
                 return false;
         }
     },
-    register: (req, res, next) => { // add html check
+    register: (req, res, next) => {
         console.log('been there');
         let {email, username, password, firstname, lastname} = req.body;
         let {profilePic} = req.file;
-        if (!email || !username || !password || !firstname || !lastname || !profilePic) {
+        if (!email || !username || !password || !firstname || !lastname) {
             console.log(req.body);
             console.log(req.file);
+            return res.status(200).send('error: invalid request')
+        } else if (email.type && typeof email.type !== 'string' || username.type && typeof username.type !== 'string' || password.type && typeof password.type !== 'string'
+        || firstname.type && typeof firstname.type !== 'string' || lastname.type && typeof lastname.type !== 'string') {
+            console.log(req.body);
             return res.status(200).send('error: invalid request')
         } else {
             if (validator.validate(email) === true) {
@@ -106,11 +112,15 @@ module.exports = {
             })(req, res, next);
         }
     },
-    modify: (req, res) => { // add html check (dans le sens balise script dans le champ)
+    modify: (req, res) => {
         console.log('0');
         let {acc_id, email, username, password, rpassword, firstname, lastname} = req.body;
         let {profilePic} = req.file;
         if (!acc_id || !email && !username && !password && !rpassword && !firstname && !lastname && !profilePic) {
+            return res.status(200).send('error: invalid request')
+        } else if (acc_id.type && typeof acc_id.type !== 'string' || email.type && typeof email.type !== 'string' || username.type && typeof username.type !== 'string' || password.type && typeof password.type !== 'string'
+           || rpassword.type && typeof rpassword.type !== 'string' || firstname.type && typeof firstname.type !== 'string' || lastname.type && typeof lastname.type !== 'string') {
+            console.log(req.body);
             return res.status(200).send('error: invalid request')
         } else {
             console.log('1');
@@ -183,17 +193,17 @@ module.exports = {
                     }).then((user, error) => {
                         if (!user) {
                             console.log('no account found');
-                            return res.status(200).send('error: no account found with this id')
+                            return res.status(200).send('error: no account found')
                         } else if (error) {
                             console.log('error:', error);
                             return res.status(200).send('error: invalid request')
                         } else {
                             console.log('3');
-                            email ? user.email = email : null;
-                            username ? user.username = username : null;
-                            password ? user.password = password : null;
-                            firstname ? user.firstname = firstname : null;
-                            lastname ? user.lastname = lastname : null;
+                            email ? user.email = xss(email) : null;
+                            username ? user.username = xss(username) : null;
+                            password ? user.password = xss(password) : null;
+                            firstname ? user.firstname = xss(firstname) : null;
+                            lastname ? user.lastname = xss(lastname) : null;
                             user.save((error) => {
                                 console.log('4');
                                 if (error) {

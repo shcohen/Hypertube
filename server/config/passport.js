@@ -3,6 +3,7 @@ const GoogleStrategy = require('passport-google-oauth20');
 const GithubStrategy = require('passport-github2');
 const FortyTwoStrategy = require('passport-42');
 let config = require('../oAuth/config.js');
+const xss = require('xss');
 const mailUtils = require('../utils/mailUtils');
 const User = require('../models/user'); // load up the user model
 
@@ -23,11 +24,11 @@ module.exports = (passport) => {
                     let validationToken = Math.random().toString(36).substr(2, 9);
                     User.create({
                         acc_id: Math.random().toString(36).substr(2, 9),
-                        email: email,
-                        username: req.body.username + Math.random().toString().substr(5, 3),
-                        password: password,
-                        firstname: req.body.firstname,
-                        lastname: req.body.lastname,
+                        email: xss(email),
+                        username: xss(req.body.username) + Math.random().toString().substr(5, 3),
+                        password: xss(password),
+                        firstname: xss(req.body.firstname),
+                        lastname: xss(req.body.lastname),
                         validation: false,
                         validationToken: validationToken,
                         resetToken: null,
@@ -122,11 +123,11 @@ module.exports = (passport) => {
                                 let validationToken = Math.random().toString(36).substr(2, 9);
                                 User.create({
                                     acc_id: Math.random().toString(36).substr(2, 9),
-                                    email: profile._json.email,
-                                    username: profile.displayName.replace(/\s/g, "") + Math.random().toString().substr(5, 3),
+                                    email: xss(profile._json.email),
+                                    username: xss(profile.displayName.replace(/\s/g, "")) + Math.random().toString().substr(5, 3),
                                     password: 'P' + Math.random().toString(36).substr(2, 11),
-                                    firstname: profile._json.given_name,
-                                    lastname: profile._json.family_name,
+                                    firstname: xss(profile._json.given_name),
+                                    lastname: xss(profile._json.family_name),
                                     validation: profile._json.email_verified,
                                     validationToken: validationToken,
                                     resetToken: null,
@@ -187,11 +188,11 @@ module.exports = (passport) => {
                                 let validationToken = Math.random().toString(36).substr(2, 9);
                                 User.create({
                                     acc_id: Math.random().toString(36).substr(2, 9),
-                                    email: profile._json.email,
-                                    username: profile._json.login + Math.random().toString().substr(5, 3),
+                                    email: xss(profile._json.email),
+                                    username: xss(profile._json.login) + Math.random().toString().substr(5, 3),
                                     password: 'P' + Math.random().toString(36).substr(2, 11),
-                                    firstname: profile._json.name.split(" ")[0],
-                                    lastname: profile._json.name.split(" ")[1],
+                                    firstname: xss(profile._json.name.split(" ")[0]),
+                                    lastname: xss(profile._json.name.split(" ")[1]),
                                     validation: true,
                                     validationToken: validationToken,
                                     resetToken: null,
@@ -252,11 +253,11 @@ module.exports = (passport) => {
                                 let validationToken = Math.random().toString(36).substr(2, 9);
                                 User.create({
                                     acc_id: Math.random().toString(36).substr(2, 9),
-                                    email: profile._json.email,
-                                    username: profile._json.login + Math.random().toString().substr(5, 3),
+                                    email: xss(profile._json.email),
+                                    username: xss(profile._json.login) + Math.random().toString().substr(5, 3),
                                     password: 'P' + Math.random().toString(36).substr(2, 11),
-                                    firstname: profile._json.first_name,
-                                    lastname: profile._json.last_name,
+                                    firstname: xss(profile._json.first_name),
+                                    lastname: xss(profile._json.last_name),
                                     validation: true,
                                     validationToken: validationToken,
                                     resetToken: null,
