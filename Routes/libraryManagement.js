@@ -6,6 +6,11 @@ const {getImdbIdAndGenre, removeDuplicatesMovies, getMovieInfo, removeMoviesWith
 const {TMDB_API_KEY_V3} = require('../config/apiKey');
 
 module.exports = {
+    libraryManager: async (req, res) => {
+        let {name, quantity} = req.body;
+
+        if (name && name.length)
+    },
     findMovies: async (req, res) => {
         let {name, quantity} = req.body;
 

@@ -2,7 +2,7 @@ const axios = require('axios');
 const torrentSearch = require('torrent-search-api');
 const rateLimit = require('axios-rate-limit');
 const {TMDB_API_KEY_V3, RAPIDAPI_KEY} = require('../config/apiKey');
-const limitedRequest = rateLimit(axios.create(), {maxRequests: 39, perMilliseconds: 10000});
+const limitedRequest = rateLimit(axios.create(), {maxRequests: 35, perMilliseconds: 10000});
 const genres = [{"id": 28, "name": "Action"}, {"id": 12, "name": "Adventure"}, {"id": 16, "name": "Animation"},
     {"id": 35, "name": "Comedy"}, {"id": 80, "name": "Crime"}, {"id": 99, "name": "Documentary"}, {
         "id": 18,
