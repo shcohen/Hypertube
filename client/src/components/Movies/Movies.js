@@ -11,28 +11,40 @@ class Movies extends Component {
   state = {
     movies: [],
     title: '',
-    loading: false
+    loadingSearch: false,
+    loadingInfinite: false,
+    quantity: 15
   };
 
   submitForm = () => {
     this.setState({
-      loading: true
+      loadingSearch: true
     });
-    axios.post('/api/library/find_movie', {name: this.state.title})
+    axios.post('/api/library/find_movie', {name: this.state.title, ...this.state})
       .then((res) => {
         console.log(res.data);
         this.setState({
           movies: res.data,
-          loading: false
+          loadingSearch: false
         });
       })
       .catch((err) => {
         console.log(err);
         this.setState({
-          loading: false
+          loadingSearch: false
         });
       })
   };
+
+  componentDidMount() {
+    window.onscroll = () => {
+      console.log('test');
+    };
+  }
+
+  componentWillUnmount() {
+    window.onscroll = undefined;
+  }
 
   render() {
     return (
@@ -66,12 +78,15 @@ class Movies extends Component {
         </div>
         <div className="movies">
           <SearchBar changeTitle={(t) => this.setState({title: t})} submitForm={this.submitForm}/>
+          {this.state.loadingSearch && <div className="movie__loading">
+            <Loading/>
+          </div>}
           <div className="movie__cards">
             {this.state.movies.map((movie, i) => (
               <Card key={i} movie={movie}/>
             ))}
           </div>
-          {this.state.loading && <div className="movie__loading">
+          {this.state.loadingInfinite && <div className="movie__loading">
             <Loading/>
           </div>}
         </div>
