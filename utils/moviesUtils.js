@@ -41,17 +41,25 @@ module.exports = {
             });
         }
     },
-    getImdbInfo: async id => {
-        let imdbID = await limitedRequest.get(`https://api.themoviedb.org/3/movie/${id}/external_ids?api_key=${TMDB_API_KEY_V3}`);
-        if (imdbID.data.imdb_id) {
-            return await axios.get(`https://movie-database-imdb-alternative.p.rapidapi.com/?i=${imdbID.data.imdb_id}&r=json`, {
-                headers: {
-                    "X-RapidAPI-Host": "movie-database-imdb-alternative.p.rapidapi.com",
-                    "X-RapidAPI-Key": RAPIDAPI_KEY
+    getImdbIdAndGenre: async (id, genres_id) => {
+        let res = await limitedRequest.get(`https://api.themoviedb.org/3/movie/${id}/external_ids?api_key=${TMDB_API_KEY_V3}`);
+        if (res.data.imdb_id) {
+            let newGenres = await genres_id.map(id => {
+                if (genres.id === id) {
+                    console.log('OK');
+                    return [newGenres, genres.name];
                 }
-            }).then(res => {
-                return res.data;
-            })
+            });
+            console.log(newGenres);
+            // return {imdbId: res.data.imdb_id, genres: newGenres};
+            // return await axios.get(`https://movie-database-imdb-alternative.p.rapidapi.com/?i=${imdbID.data.imdb_id}&r=json`, {
+            //     headers: {
+            //         "X-RapidAPI-Host": "movie-database-imdb-alternative.p.rapidapi.com",
+            //         "X-RapidAPI-Key": RAPIDAPI_KEY
+            //     }
+            // }).then(res => {
+            //     return res.data;
+            // })
         }
     },
     removeMoviesWithoutInfo: (movies) => {
