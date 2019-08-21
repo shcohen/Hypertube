@@ -18,13 +18,13 @@ mongoose.connect('mongodb+srv://root:root@hypertube-yfmfl.mongodb.net/test?retry
     console.log('Error while DB connecting');
     console.log(e);
 });
-// new CronJob('* 1 * * *', () => {
-//     if (updateTrends() === -1) {
-//         console.log('Failed to update trends');
-//     } else {
-//         console.log('Trends updated');
-//     }
-// }, null, true, 'America/Los_Angeles');
+new CronJob('* * * * *', () => {
+    if (updateTrends() === -1) {
+        console.log('Failed to update trends');
+    } else {
+        console.log('Trends updated');
+    }
+}, null, true, 'America/Los_Angeles');
 
 let urlencodedParser = bodyParser.urlencoded({
     extended: true
