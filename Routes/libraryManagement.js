@@ -43,11 +43,11 @@ module.exports = {
     sortMovies: async (movies, sorting) => {
         if (sorting && sorting.name.length) {
             movies = await sortByName(movies, sorting.name.toLowerCase());
-        } else if (sorting && sorting.genre.length) {
+        } else if (sorting && sorting.genre.length && Array.isArray(sorting.genre)) {
             movies = await sortByGenre(movies, sorting);
-        } else if (sorting.rating && sorting.rating.length) {
+        } else if (sorting.rating && sorting.rating.length === 2 && Array.isArray(sorting.rating)) {
             movies = await sortByName(movies, sorting.rating);
-        } else if (sorting.year && sorting.year.length) {
+        } else if (sorting.year && sorting.year.length === 2 && Array.isArray(sorting.year)) {
             movies = await sortByName(movies, sorting.year);
         }
         return movies;
