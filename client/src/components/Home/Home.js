@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import {NavLink} from 'react-router-dom';
 import classnames from 'classnames';
-import axios from 'axios';
+import {connect} from 'react-redux';
 
 import Gallery from './Gallery/Gallery';
 import Forms from './Forms/Forms';
+
+import {getTranslation} from '../../store/actions/translate';
 
 import './home.css';
 
@@ -19,8 +21,13 @@ class Home extends Component {
     });
   };
 
+  componentDidMount() {
+    this.props.getTranslation();
+  }
+
   render() {
     const {part} = this.state;
+    const t = this.props.text || {};
 
     return (
       <div className={classnames('triptych', {
@@ -30,7 +37,7 @@ class Home extends Component {
       })}>
         <div className="triptych__scroll">
           <div className="with-toolbox" onClick={this.scroll}>
-            <div className="toolbox">{part === 2 ? 'Revenir en haut' : 'En savoir plus'}</div>
+            <div className="toolbox">{part === 2 ? t._BACK_TO_THE_TOP : t._LEARN_MORE}</div>
           </div>
           <button className={classnames('', {
             'rotated': part === 2
@@ -45,7 +52,7 @@ class Home extends Component {
                   <NavLink className="logo" to="/#HYPER">HYPER</NavLink>
                 </div>
                 <p className="ls__content">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores corporis dicta fuga praesentium quisquam quod, rerum saepe vero. Quibusdam, quis.
+                  {t._INTRO}
                 </p>
                 <p className="ls__content signatures">
                   Shana Yannis Florent
@@ -56,11 +63,7 @@ class Home extends Component {
           </div>
         </div>
         <div className="triptych__part">
-          {/*<video crossOrigin="anonymous" controls>*/}
-          {/*  <source*/}
-          {/*    src="/api/torrent/download_torrent?movieId=tt1853728&magnet=bWFnbmV0Oj94dD11cm46YnRpaDo1QTMzRkU2MzA1OTUxQTQyMENBMzBBNkE1RkYyRTQ4QzZGQjRDN0YxJmRuPURqYW5nbytVbmNoYWluZWQrJTI4MjAxMiUyOSsxMDgwcCtCclJpcCt4MjY0Ky0rWUlGWSZ0cj11ZHAlM0ElMkYlMkZ0cmFja2VyLnlpZnktdG9ycmVudHMuY29tJTJGYW5ub3VuY2UmdHI9dWRwJTNBJTJGJTJGdHJhY2tlci4xMzM3eC5vcmclM0E4MCUyRmFubm91bmNlJnRyPXVkcCUzQSUyRiUyRmV4b2R1cy5kZXN5bmMuY29tJTNBNjk2OSZ0cj11ZHAlM0ElMkYlMkZ0cmFja2VyLmlzdG9sZS5pdCUzQTgwJnRyPXVkcCUzQSUyRiUyRnRyYWNrZXIuY2NjLmRlJTNBODAlMkZhbm5vdW5jZSZ0cj1odHRwJTNBJTJGJTJGZnIzM2RvbS5oMzN0LmNvbSUzQTMzMTAlMkZhbm5vdW5jZSZ0cj11ZHAlM0ElMkYlMkZ0cmFja2VyLnB1YmxpY2J0LmNvbSUzQTgwJnRyPXVkcCUzQSUyRiUyRmNvcHBlcnN1cmZlci50ayUzQTY5NjklMkZhbm5vdW5jZSZ0cj11ZHAlM0ElMkYlMkZ0cmFja2VyLm9wZW5iaXR0b3JyZW50LmNvbSUzQTgwJTJGYW5ub3VuY2UmdHI9dWRwJTNBJTJGJTJGdHJhY2tlci56ZXIwZGF5LnRvJTNBMTMzNyUyRmFubm91bmNlJnRyPXVkcCUzQSUyRiUyRnRyYWNrZXIubGVlY2hlcnMtcGFyYWRpc2Uub3JnJTNBNjk2OSUyRmFubm91bmNlJnRyPXVkcCUzQSUyRiUyRmNvcHBlcnN1cmZlci50ayUzQTY5NjklMkZhbm5vdW5jZQ"/>*/}
-          {/*    <track label="French" kind="subtitles" src={process.env.PUBLIC_URL + "/Subtitles/tt1853728/tt1853728.fr.vtt"} srcLang="fr"/>*/}
-          {/*</video>*/}
+
         </div>
         <div className="triptych__part">
           Three
@@ -70,4 +73,8 @@ class Home extends Component {
   }
 }
 
-export default Home;
+const mapStateToProps = (state) => ({
+  text: state.translate._HOME
+});
+
+export default connect(mapStateToProps, {getTranslation})(Home);

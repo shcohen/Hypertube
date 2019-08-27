@@ -95,7 +95,8 @@ svg.loading circle {
 
 /*INPUTS*/
 
-form:not(.custom) input:not([type="submit"]):not([type="radio"]):not([type="checkbox"]) {
+form:not(.custom) input:not([type="submit"]):not([type="radio"]):not([type="checkbox"]),
+form:not(.custom) select {
     height: 2rem;
     border-radius: 0.3rem;
     background-color: var(--bg-container);
@@ -106,18 +107,21 @@ form:not(.custom) input:not([type="submit"]):not([type="radio"]):not([type="chec
     transition: background-color 0.2s, box-shadow 0.2s;
 }
 
-form:not(.custom) input:not([type="submit"]):not([type="radio"]):not([type="checkbox"]):hover {
+form:not(.custom) input:not([type="submit"]):not([type="radio"]):not([type="checkbox"]):hover,
+form:not(.custom) select:hover {
     border: 1px solid var(--color-borders-hover);
     background-color: var(--bg-container-hover);
 }
 
-form:not(.custom) input:not([type="submit"]):not([type="radio"]):not([type="checkbox"]):focus {
+form:not(.custom) input:not([type="submit"]):not([type="radio"]):not([type="checkbox"]):focus,
+form:not(.custom) select:focus {
     border: 1px solid var(--color-headings);
     box-shadow: 0 0 0 2px var(--color-headings-transparent);
     background-color: var(--bg-container-active);
 }
 
-form:not(.custom) input.validation:valid {
+form:not(.custom) input.validation:valid,
+form:not(.custom) select.validation:valid {
     padding-right: 2rem !important;
     background-image: url("../assets/img/input-valid.svg");
     background-position: calc(100% - 0.5rem);
