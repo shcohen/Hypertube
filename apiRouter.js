@@ -9,7 +9,6 @@ exports.router = (() => {
     /* MOVIE LIBRARY */
     apiRouter.route('/library/find_movie').post(libraryManagement.libraryManager);
     apiRouter.route('/library/find_movie_info').post(libraryManagement.findMovieInfo);
-    apiRouter.route('/library/get_trends').get(libraryManagement.updateTrends);
 
     /* TORRENT */
     apiRouter.route('/torrent/get_torrent').post(torrentManagement.findTorrent);

@@ -1,111 +1,53 @@
 const axios = require('axios');
-const torrentSearch = require('torrent-search-api');
-const rateLimit = require('axios-rate-limit');
-const {TMDB_API_KEY_V3, RAPIDAPI_KEY} = require('../config/apiKey');
-const limitedRequest = rateLimit(axios.create(), {maxRequests: 35, perMilliseconds: 10000});
-const genres = [{"id": 28, "name": "Action"}, {"id": 12, "name": "Adventure"}, {"id": 16, "name": "Animation"},
-    {"id": 35, "name": "Comedy"}, {"id": 80, "name": "Crime"}, {"id": 99, "name": "Documentary"}, {
-        "id": 18,
-        "name": "Drama"
-    },
-    {"id": 10751, "name": "Family"}, {"id": 14, "name": "Fantasy"}, {"id": 36, "name": "History"}, {
-        "id": 27,
-        "name": "Horror"
-    },
-    {"id": 10402, "name": "Music"}, {"id": 9648, "name": "Mystery"}, {"id": 10749, "name": "Romance"}, {
-        "id": 878,
-        "name": "Science Fiction"
-    },
-    {"id": 10770, "name": "TV Movie"}, {"id": 53, "name": "Thriller"}, {"id": 10752, "name": "War"}, {
-        "id": 37,
-        "name": "Western"
-    }];
+// const rateLimit = require('axios-rate-limit');
+const {RAPIDAPI_KEY} = require('../config/apiKey');
+// const limitedRequest = rateLimit(axios.create(), {maxRequests: 35, perMilliseconds: 10000});
 
 module.exports = {
-    getMovieInfo: async (title, movie) => {
-        let res = await limitedRequest.get(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY_V3}&query=${title}`);
-        if (res.data.results[0]) {
-            console.log(title + ' vs ' + res.data.results[0].title);
-                // movie.title = res.data.results[0].title;
-                // movie.poster = res.data.results[0].poster_path ? res.data.results[0].poster_path : res.data.results[0].backdrop_path;
-                // movie.date = res.data.results[0].release_date.substr(0, 4);
-                // movie.note = res.data.results[0].vote_average;
-                // movie.overview = res.data.results[0].overview;
-                // movie.id = res.data.results[0].id;
-                // movie.genre = [];
-                // res.data.results[0].genre_ids.map(id => {
-                //     genres.map(genre => {
-                //         if (genre.id === id) {
-                //             movie.genre = [...movie.genre, genre.name];
-                //         }
-                //     })
-                // });
-        }
+    getMovieInfo: async (id) => {
+        return await axios.get(`https://movie-database-imdb-alternative.p.rapidapi.com/?i=${id}&r=json`, {
+            headers: {
+                "X-RapidAPI-Host": "movie-database-imdb-alternative.p.rapidapi.com",
+                "X-RapidAPI-Key": RAPIDAPI_KEY
+            }
+        }).then(res => {
+            return res.data;
+        })
     },
-    getAllMovies: async name => {
-        let result = await limitedRequest.get(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY_V3}&language=en-US&query=${name}`);
-        return result.data.results;
+    sortByName: (movies, name) => {
+        return movies.filter(movie => {
+            let title = movie.title.replace(/[:]/gm, '').toLowerCase();
+            return title.indexOf(name) >= 0;
+        });
     },
-    getImdbIdAndGenre: async (id, genres_id) => {
-        let res = await limitedRequest.get(`https://api.themoviedb.org/3/movie/${id}/external_ids?api_key=${TMDB_API_KEY_V3}`);
-        if (res.data.imdb_id) {
-            let newGenres = [];
-            genres_id.map(id => {
-                genres.map(genre => {
-                    if (genre.id === id) {
-                        newGenres = [...newGenres, genre.name];
-                    }
-                })
+    sortByGenre: (movies, category) => {
+        let checkGenre = [];
+        movies.map(movie => {
+            let movieGenre = [];
+            let genres_length = movie.genres.length;
+            movie.genres.map(genre => {
+                category.filter(val => val === genre ? movieGenre.push(genre) : movieGenre);
             });
-            return {imdbId: res.data.imdb_id, genres: newGenres};
-            // $$$$$$$$$$
-            // return await axios.get(`https://movie-database-imdb-alternative.p.rapidapi.com/?i=${imdbID.data.imdb_id}&r=json`, {
-            //     headers: {
-            //         "X-RapidAPI-Host": "movie-database-imdb-alternative.p.rapidapi.com",
-            //         "X-RapidAPI-Key": RAPIDAPI_KEY
-            //     }
-            // }).then(res => {
-            //     return res.data;
-            // })
-            // $$$$$$$$$$
-        }
-    },
-    removeMoviesWithoutInfo: (movies) => {
-        return movies.filter((first_movie, i) => {
-            return movies.findIndex(second_movie => {
-                if (first_movie.id && second_movie.id)
-                    return second_movie.id === first_movie.id;
-            }) === i;
+            if (movieGenre.length === genres_length) {
+                return checkGenre.push(movie);
+            }
         });
+        return checkGenre;
     },
-    removeDuplicatesMovies: (movies) => {
-        return movies.filter((first_movie, i) => {
-            return movies.findIndex(second_movie => {
-                if (first_movie.title && second_movie.title)
-                    return second_movie.title.toLowerCase() === first_movie.title.toLowerCase();
-            }) === i;
+    sortByRatings: (movies, ratings) => {
+        let checkRatings = [];
+        movies.map(movie => {
+            return parseInt(movie.rating) >= parseInt(ratings[0]) && parseInt(movie.rating) <= parseInt(ratings[1])
+                && checkRatings.push(movie);
         });
+        return checkRatings;
     },
-    removeTitleAndQualityDoublons: (movies) => {
-        return movies.filter((first_movie, i) => {
-            return movies.findIndex(second_movie => {
-                if (first_movie.title && second_movie.title && first_movie.torrent && second_movie.torrent)
-                    return second_movie.title === first_movie.title && second_movie.torrent[0].quality === first_movie.torrent[0].quality;
-            }) === i;
+    sortByYear: (movies, year) => {
+        let checkYear = [];
+        movies.map(movie => {
+            return parseInt(movie.year) >= parseInt(year[0]) && parseInt(movie.year) <= parseInt(year[1])
+                && checkYear.push(movie);
         });
-    },
-    verifyTitle: async title => {
-        let res = await limitedRequest.get(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY_V3}&query=${title}`);
-        return res.data.results ? title === res.data.results[0].title : false
-    },
-    regroupTorrent: async movie => {
-        let final = movie.shift();
-        await Promise.all(movie.map(movie => {
-            final.torrent = [...final.torrent, movie.torrent[0]];
-        }));
-        await final.torrent.sort((a, b) => {
-            return b.quality - a.quality;
-        });
-        return final;
+        return checkYear;
     },
 };
