@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import {NavLink} from 'react-router-dom';
 import classnames from 'classnames';
 
@@ -48,7 +49,7 @@ class Header extends Component {
 
   render() {
     const {hidden} = this.state;
-    const links = this.getLinks();
+    const t = this.props.text || {};
 
     return (
       <header className={classnames('centered', {
@@ -60,7 +61,7 @@ class Header extends Component {
               className="broken2">r</span></NavLink>
           </div>
           <div className="left">
-            {links}
+            {this.getLinks()}
           </div>
           <div className="right">
             <RightButtons/>
@@ -71,4 +72,8 @@ class Header extends Component {
   }
 }
 
-export default Header;
+const mapStateToProps = (state) => ({
+  text: state.translate._HEADER
+});
+
+export default connect(mapStateToProps)(Header);

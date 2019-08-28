@@ -75,7 +75,7 @@ hr.or {
 }
 
 hr.or::after {
-    content: "ou";
+    content: "or";
     display: block;
     position: absolute;
     top: 0;
@@ -144,6 +144,7 @@ form:not(.custom) input[type="submit"] {
     cursor: pointer;
     box-shadow: 0 0 0 0 transparent;
     transition: opacity 0.2s, box-shadow 0.2s, background-color 0.2s;
+    white-space: nowrap;
 }
 
 button.custom:hover,

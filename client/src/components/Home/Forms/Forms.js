@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import classnames from 'classnames';
 import queryString from 'query-string';
+import {connect} from 'react-redux';
 
 import Login from './Login';
 import Register from './Register';
@@ -32,6 +33,7 @@ class Forms extends Component {
 
   render() {
     const {step} = this.state;
+    const t = this.props.text || {};
 
     return (
       <div className="right-side">
@@ -39,24 +41,24 @@ class Forms extends Component {
           <button className={classnames('hf__tab left', {
             'active': step === 0
           })} onClick={() => this.goToStep(0)}>
-            Inscription
+            {t._REGISTER_TITLE}
           </button>
           <button className={classnames('hf__tab right', {
             'active': step === 1
           })} onClick={() => this.goToStep(1)}>
-            Connexion
+            {t._LOGIN_TITLE}
           </button>
         </div>
         <hr/>
         <div className="hf__content">
-          {step === 0 && <Register/>}
-          {step === 1 && <Login goToForgotPwd={() => this.goToStep(2)}/>}
-          {step === 2 && <ForgotPassword/>}
-          {step === 3 && <ChangePassword/>}
+          {step === 0 && <Register text={t}/>}
+          {step === 1 && <Login goToForgotPwd={() => this.goToStep(2)} text={t}/>}
+          {step === 2 && <ForgotPassword text={t}/>}
+          {step === 3 && <ChangePassword text={t}/>}
         </div>
         <hr className="or"/>
         <div className="hf__content">
-          <h4>Vous pouvez vous connecter avec vos réseaux sociaux :</h4>
+          <h4>{t._SOCIALS_SUBTITLE}</h4>
           <div className="hf__socials">
             <button className="custom twitter"/>
             <button className="custom google"/>
@@ -69,4 +71,8 @@ class Forms extends Component {
   }
 }
 
-export default Forms;
+const mapStateToProps = (state) => ({
+  text: state.translate._FORMS
+});
+
+export default connect(mapStateToProps)(Forms);

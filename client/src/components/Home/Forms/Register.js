@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 
-import PasswordValidator from '../../Utilities/PasswordValidator';
+import PasswordValidator from '../../Utilities/PasswordValidator/PasswordValidator';
 
-const Register = () => {
+const Register = (props) => {
   let [formData, setFormData] = useState({
     email: '',
     username: '',
@@ -26,10 +26,12 @@ const Register = () => {
     e.preventDefault();
   };
 
+  const t = props.text || {};
+
   return (
     <form onSubmit={onFormSubmit}>
-      <h4>Bienvenue ! Renseignez quelques informations pour vous inscrire :</h4>
-      <label>Adresse email</label><br/>
+      <h4>{t._REGISTER_SUBTITLE}</h4>
+      <label>{t._EMAIL_ADDRESS}</label><br/>
       <input className="validation"
              name="email"
              type="email"
@@ -40,7 +42,7 @@ const Register = () => {
              onChange={onInputChange}
              value={formData.email}/><br/>
       {formData.emailError !== '' && <p><i className="fas fa-times"/> {formData.emailError}</p>}
-      <label>Nom d'utilisateur</label><br/>
+      <label>{t._USERNAME}</label><br/>
       <input className="validation"
              name="username"
              type="text"
@@ -52,7 +54,7 @@ const Register = () => {
              onChange={onInputChange}
              value={formData.username}/><br/>
       {formData.usernameError !== '' && <p><i className="fas fa-times"/> {formData.usernameError}</p>}
-      <label>Prénom et nom</label><br/>
+      <label>{t._FIRSTNAME_LASTNAME}</label><br/>
       <input className="validation half"
              name="firstname"
              type="text"
@@ -75,12 +77,12 @@ const Register = () => {
              value={formData.lastname}/><br/>
       {(formData.firstnameError !== '' || formData.lastnameError !== '') &&
       <p><i className="fas fa-times"/> {formData.firstnameError}{formData.lastnameError}</p>}
-      <label>Mot de passe</label><br/>
+      <label>{t._PASSWORD}</label><br/>
       <div className="pwd-validator">
         <input className="validation"
                name="password"
                type="password"
-               placeholder="Choisissez un mot de passe fort"
+               placeholder={t._PASSWORD_PLACEHOLDER}
                minLength="1"
                maxLength="64"
                pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,64}$"
@@ -90,11 +92,11 @@ const Register = () => {
         <PasswordValidator password={formData.password}/>
       </div>
       {formData.passwordError !== '' && <p><i className="fas fa-times"/> {formData.passwordError}</p>}
-      <label>Confirmation du mot de passe</label><br/>
+      <label>{t._CONFIRMATION}</label><br/>
       <input className="validation"
              name="confirm"
              type="password"
-             placeholder="Réécrivez le mot de passe choisi"
+             placeholder={t._CONFIRMATION_PLACEHOLDER}
              minLength="1"
              maxLength="64"
              pattern={'^' + formData.password + '$'}
@@ -103,7 +105,7 @@ const Register = () => {
              onChange={onInputChange}
              value={formData.confirm}/><br/>
       {formData.confirmError !== '' && <p><i className="fas fa-times"/> {formData.confirmError}</p>}
-      <input type="submit" value="S'inscrire"/>
+      <input type="submit" value={' ' + t._REGISTER_BUTTON + ' '}/>
     </form>
   );
 };

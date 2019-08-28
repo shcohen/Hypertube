@@ -16,7 +16,6 @@ import './css/checkbox.css';
 import './css/toolbox.css';
 
 class App extends Component {
-
   render() {
     return (
       <Provider store={store}>

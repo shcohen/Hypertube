@@ -16,30 +16,32 @@ const Login = (props) => {
     e.preventDefault();
   };
 
+  const t = props.text || {};
+
   return (
     <form onSubmit={onFormSubmit}>
-      <h4>Vous pouvez vous connecter avec vos identifiants :</h4>
-      <label>Email ou nom d'utilisateur</label><br/>
+      <h4>{t._LOGIN_SUBTITLE}</h4>
+      <label>{t._EMAIL_OR_USERNAME}</label><br/>
       <input name="login"
              type="text"
-             placeholder="Votre email ou nom d'utilisateur"
+             placeholder={t._EMAIL_OR_USERNAME_PLACEHOLDER}
              minLength="1"
              maxLength="64"
              required
              onChange={onInputChange}
              value={formData.login}/><br/>
       {formData.loginError !== '' && <p><i className="fas fa-times"/> {formData.loginError}</p>}
-      <label>Mot de passe <span onClick={props.goToForgotPwd}>(oublié ?)</span></label><br/>
+      <label>{t._PASSWORD} <span onClick={props.goToForgotPwd}>({t._FORGOTTEN} ?)</span></label><br/>
       <input name="password"
              type="password"
-             placeholder="Votre mot de passe"
+             placeholder={t._LOGIN_PASSWORD_PLACEHOLDER}
              minLength="1"
              maxLength="64"
              required
              onChange={onInputChange}
              value={formData.password}/><br/>
       {formData.passwordError !== '' && <p><i className="fas fa-times"/> {formData.passwordError}</p>}
-      <input type="submit" value="Se connecter"/>
+      <input type="submit" value={' ' + t._LOGIN_BUTTON + ' '}/>
     </form>
   );
 };

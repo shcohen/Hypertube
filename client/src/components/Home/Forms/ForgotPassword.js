@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-const ForgotPassword = () => {
+const ForgotPassword = (props) => {
   let [formData, setFormData] = useState({
     email: '',
     emailError: '',
@@ -14,17 +14,19 @@ const ForgotPassword = () => {
     e.preventDefault();
   };
 
+  const t = props.text || {};
+
   return (
     <form onSubmit={onFormSubmit}>
-      <h4>Recevez un lien de réinitialisation de votre mot de passe par mail :</h4>
-      <label>Adresse email</label><br/>
+      <h4>{t._FORGOT_PWD_SUBTITLE}</h4>
+      <label>{t._EMAIL_ADDRESS}</label><br/>
       <input name="email"
              type="email"
-             placeholder="L'adresse email liée à votre compte"
+             placeholder={t._FORGOT_PWD_EMAIL_PLACEHOLDER}
              onChange={onInputChange}
              value={formData.email}/><br/>
       {formData.emailError !== '' && <p><i className="fas fa-times"/> {formData.emailError}</p>}
-      <input type="submit" value="Envoyer"/>
+      <input type="submit" value={' ' + t._FORGOT_PWD_BUTTON + ' '}/>
     </form>
   );
 };

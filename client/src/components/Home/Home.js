@@ -6,8 +6,6 @@ import {connect} from 'react-redux';
 import Gallery from './Gallery/Gallery';
 import Forms from './Forms/Forms';
 
-import {getTranslation} from '../../store/actions/translate';
-
 import './home.css';
 
 class Home extends Component {
@@ -20,10 +18,6 @@ class Home extends Component {
       part: (this.state.part + 1) % 3
     });
   };
-
-  componentDidMount() {
-    this.props.getTranslation();
-  }
 
   render() {
     const {part} = this.state;
@@ -77,4 +71,4 @@ const mapStateToProps = (state) => ({
   text: state.translate._HOME
 });
 
-export default connect(mapStateToProps, {getTranslation})(Home);
+export default connect(mapStateToProps)(Home);
