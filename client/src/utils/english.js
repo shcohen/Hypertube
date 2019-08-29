@@ -56,6 +56,7 @@ module.exports = {
     _S_LOWEST_RATED: "The worst movies",
     _S_MOST_RECENT: "The most recent ones",
     _S_OLDEST: "The oldest ones",
+    _GENRE_TITLE: "Genre",
     _G_ACTION: "Action",
     _G_ADVENTURE: "Adventure",
     _G_ANIMATION: "Animation",
