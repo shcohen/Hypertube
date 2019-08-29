@@ -16,12 +16,12 @@ module.exports = {
         }
         movies = await module.exports.filterMovies(movies, genres, ratingMin, ratingMax, yearMin, yearMax);
         await translateGenres(movies);
-        return res.status(200).send(sortMovies(sort, movies));
+        return res.status(200).send(sortMovies(sort && sort.length ? sort : 'alphabetical', movies));
     },
     findMovies: async (name, quantity) => {
         let result = await axios.get(`https://yts.lt/api/v2/list_movies.json?query_term=${name}`);
         return result.data.data.movies && result.data.data.movies.length ?
-            result.data.data.movies.slice(0, quantity).sort() : [];
+            result.data.data.movies.slice(0, quantity) : [];
     },
     findMovieInfo: async (req, res) => {
         let {id} = req.body;
