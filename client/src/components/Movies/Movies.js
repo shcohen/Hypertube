@@ -93,6 +93,12 @@ class Movies extends Component {
     }
   };
 
+  changeSort = (e) => {
+    this.setState({
+      sort: e.target.value
+    });
+  };
+
   render() {
     const t = this.props.text || {};
 
@@ -109,7 +115,7 @@ class Movies extends Component {
               <form onSubmit={this.submitForm}>
                 <div className="sidebar__group">
                   {/*<label htmlFor="sort">Trier les films par</label>*/}<br/>
-                  <select id="sort" name="sort" defaultValue="name">
+                  <select id="sort" name="sort" defaultValue="name" onChange={this.changeSort}>
                     <option value="" disabled>{t._S_SORT_BY}</option>
                     <option value="alphabetical">{t._S_ALPHA}</option>
                     <option value="relevance">{t._S_RELEVANCE}</option>
