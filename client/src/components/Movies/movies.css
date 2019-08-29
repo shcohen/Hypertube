@@ -8,27 +8,57 @@
 
 .movies {
     transition: filter 0.2s;
+    margin-top: 9rem;
+}
+
+/*TOPBAR*/
+
+.topbar {
+    position: fixed;
+    top: var(--header-height);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    width: 30rem;
+    height: 3rem;
+    max-width: 90vw;
+    border-radius: 0.2rem;
+    margin: 3rem auto 2rem auto;
+    box-shadow: 0 0 0 0 var(--color-headings-transparent), 0 8px 32px -8px #00000080;
+    transition: box-shadow 0.2s, height 0.4s, top 0.5s;
+}
+
+.topbar:hover {
+    box-shadow: 0 0 0 0 var(--color-headings-transparent), 0 12px 48px -8px #00000080;
+    height: 30rem;
+}
+
+.topbar.up {
+    top: 0;
 }
 
 /*SIDEBAR*/
 
 .sidebar {
-    position: fixed;
-    top: calc(var(--header-height) + 2rem);
-    left: 0;
-    width: 20rem;
-    max-width: 90vw;
-    height: calc(100vh - var(--header-height) - 4rem);
-    z-index: 2;
-    transform: translateX(-100%);
-    transition: transform 0.4s;
+    position: relative;
+    z-index: 4;
+    top: calc(3rem - 0.4rem);
+    width: 100%;
+    height: 0;
     display: grid;
     align-items: center;
     justify-items: center;
+    overflow: hidden;
+    transition: height 0.4s;
+    border-radius: 0 0 0.2rem 0.2rem;
+}
+
+.topbar:hover .sidebar {
+    height: 27.4rem;
 }
 
 .sidebar:hover {
-    transform: translateX(0);
+    height: 20rem;
 }
 
 .sidebar:hover ~ .movies {
@@ -38,11 +68,9 @@
 .sidebar__container {
     background-color: var(--bg);
     position: relative;
-    width: 90%;
-    height: 95%;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
-    border-radius: 1.5rem;
-    box-shadow: 0 0 16px -8px #00000080;
 }
 
 .sidebar__icon {
@@ -110,7 +138,7 @@ html[data-theme="dark"] .sidebar__icon {
 
 .sidebar__group-genres {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
 .sidebar__group-genres label {
