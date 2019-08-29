@@ -1,5 +1,6 @@
 const axios = require('axios');
 // const rateLimit = require('axios-rate-limit');
+const {translateSentence} = require('./languageUtils');
 const {RAPIDAPI_KEY} = require('../config/apiKey');
 // const limitedRequest = rateLimit(axios.create(), {maxRequests: 35, perMilliseconds: 10000});
 
@@ -10,7 +11,10 @@ module.exports = {
                 "X-RapidAPI-Host": "movie-database-imdb-alternative.p.rapidapi.com",
                 "X-RapidAPI-Key": RAPIDAPI_KEY
             }
-        }).then(res => {
+        }).then(async res => {
+            let genres = await translateSentence(res.data.Genre);
+            res.data.Genre = genres.split(',').map((genre) => (genre.trim()));
+            res.data.Plot = await translateSentence(res.data.Plot);
             return res.data;
         })
     },

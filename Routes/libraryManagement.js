@@ -6,11 +6,11 @@ const {TMDB_API_KEY_V3} = require('../config/apiKey');
 
 module.exports = {
     libraryManager: async (req, res) => {
-        let {name, quantity, sorting} = req.body;
+        let {search, quantity, sorting} = req.body;
         let movies = [];
 
-        if (name && name.length && quantity) {
-            movies = await module.exports.findMovies(name, parseInt(quantity));
+        if (search && search.length && quantity) {
+            movies = await module.exports.findMovies(search, parseInt(quantity));
         } else {
             movies = await module.exports.getTrends();
         }
@@ -31,6 +31,7 @@ module.exports = {
         let {id} = req.body;
 
         if (id !== undefined && id.length) {
+            // let movieInfo = await getMovieInfo(id);
             return res.status(200).send(await getMovieInfo(id));
         } else {
             return res.status(200).send(await translateSentence('No ID provided'));
