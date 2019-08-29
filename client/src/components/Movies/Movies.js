@@ -89,12 +89,12 @@ class Movies extends Component {
                   <select id="sort" name="sort" defaultValue="name">
                     <option value="" disabled>{t._S_SORT_BY}</option>
                     <option value="name">{t._S_ALPHA}</option>
-                    <option value="genre">{t._S_GENRE}</option>
-                    <option value="" disabled>En premier...</option>
-                    <option value="rating-asc">Les moins bien notés</option>
-                    <option value="rating-desc">Les mieux notés</option>
-                    <option value="year-asc">Les plus anciens</option>
-                    <option value="year-desc">Les plus récents</option>
+                    <option value="relevance">{t._S_RELEVANCE}</option>
+                    <option value="" disabled>{t._S_FIRST}</option>
+                    <option value="rating-asc">{t._S_BEST_RATED}</option>
+                    <option value="rating-desc">{t._S_LOWEST_RATED}</option>
+                    <option value="year-asc">{t._S_OLDEST}</option>
+                    <option value="year-desc">{t._S_MOST_RECENT}</option>
                   </select><br/>
                 </div>
                 <br/>
@@ -106,30 +106,30 @@ class Movies extends Component {
                   <label htmlFor="genres">Genre</label>
                   <input hidden type="checkbox" id="genres" name="genres"/>
                   <div className="sidebar__group-genres">
-                    <input hidden type="checkbox" id="Action" name="Action"/><label htmlFor="Action">Action</label>
-                    <input hidden type="checkbox" id="Adventure" name="Adventure"/><label htmlFor="Adventure">Adventure</label>
-                    <input hidden type="checkbox" id="Animation" name="Animation"/><label htmlFor="Animation">Animation</label>
-                    <input hidden type="checkbox" id="Biography" name="Biography"/><label htmlFor="Biography">Biography</label>
-                    <input hidden type="checkbox" id="Comedy" name="Comedy"/><label htmlFor="Comedy">Comedy</label>
-                    <input hidden type="checkbox" id="Crime" name="Crime"/><label htmlFor="Crime">Crime</label>
-                    <input hidden type="checkbox" id="Documentary" name="Documentary"/><label htmlFor="Documentary">Documentary</label>
-                    <input hidden type="checkbox" id="Drama" name="Drama"/><label htmlFor="Drama">Drama</label>
-                    <input hidden type="checkbox" id="Family" name="Family"/><label htmlFor="Family">Family</label>
-                    <input hidden type="checkbox" id="Fantasy" name="Fantasy"/><label htmlFor="Fantasy">Fantasy</label>
-                    <input hidden type="checkbox" id="FilmNoir" name="Film Noir"/><label htmlFor="FilmNoir">Film Noir</label>
-                    <input hidden type="checkbox" id="History" name="History"/><label htmlFor="History">History</label>
-                    <input hidden type="checkbox" id="Horror" name="Horror"/><label htmlFor="Horror">Horror</label>
-                    <input hidden type="checkbox" id="Music" name="Music"/><label htmlFor="Music">Music</label>
-                    <input hidden type="checkbox" id="Musical" name="Musical"/><label htmlFor="Musical">Musical</label>
-                    <input hidden type="checkbox" id="Mystery" name="Mystery"/><label htmlFor="Mystery">Mystery</label>
-                    <input hidden type="checkbox" id="Romance" name="Romance"/><label htmlFor="Romance">Romance</label>
-                    <input hidden type="checkbox" id="Sci-Fi" name="Sci-Fi"/><label htmlFor="Sci-Fi">Sci-Fi</label>
-                    <input hidden type="checkbox" id="ShortFilm" name="Short Film"/><label htmlFor="ShortFilm">Short Film</label>
-                    <input hidden type="checkbox" id="Sport" name="Sport"/><label htmlFor="Sport">Sport</label>
-                    <input hidden type="checkbox" id="Superhero" name="Superhero"/><label htmlFor="Superhero">Superhero</label>
-                    <input hidden type="checkbox" id="Thriller" name="Thriller"/><label htmlFor="Thriller">Thriller</label>
-                    <input hidden type="checkbox" id="War" name="War"/><label htmlFor="War">War</label>
-                    <input hidden type="checkbox" id="Western" name="Western"/><label htmlFor="Western">Western</label>
+                    <input hidden type="checkbox" id="Action" name="Action"/><label htmlFor="Action">{t._G_ACTION}</label>
+                    <input hidden type="checkbox" id="Adventure" name="Adventure"/><label htmlFor="Adventure">{t._G_ADVENTURE}</label>
+                    <input hidden type="checkbox" id="Animation" name="Animation"/><label htmlFor="Animation">{t._G_ANIMATION}</label>
+                    <input hidden type="checkbox" id="Biography" name="Biography"/><label htmlFor="Biography">{t._G_BIOGRAPHY}</label>
+                    <input hidden type="checkbox" id="Comedy" name="Comedy"/><label htmlFor="Comedy">{t._G_COMEDY}</label>
+                    <input hidden type="checkbox" id="Crime" name="Crime"/><label htmlFor="Crime">{t._G_CRIME}</label>
+                    <input hidden type="checkbox" id="Documentary" name="Documentary"/><label htmlFor="Documentary">{t._G_DOCUMENTARY}</label>
+                    <input hidden type="checkbox" id="Drama" name="Drama"/><label htmlFor="Drama">{t._G_DRAMA}</label>
+                    <input hidden type="checkbox" id="Family" name="Family"/><label htmlFor="Family">{t._G_FAMILY}</label>
+                    <input hidden type="checkbox" id="Fantasy" name="Fantasy"/><label htmlFor="Fantasy">{t._G_FANTASY}</label>
+                    <input hidden type="checkbox" id="FilmNoir" name="Film Noir"/><label htmlFor="FilmNoir">{t._G_FILM_NOIR}</label>
+                    <input hidden type="checkbox" id="History" name="History"/><label htmlFor="History">{t._G_HISTORY}</label>
+                    <input hidden type="checkbox" id="Horror" name="Horror"/><label htmlFor="Horror">{t._G_HORROR}</label>
+                    <input hidden type="checkbox" id="Music" name="Music"/><label htmlFor="Music">{t._G_MUSIC}</label>
+                    <input hidden type="checkbox" id="Musical" name="Musical"/><label htmlFor="Musical">{t._G_MUSICAL}</label>
+                    <input hidden type="checkbox" id="Mystery" name="Mystery"/><label htmlFor="Mystery">{t._G_MYSTERY}</label>
+                    <input hidden type="checkbox" id="Romance" name="Romance"/><label htmlFor="Romance">{t._G_ROMANCE}</label>
+                    <input hidden type="checkbox" id="Sci-Fi" name="Sci-Fi"/><label htmlFor="Sci-Fi">{t._G_SCI_FI}</label>
+                    <input hidden type="checkbox" id="ShortFilm" name="Short Film"/><label htmlFor="ShortFilm">{t._G_SHORT_FILM}</label>
+                    <input hidden type="checkbox" id="Sport" name="Sport"/><label htmlFor="Sport">{t._G_SPORT}</label>
+                    <input hidden type="checkbox" id="Superhero" name="Superhero"/><label htmlFor="Superhero">{t._G_SUPERHERO}</label>
+                    <input hidden type="checkbox" id="Thriller" name="Thriller"/><label htmlFor="Thriller">{t._G_THRILLER}</label>
+                    <input hidden type="checkbox" id="War" name="War"/><label htmlFor="War">{t._G_WAR}</label>
+                    <input hidden type="checkbox" id="Western" name="Western"/><label htmlFor="Western">{t._G_WESTERN}</label>
                   </div>
                 </div>
                 <div className="sidebar__group">
