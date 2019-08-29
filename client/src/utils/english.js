@@ -35,5 +35,18 @@ module.exports = {
     _LOWERCASE: "At least 1 lowercase letter.",
     _UPPERCASE: "At least 1 uppercase letter.",
     _NUMBER: "At least 1 number."
+  },
+  _HEADER: {
+    _HOME: "Home page",
+    _ALL_MOVIES: "All movies",
+    _MY_ACCOUNT: "My account",
+    _THEME: "Theme",
+    _DARK_MODE: "Dark mode",
+    _NEON_EFFECT: "Neon effect",
+    _SECONDARY_COLOR: "Custom color"
+  },
+  _MOVIES: {
+    _SORT_TITLE: "Sorting movies by...",
+    _FILTER_TITLE: "Filter movies by..."
   }
 };

@@ -1,4 +1,4 @@
-import {GET_TRANSLATION} from './constants';
+import {GET_TRANSLATION, TRANSLATION_LOADING} from './constants';
 
 import axios from 'axios';
 
@@ -6,6 +6,10 @@ import english from '../../utils/english';
 
 export const getTranslation = () => async dispatch => {
   //todo: CALL API TO CHANGE FAVORITE LANGUAGE
+  dispatch({
+    type: TRANSLATION_LOADING,
+    payload: true
+  });
   dispatch({
     type: GET_TRANSLATION,
     payload: english
@@ -27,5 +31,9 @@ export const getTranslation = () => async dispatch => {
   dispatch({
     type: GET_TRANSLATION,
     payload: res
+  });
+  dispatch({
+    type: TRANSLATION_LOADING,
+    payload: false
   });
 };

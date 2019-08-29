@@ -5,11 +5,13 @@ html {
     --bg-container: #ebebeb;
     --bg-container-hover: #efefef;
     --bg-container-active: #fafafa;
+    --bg-contrast: #222222;
 
     --color-headings: #0077ff;
     --color-headings-transparent: #0077ff80;
     --color-text: #333333;
     --color-text-hover: #131313;
+    --color-text-contrast: #b5b5b5;
 
     --color-borders: #dadada;
     --color-borders-hover: #cacaca;
@@ -20,12 +22,14 @@ html[data-theme="dark"] {
     --bg-container: #272727;
     --bg-container-hover: #202020;
     --bg-container-active: #181818;
+    --bg-contrast: #fcfcfc;
 
     /*--color-headings: #3694ff;*/
     --color-headings: #ff7540;
     --color-headings-transparent: #ff754080;
     --color-text: #b5b5b5;
     --color-text-hover: #d5d5d5;
+    --color-text-contrast: #333333;
 
     --color-borders: #505050;
     --color-borders-hover: #606060;

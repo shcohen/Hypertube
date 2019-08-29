@@ -76,6 +76,7 @@ class RightButtons extends Component {
 
   render() {
     const {loggedIn, opened1, opened2, theme} = this.state;
+    const t = this.props.text || {};
 
     if (loggedIn) {
       return (<React.Fragment>
@@ -88,19 +89,19 @@ class RightButtons extends Component {
           <button onClick={() => this.openDropdown(1)}/>
           <div className="dropdown">
             <div className="dropdown__title">
-              <i className="fas fa-palette"/> Thème
+              <i className="fas fa-palette"/> {t._THEME}
             </div>
             <div className="dropdown__section dark-mode">
-              Mode sombre
+              {t._DARK_MODE}
               <input className="custom" type="checkbox" name="theme" onChange={this.toggleMode}
                      checked={theme === 'dark'}/>
             </div>
             <div className="dropdown__section dark-mode">
-              Effet néon
+              {t._NEON_EFFECT}
               <input className="custom" type="checkbox" name="neon" onChange={this.toggleNeon}/>
             </div>
             <div className="dropdown__section">
-              Couleur secondaire
+              {t._SECONDARY_COLOR}
               <form className="color-picker">
                 <input type="radio" name="color" className="red" value="#ff2200" onChange={this.changeColor}/>
                 <input type="radio" name="color" className="orange" value="#ff7540" onChange={this.changeColor}/>

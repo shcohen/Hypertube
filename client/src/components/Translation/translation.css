@@ -1,0 +1,33 @@
+/*TRANSLATION*/
+
+.translation {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    z-index: 100;
+    transform: translate(-50%, -200%);
+    margin: 1rem;
+    padding: 1rem;
+    background-color: var(--bg-contrast);
+    display: grid;
+    grid-template-columns: 2rem auto;
+    grid-template-rows: 2rem;
+    align-items: center;
+    justify-items: center;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 16px -4px black;
+    transition: transform 0.4s ease-in;
+}
+
+.translation.in {
+    transform: translate(-50%, 0);
+}
+
+.translation img {
+    width: 1.75rem;
+}
+
+.translation span {
+    margin: 0 0.5rem;
+    color: var(--color-text-contrast);
+}

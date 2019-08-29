@@ -27,17 +27,17 @@ class Header extends Component {
     }
   }
 
-  getLinks = () => {
+  getLinks = (t) => {
     if (this.state.loggedIn) {
       return (<React.Fragment>
         <NavLink to="/" exact>
-          Accueil
+          {t._HOME}
         </NavLink>
         <NavLink to="/movies">
-          Tous les films
+          {t._ALL_MOVIES}
         </NavLink>
         <NavLink to="/account">
-          Mon compte
+          {t._MY_ACCOUNT}
         </NavLink>
       </React.Fragment>)
     } else {
@@ -61,10 +61,10 @@ class Header extends Component {
               className="broken2">r</span></NavLink>
           </div>
           <div className="left">
-            {this.getLinks()}
+            {this.getLinks(t)}
           </div>
           <div className="right">
-            <RightButtons/>
+            <RightButtons text={t}/>
           </div>
         </div>
       </header>

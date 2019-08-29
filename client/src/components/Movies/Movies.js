@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import {connect} from 'react-redux';
 
 import SearchBar from './SearchBar/SearchBar';
 import Card from './Cards/Card';
@@ -70,6 +71,8 @@ class Movies extends Component {
   }
 
   render() {
+    const t = this.props.text || {};
+
     return (
       <div id="movies">
         <div className="sidebar">
@@ -77,16 +80,16 @@ class Movies extends Component {
           <div className="sidebar__container">
             <div className="sidebar__scrollable">
               <div className="sidebar__title">
-                Classement
+                {t._SORT_TITLE}
               </div>
               <hr/>
               <form>
                 <div className="sidebar__group">
-                  <label htmlFor="sort">Trier les films par</label>
+                  {/*<label htmlFor="sort">Trier les films par</label>*/}<br/>
                   <select id="sort" name="sort" defaultValue="name">
-                    <option value="" disabled>Trier par...</option>
-                    <option value="name">Titre (ordre alphabétique)</option>
-                    <option value="genre">Genre</option>
+                    <option value="" disabled>{t._S_SORT_BY}</option>
+                    <option value="name">{t._S_ALPHA}</option>
+                    <option value="genre">{t._S_GENRE}</option>
                     <option value="" disabled>En premier...</option>
                     <option value="rating-asc">Les moins bien notés</option>
                     <option value="rating-desc">Les mieux notés</option>
@@ -96,7 +99,7 @@ class Movies extends Component {
                 </div>
                 <br/>
                 <div className="sidebar__title">
-                  Filtrer par...
+                  {t._FILTER_TITLE}
                 </div>
                 <hr/>
                 <div className="sidebar__group genres">
@@ -156,4 +159,8 @@ class Movies extends Component {
   }
 }
 
-export default Movies;
+const mapStateToProps = (state) => ({
+  text: state.translate._MOVIES
+});
+
+export default connect(mapStateToProps)(Movies);

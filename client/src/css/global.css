@@ -90,7 +90,7 @@ hr.or::after {
 }
 
 svg.loading circle {
-    fill: var(--color-headings);
+    fill: var(--color-headings-transparent);
 }
 
 /*INPUTS*/
