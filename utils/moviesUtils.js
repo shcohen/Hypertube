@@ -18,13 +18,7 @@ module.exports = {
             return res.data;
         })
     },
-    sortByName: (movies, name) => {
-        return movies.filter(movie => {
-            let title = movie.title.replace(/[:]/gm, '').toLowerCase();
-            return title.indexOf(name) >= 0;
-        });
-    },
-    sortByGenre: (movies, category) => {
+    filterByGenre: (movies, category) => {
         let checkGenre = [];
         movies.map(movie => {
             let movieGenre = [];
@@ -38,7 +32,7 @@ module.exports = {
         });
         return checkGenre;
     },
-    sortByRatings: (movies, ratings) => {
+    filterByRatings: (movies, ratings) => {
         let checkRatings = [];
         movies.map(movie => {
             return parseInt(movie.rating) >= parseInt(ratings[0]) && parseInt(movie.rating) <= parseInt(ratings[1])
@@ -46,12 +40,38 @@ module.exports = {
         });
         return checkRatings;
     },
-    sortByYear: (movies, year) => {
+    filterByYear: (movies, year) => {
         let checkYear = [];
         movies.map(movie => {
             return parseInt(movie.year) >= parseInt(year[0]) && parseInt(movie.year) <= parseInt(year[1])
                 && checkYear.push(movie);
         });
         return checkYear;
+    },
+    sortMovies: (sort, movies) => {
+        switch (sort) {
+            case 'alphabetical':
+                return movies.sort((current, next) => {
+                    return current.title > next.title ? 1 : -1
+                });
+            case 'relevance':
+                return movies;
+            case 'rating-asc':
+                return movies.sort((current, next) => {
+                    return parseFloat(current.rating) > parseFloat(next.rating) ? 1 : -1
+                });
+            case 'rating-desc':
+                return movies.sort((current, next) => {
+                    return parseFloat(current.rating) > parseFloat(next.rating) ? -1 : 1
+                });
+            case 'year-asc':
+                return movies.sort((current, next) => {
+                    return parseInt(current.year) > parseInt(next.year) ? 1 : -1
+                });
+            case 'year-desc':
+                return movies.sort((current, next) => {
+                    return parseInt(current.year) > parseInt(next.year) ? -1 : 1
+                });
+        }
     },
 };
