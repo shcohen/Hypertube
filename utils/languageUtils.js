@@ -15,10 +15,10 @@ module.exports = {
             await Promise.all(movies.map(async movie => {
                 let translatedGenres = [];
                 await Promise.all(movie.genres.map(async genre => {
-                    genre = genre + ':';
+                    genre = '|' + genre + '|';
                     let translated = await module.exports.translateSentence(genre);
                     if (translated && translated.length) {
-                        translatedGenres = [...translatedGenres, translated.replace(':', '')];
+                        translatedGenres = [...translatedGenres, translated.replace(/[|]/g, '').trim()];
                     }
                 }));
                 if (translatedGenres && translatedGenres.length) {
