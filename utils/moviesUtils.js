@@ -19,18 +19,9 @@ module.exports = {
         })
     },
     filterByGenre: (movies, category) => {
-        let checkGenre = [];
-        movies.map(movie => {
-            let movieGenre = [];
-            let genres_length = movie.genres.length;
-            movie.genres.map(genre => {
-                category.filter(val => val === genre ? movieGenre.push(genre) : movieGenre);
-            });
-            if (movieGenre.length === genres_length) {
-                return checkGenre.push(movie);
-            }
+        return movies.filter(movie => {
+            return (movie.genres.filter(genre => category.find((g) => (g === genre))).length === category.length);
         });
-        return checkGenre;
     },
     filterByRatings: (movies, ratings) => {
         let checkRatings = [];

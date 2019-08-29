@@ -80,7 +80,6 @@ class Movies extends Component {
   }
 
   changeGenre = (e) => {
-    console.log(e.target.name);
     const genre = e.target.name;
     const {genres} = this.state;
     if (genres.find((g) => (g === genre))) {
@@ -88,7 +87,6 @@ class Movies extends Component {
         genres: genres.filter((g) => (g !== genre))
       });
     } else {
-      console.log('on met dans state');
       this.setState({
         genres: [...genres, e.target.name]
       });
