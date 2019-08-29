@@ -28,6 +28,7 @@ module.exports = {
         }
     },
     translateMovieDetail: async movie => {
-
+        if (movie && movie.length) {
+        }
     }
 };
