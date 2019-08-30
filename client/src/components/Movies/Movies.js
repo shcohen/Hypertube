@@ -27,25 +27,27 @@ class Movies extends Component {
     yearMax: 2020
   };
 
+  _isMounted = false;
+
   submitForm = (e) => {
     if (e) {
       e.preventDefault();
     }
-    this.setState({
+    this._isMounted && this.setState({
       loadingSearch: true,
       quantity: 20
     });
     axios.post('/api/library/find_movie', {...this.state, search: this.state.title, quantity: 10})
       .then((res) => {
         console.log(res.data);
-        this.setState({
+        this._isMounted && this.setState({
           movies: res.data,
           loadingSearch: false
         });
       })
       .catch((err) => {
         console.log(err);
-        this.setState({
+        this._isMounted && this.setState({
           loadingSearch: false
         });
       })
@@ -53,13 +55,13 @@ class Movies extends Component {
 
   infiniteScroll = () => {
     if (this.state.title !== '' && window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
-      this.setState({
+      this._isMounted && this.setState({
         loadingInfinite: true
       });
       axios.post('/api/library/find_movie', {...this.state, search: this.state.title})
         .then((res) => {
           console.log(res.data);
-          this.setState({
+          this._isMounted && this.setState({
             movies: res.data,
             quantity: this.state.quantity + 10,
             loadingInfinite: false
@@ -67,7 +69,7 @@ class Movies extends Component {
         })
         .catch((err) => {
           console.log(err);
-          this.setState({
+          this._isMounted && this.setState({
             loadingInfinite: false
           });
         });
@@ -86,12 +88,14 @@ class Movies extends Component {
   };
 
   componentDidMount() {
+    this._isMounted = true;
     window.addEventListener('scroll', this.infiniteScroll);
     window.addEventListener('scroll', this.topbarGoUp);
     this.submitForm();
   }
 
   componentWillUnmount() {
+    this._isMounted = false;
     window.removeEventListener('scroll', this.infiniteScroll);
     window.removeEventListener('scroll', this.topbarGoUp);
   }
