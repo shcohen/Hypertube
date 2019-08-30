@@ -46,7 +46,7 @@ module.exports = {
     _SECONDARY_COLOR: "Custom color"
   },
   _MOVIES: {
-    _SORT_TITLE: "Sorting movies by...",
+    _SORT_TITLE: "Sorting by :",
     _FILTER_TITLE: "Filter movies by...",
     _S_SORT_BY: "Sort by...",
     _S_ALPHA: "Alphabetical order",

@@ -82,7 +82,7 @@ class SearchBar extends Component {
       }}>
         <input name="title"
                className="search-bar"
-               type="text"
+               type="search"
                placeholder={auto + (dash ? '|' : ' ')}
                minLength="1"
                maxLength="32"
