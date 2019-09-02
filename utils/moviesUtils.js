@@ -63,6 +63,8 @@ module.exports = {
                 return movies.sort((current, next) => {
                     return parseInt(current.year) > parseInt(next.year) ? -1 : 1
                 });
+            default:
+                return movies;
         }
     },
 };
