@@ -11,6 +11,14 @@ import LoadingCards from './LoadingCards/LoadingCards';
 import './movies.css';
 
 class Movies extends Component {
+  STEP = Math.floor(window.innerWidth / 320);
+
+  changeStep = () => {
+    this.STEP = Math.floor(window.innerWidth / 320);
+  };
+
+  _isMounted = false;
+
   state = {
     old: 0,
     up: false,
@@ -18,7 +26,7 @@ class Movies extends Component {
     title: '',
     loadingSearch: false,
     loadingInfinite: false,
-    quantity: 20,
+    quantity: this.STEP,
     sort: 'alphabetical',
     genres: [],
     ratingMin: 0.0,
@@ -27,17 +35,16 @@ class Movies extends Component {
     yearMax: 2020
   };
 
-  _isMounted = false;
-
   submitForm = (e) => {
     if (e) {
       e.preventDefault();
     }
     this._isMounted && this.setState({
       loadingSearch: true,
-      quantity: 20
+      quantity: this.STEP * 6,
+      movies: []
     });
-    axios.post('/api/library/find_movie', {...this.state, search: this.state.title, quantity: 10})
+    axios.post('/api/library/find_movie', {...this.state, search: this.state.title, quantity: this.STEP * 3})
       .then((res) => {
         console.log(res.data);
         this._isMounted && this.setState({
@@ -63,7 +70,7 @@ class Movies extends Component {
           console.log(res.data);
           this._isMounted && this.setState({
             movies: res.data,
-            quantity: this.state.quantity + 10,
+            quantity: this.state.quantity + this.STEP,
             loadingInfinite: false
           });
         })
@@ -91,6 +98,7 @@ class Movies extends Component {
     this._isMounted = true;
     window.addEventListener('scroll', this.infiniteScroll);
     window.addEventListener('scroll', this.topbarGoUp);
+    window.addEventListener('resize', this.changeStep);
     this.submitForm();
   }
 
@@ -98,6 +106,7 @@ class Movies extends Component {
     this._isMounted = false;
     window.removeEventListener('scroll', this.infiniteScroll);
     window.removeEventListener('scroll', this.topbarGoUp);
+    window.removeEventListener('resize', this.changeStep);
   }
 
   changeGenre = (e) => {
@@ -219,7 +228,7 @@ class Movies extends Component {
             </form>
           </div>
           {this.state.loadingSearch && <div className="movie__loading">
-            <LoadingCards/>
+            <LoadingCards n={2 * this.STEP}/>
             {/*<Loading/>*/}
           </div>}
           <div className="movie__cards">
@@ -228,8 +237,8 @@ class Movies extends Component {
             ))}
           </div>
           {this.state.loadingInfinite && <div className="movie__loading">
-            <LoadingCards/>
-            {/*<Loading/>*/}
+            {/*<LoadingCards n={this.STEP}/>*/}
+            <Loading/>
           </div>}
         </div>
       </div>
