@@ -289,13 +289,13 @@ class Movies extends Component {
                     </div>
                     <div>
                       <div className="sidebar__group">
-                        <label htmlFor="year">{t._SORT_TITLE}</label>
+                        <label htmlFor="year">{t._FILTER_YEAR_TITLE}</label>
                         <div id="year" className="noUiSlider"/>
                       </div>
                     </div>
                     <div>
                       <div className="sidebar__group">
-                        <label htmlFor="rating">{t._SORT_TITLE}</label>
+                        <label htmlFor="rating">{t._FILTER_RATING_TITLE}</label>
                         <div id="rating" className="noUiSlider"/>
                       </div>
                     </div>

@@ -80,6 +80,8 @@ module.exports = {
     _G_SUPERHERO: "Superhero",
     _G_THRILLER: "Thriller",
     _G_WAR: "War",
-    _G_WESTERN: "Western"
+    _G_WESTERN: "Western",
+    _FILTER_YEAR_TITLE: "Filter by release date :",
+    _FILTER_RATING_TITLE: "Filter by ratings :"
   }
 };
