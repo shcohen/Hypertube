@@ -30,7 +30,6 @@ html[data-theme="dark"] .loading-cards {
     height: 26rem;
     overflow: hidden;
     border-radius: 0.5rem;
-    cursor: pointer;
     box-shadow: 0 0 16px -4px #00000060;
 }
 
