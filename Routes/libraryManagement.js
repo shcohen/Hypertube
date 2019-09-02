@@ -25,7 +25,7 @@ module.exports = {
             result.data.data.movies: [];
     },
     findMovieInfo: async (req, res) => {
-        let {id} = req.body;
+        let {id} = req.query;
 
         if (id !== undefined && id.length) {
             return res.status(200).send(await getMovieInfo(id));
