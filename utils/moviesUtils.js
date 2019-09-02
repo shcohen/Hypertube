@@ -12,9 +12,9 @@ module.exports = {
                 "X-RapidAPI-Key": RAPIDAPI_KEY
             }
         }).then(async res => {
-            let genres = await translateSentence(res.data.Genre);
-            res.data.Genre = genres.split(',').map((genre) => (genre.trim()));
-            res.data.Plot = await translateSentence(res.data.Plot);
+            // let genres = await translateSentence(res.data.Genre);
+            // res.data.Genre = genres.split(',').map((genre) => (genre.trim()));
+            // res.data.Plot = await translateSentence(res.data.Plot);
             return res.data;
         })
     },
