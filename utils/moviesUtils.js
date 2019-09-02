@@ -26,7 +26,7 @@ module.exports = {
     filterByRatings: (movies, ratings) => {
         let checkRatings = [];
         movies.map(movie => {
-            return parseInt(movie.rating) >= parseInt(ratings[0]) && parseInt(movie.rating) <= parseInt(ratings[1])
+            return parseFloat(movie.rating) >= parseFloat(ratings[0]) && parseFloat(movie.rating) <= parseFloat(ratings[1])
                 && checkRatings.push(movie);
         });
         return checkRatings;
