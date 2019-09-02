@@ -15,9 +15,9 @@ module.exports = {
             movies = await module.exports.getTrends();
         }
         movies = await module.exports.filterMovies(movies, genres, ratingMin, ratingMax, yearMin, yearMax);
-        movies = movies.slice(0, parseInt(quantity));
         await translateGenres(movies);
-        return res.status(200).send(sortMovies(sort, movies));
+        movies = await sortMovies(sort, movies);
+        return res.status(200).send(movies.slice(0, parseInt(quantity)));
     },
     findMovies: async (name) => {
         let result = await axios.get(`https://yts.lt/api/v2/list_movies.json?query_term=${name}`);
