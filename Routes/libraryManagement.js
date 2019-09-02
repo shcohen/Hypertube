@@ -10,18 +10,19 @@ module.exports = {
         let movies = [];
 
         if (search && search.length && quantity) {
-            movies = await module.exports.findMovies(search, parseInt(quantity));
+            movies = await module.exports.findMovies(search);
         } else {
             movies = await module.exports.getTrends();
         }
         movies = await module.exports.filterMovies(movies, genres, ratingMin, ratingMax, yearMin, yearMax);
+        movies = movies.slice(0, parseInt(quantity));
         await translateGenres(movies);
-        return res.status(200).send(sortMovies(sort && sort.length ? sort : 'alphabetical', movies));
+        return res.status(200).send(sortMovies(sort, movies));
     },
-    findMovies: async (name, quantity) => {
+    findMovies: async (name) => {
         let result = await axios.get(`https://yts.lt/api/v2/list_movies.json?query_term=${name}`);
         return result.data.data.movies && result.data.data.movies.length ?
-            result.data.data.movies.slice(0, quantity) : [];
+            result.data.data.movies: [];
     },
     findMovieInfo: async (req, res) => {
         let {id} = req.body;
