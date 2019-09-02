@@ -1,6 +1,11 @@
 import React, {Component} from 'react';
+import axios from 'axios';
 
 class MoviePage extends Component {
+  componentWillUnmount() {
+    axios.get('/')
+  }
+
   render() {
     return (
       <div>
