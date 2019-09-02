@@ -35,9 +35,7 @@ module.exports = {
     },
     getTrends: async () => {
         let result = await axios.get(`https://yts.lt/api/v2/list_movies.json`);
-        return result.data.data.movies.sort((current, next) => {
-            return current.title > next.title ? 1 : -1;
-        });
+        return result.data ? result.data.data.movies : [];
     },
     filterMovies: async (movies, genres, ratingMin, ratingMax, yearMin, yearMax) => {
         if (genres && genres.length && Array.isArray(genres)) {
