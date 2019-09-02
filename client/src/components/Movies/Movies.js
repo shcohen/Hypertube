@@ -102,31 +102,53 @@ class Movies extends Component {
     let sliderRating = document.getElementById('rating');
 
     noUiSlider.create(sliderYear, {
-      start: [2000, 2019],
+      start: [1900, 2020],
       connect: true,
       range: {
-        'min': 1900,
+        'min': [1900, 5],
+        '60%': [2000, 1],
         'max': 2020
       },
       tooltips: [wNumb({decimals: 0}), wNumb({decimals: 0})],
       pips: {
         mode: 'steps',
         stepped: true,
-        density: 2
-      }
+        density: 0,
+        filter: (value, type) => {
+          if (value % 100 === 0 || value === 2020) {
+            return 1
+          }
+          if (value < 2000) {
+            if (value % 20 === 0) {
+              return 2;
+            }
+            if (value % 5 === 0) {
+              return 0;
+            }
+            return -1;
+          }
+          if (value % 5 === 0) {
+            return 2
+          }
+          if (value % 1 === 0) {
+            return 0;
+          }
+          return -1
+        }
+      },
     });
     noUiSlider.create(sliderRating, {
       start: [0.0, 10.0],
       connect: true,
       range: {
         'min': 0.0,
+        '50%': 5.0,
         'max': 10.0
       },
       tooltips: [wNumb({decimals: 1}), wNumb({decimals: 1})],
       pips: {
-        mode: 'steps',
-        stepped: true,
-        density: 3
+        mode: 'range',
+        density: 10
       }
     });
     sliderYear.noUiSlider.on('update', (values, handle) => {
@@ -137,8 +159,8 @@ class Movies extends Component {
     });
     sliderRating.noUiSlider.on('update', (values, handle) => {
       this.setState({
-        ratingMin: parseInt(values[0], 10),
-        ratingMax: parseInt(values[1], 10)
+        ratingMin: parseFloat(values[0]),
+        ratingMax: parseFloat(values[1])
       });
     });
   };
