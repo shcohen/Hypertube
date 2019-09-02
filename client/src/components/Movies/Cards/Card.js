@@ -7,7 +7,7 @@ const Card = (props) => {
 
   return (props.movie &&
     <div className="movie__card">
-      <NavLink to={'/movie/' + props.movie.imdb_code}>
+      <NavLink to={`/movie/${props.movie.imdb_code}/${props.movie.id}`}>
       <div className="movie__poster">
         <div className="movie__poster-background"
              style={props.movie.medium_cover_image && {backgroundImage: `url("${props.movie.large_cover_image}")`}}/>
