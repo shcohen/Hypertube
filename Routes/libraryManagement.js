@@ -25,12 +25,13 @@ module.exports = {
             result.data.data.movies: [];
     },
     findMovieInfo: async (req, res) => {
-        let {id} = req.query;
+        let {IMDBid, YTSid} = req.query;
 
-        if (id !== undefined && id.length) {
-            return res.status(200).send(await getMovieInfo(id));
+        if (IMDBid !== undefined && IMDBid.length && YTSid !== undefined && YTSid.length) {
+            let data = await getMovieInfo(IMDBid, YTSid);
+            return data ? res.status(200).send(data) : res.status(400).send('IMDB id doesn\'t match');
         } else {
-            return res.status(200).send(await translateSentence('No ID provided'));
+            return res.status(400).send(await translateSentence('No ID provided'));
         }
     },
     getTrends: async () => {
