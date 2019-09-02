@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import {connect} from 'react-redux';
 import classnames from 'classnames';
+import noUiSlider from 'nouislider';
+import wNumb from 'wnumb';
 
 import SearchBar from './SearchBar/SearchBar';
 import Card from './Cards/Card';
@@ -9,6 +11,7 @@ import Loading from './../Utilities/Loading/Loading';
 import LoadingCards from './LoadingCards/LoadingCards';
 
 import './movies.css';
+import '../../css/nouislider.css';
 
 class Movies extends Component {
   STEP = Math.floor(window.innerWidth / 320);
@@ -31,7 +34,7 @@ class Movies extends Component {
     genres: [],
     ratingMin: 0.0,
     ratingMax: 10.0,
-    yearMin: 0,
+    yearMin: 1900,
     yearMax: 2020
   };
 
@@ -61,7 +64,7 @@ class Movies extends Component {
   };
 
   infiniteScroll = () => {
-    if (this.state.title !== '' && window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+    if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
       this._isMounted && this.setState({
         loadingInfinite: true
       });
@@ -94,12 +97,59 @@ class Movies extends Component {
     this.setState({old: window.scrollY});
   };
 
+  setSliders = () => {
+    let sliderYear = document.getElementById('year');
+    let sliderRating = document.getElementById('rating');
+
+    noUiSlider.create(sliderYear, {
+      start: [2000, 2019],
+      connect: true,
+      range: {
+        'min': 1900,
+        'max': 2020
+      },
+      tooltips: [wNumb({decimals: 0}), wNumb({decimals: 0})],
+      pips: {
+        mode: 'steps',
+        stepped: true,
+        density: 2
+      }
+    });
+    noUiSlider.create(sliderRating, {
+      start: [0.0, 10.0],
+      connect: true,
+      range: {
+        'min': 0.0,
+        'max': 10.0
+      },
+      tooltips: [wNumb({decimals: 1}), wNumb({decimals: 1})],
+      pips: {
+        mode: 'steps',
+        stepped: true,
+        density: 3
+      }
+    });
+    sliderYear.noUiSlider.on('update', (values, handle) => {
+      this.setState({
+        yearMin: parseInt(values[0], 10),
+        yearMax: parseInt(values[1], 10)
+      });
+    });
+    sliderRating.noUiSlider.on('update', (values, handle) => {
+      this.setState({
+        ratingMin: parseInt(values[0], 10),
+        ratingMax: parseInt(values[1], 10)
+      });
+    });
+  };
+
   componentDidMount() {
     this._isMounted = true;
     window.addEventListener('scroll', this.infiniteScroll);
     window.addEventListener('scroll', this.topbarGoUp);
     window.addEventListener('resize', this.changeStep);
     this.submitForm();
+    this.setSliders();
   }
 
   componentWillUnmount() {
@@ -216,12 +266,20 @@ class Movies extends Component {
                       </div>
                     </div>
                     <div>
+                      <div className="sidebar__group">
+                        <label htmlFor="year">{t._SORT_TITLE}</label>
+                        <div id="year" className="noUiSlider"/>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="sidebar__group">
+                        <label htmlFor="rating">{t._SORT_TITLE}</label>
+                        <div id="rating" className="noUiSlider"/>
+                      </div>
+                    </div>
+                    <div>
                       <input type="submit"/>
                     </div>
-                    {/*<div className="sidebar__group">*/}
-                    {/*  <label>Genre</label>*/}
-                    {/*  <input/><br/>*/}
-                    {/*</div>*/}
                   </div>
                 </div>
               </div>

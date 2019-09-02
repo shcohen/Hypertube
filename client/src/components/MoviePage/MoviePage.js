@@ -6,6 +6,7 @@ class MoviePage extends Component {
       <div>
         {this.props.match.params.id}
         <iframe src='http://player.allocine.fr/19582892.html' style={{width: '480px', height:'270px'}}>    </iframe>
+
       </div>
     );
   }

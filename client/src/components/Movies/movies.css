@@ -191,6 +191,10 @@ input#genres:not(:checked) ~ .sidebar__group-genres {
     background-color: var(--bg-container-hover);
 }
 
+.sidebar__group .noUiSlider {
+    position: relative !important;
+}
+
 /*MOVIE CARDS*/
 
 .movie__cards {
