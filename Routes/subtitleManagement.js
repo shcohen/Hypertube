@@ -14,7 +14,7 @@ module.exports = {
                 Object.keys(data).map(async key => {
                     if (data[key].url) {
                         let srtData = await axios.get(data[key].url);
-                        await fs.writeFileSync(`${rootDirectory}/client/public/Subtitles/${movieId}/${movieId}.${key}.srt`, srtData.data);
+                        fs.writeFileSync(`${rootDirectory}/client/public/Subtitles/${movieId}/${movieId}.${key}.srt`, srtData.data);
                         if (fs.existsSync(`${rootDirectory}/client/public/Subtitles/${movieId}/${movieId}.${key}.srt`)) {
                             await fs.createReadStream(`${rootDirectory}/client/public/Subtitles/${movieId}/${movieId}.${key}.srt`)
                                 .pipe(srt2vtt())
