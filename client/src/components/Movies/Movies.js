@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import {connect} from 'react-redux';
 import classnames from 'classnames';
+import noUiSlider from 'nouislider';
+import wNumb from 'wnumb';
 
 import SearchBar from './SearchBar/SearchBar';
 import Card from './Cards/Card';
@@ -9,8 +11,17 @@ import Loading from './../Utilities/Loading/Loading';
 import LoadingCards from './LoadingCards/LoadingCards';
 
 import './movies.css';
+import '../../css/nouislider.css';
 
 class Movies extends Component {
+  STEP = Math.floor(window.innerWidth / 320);
+
+  changeStep = () => {
+    this.STEP = Math.floor(window.innerWidth / 320);
+  };
+
+  _isMounted = false;
+
   state = {
     old: 0,
     up: false,
@@ -18,12 +29,12 @@ class Movies extends Component {
     title: '',
     loadingSearch: false,
     loadingInfinite: false,
-    quantity: 20,
+    quantity: this.STEP,
     sort: 'alphabetical',
     genres: [],
     ratingMin: 0.0,
     ratingMax: 10.0,
-    yearMin: 0,
+    yearMin: 1900,
     yearMax: 2020
   };
 
@@ -31,43 +42,44 @@ class Movies extends Component {
     if (e) {
       e.preventDefault();
     }
-    this.setState({
+    this._isMounted && this.setState({
       loadingSearch: true,
-      quantity: 20
+      quantity: this.STEP * 6,
+      movies: []
     });
-    axios.post('/api/library/find_movie', {...this.state, search: this.state.title, quantity: 10})
+    axios.post('/api/library/find_movie', {...this.state, search: this.state.title, quantity: this.STEP * 3})
       .then((res) => {
         console.log(res.data);
-        this.setState({
+        this._isMounted && this.setState({
           movies: res.data,
           loadingSearch: false
         });
       })
       .catch((err) => {
         console.log(err);
-        this.setState({
+        this._isMounted && this.setState({
           loadingSearch: false
         });
       })
   };
 
   infiniteScroll = () => {
-    if (this.state.title !== '' && window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
-      this.setState({
+    if (window.innerHeight + document.documentElement.scrollTop === document.documentElement.offsetHeight) {
+      this._isMounted && this.setState({
         loadingInfinite: true
       });
       axios.post('/api/library/find_movie', {...this.state, search: this.state.title})
         .then((res) => {
           console.log(res.data);
-          this.setState({
+          this._isMounted && this.setState({
             movies: res.data,
-            quantity: this.state.quantity + 10,
+            quantity: this.state.quantity + this.STEP,
             loadingInfinite: false
           });
         })
         .catch((err) => {
           console.log(err);
-          this.setState({
+          this._isMounted && this.setState({
             loadingInfinite: false
           });
         });
@@ -85,15 +97,88 @@ class Movies extends Component {
     this.setState({old: window.scrollY});
   };
 
+  setSliders = () => {
+    let sliderYear = document.getElementById('year');
+    let sliderRating = document.getElementById('rating');
+
+    noUiSlider.create(sliderYear, {
+      start: [1900, 2020],
+      connect: true,
+      range: {
+        'min': [1900, 5],
+        '60%': [2000, 1],
+        'max': 2020
+      },
+      tooltips: [wNumb({decimals: 0}), wNumb({decimals: 0})],
+      pips: {
+        mode: 'steps',
+        stepped: true,
+        density: 0,
+        filter: (value, type) => {
+          if (value % 100 === 0 || value === 2020) {
+            return 1
+          }
+          if (value < 2000) {
+            if (value % 20 === 0) {
+              return 2;
+            }
+            if (value % 5 === 0) {
+              return 0;
+            }
+            return -1;
+          }
+          if (value % 5 === 0) {
+            return 2
+          }
+          if (value % 1 === 0) {
+            return 0;
+          }
+          return -1
+        }
+      },
+    });
+    noUiSlider.create(sliderRating, {
+      start: [0.0, 10.0],
+      connect: true,
+      range: {
+        'min': 0.0,
+        '50%': 5.0,
+        'max': 10.0
+      },
+      tooltips: [wNumb({decimals: 1}), wNumb({decimals: 1})],
+      pips: {
+        mode: 'range',
+        density: 10
+      }
+    });
+    sliderYear.noUiSlider.on('update', (values, handle) => {
+      this.setState({
+        yearMin: parseInt(values[0], 10),
+        yearMax: parseInt(values[1], 10)
+      });
+    });
+    sliderRating.noUiSlider.on('update', (values, handle) => {
+      this.setState({
+        ratingMin: parseFloat(values[0]),
+        ratingMax: parseFloat(values[1])
+      });
+    });
+  };
+
   componentDidMount() {
+    this._isMounted = true;
     window.addEventListener('scroll', this.infiniteScroll);
     window.addEventListener('scroll', this.topbarGoUp);
+    window.addEventListener('resize', this.changeStep);
     this.submitForm();
+    this.setSliders();
   }
 
   componentWillUnmount() {
+    this._isMounted = false;
     window.removeEventListener('scroll', this.infiniteScroll);
     window.removeEventListener('scroll', this.topbarGoUp);
+    window.removeEventListener('resize', this.changeStep);
   }
 
   changeGenre = (e) => {
@@ -203,19 +288,27 @@ class Movies extends Component {
                       </div>
                     </div>
                     <div>
+                      <div className="sidebar__group">
+                        <label htmlFor="year">{t._FILTER_YEAR_TITLE}</label>
+                        <div id="year" className="noUiSlider"/>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="sidebar__group">
+                        <label htmlFor="rating">{t._FILTER_RATING_TITLE}</label>
+                        <div id="rating" className="noUiSlider"/>
+                      </div>
+                    </div>
+                    <div>
                       <input type="submit"/>
                     </div>
-                    {/*<div className="sidebar__group">*/}
-                    {/*  <label>Genre</label>*/}
-                    {/*  <input/><br/>*/}
-                    {/*</div>*/}
                   </div>
                 </div>
               </div>
             </form>
           </div>
           {this.state.loadingSearch && <div className="movie__loading">
-            <LoadingCards/>
+            <LoadingCards n={2 * this.STEP}/>
             {/*<Loading/>*/}
           </div>}
           <div className="movie__cards">
@@ -224,8 +317,8 @@ class Movies extends Component {
             ))}
           </div>
           {this.state.loadingInfinite && <div className="movie__loading">
-            <LoadingCards/>
-            {/*<Loading/>*/}
+            {/*<LoadingCards n={this.STEP}/>*/}
+            <Loading/>
           </div>}
         </div>
       </div>

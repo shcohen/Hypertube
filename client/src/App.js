@@ -8,6 +8,7 @@ import Home from './components/Home/Home';
 import Error from './components/Error/Error';
 import Movies from './components/Movies/Movies';
 import MoviePage from './components/MoviePage/MoviePage';
+import WatchMovie from './components/WatchMovie/WatchMovie';
 
 import './css/normalize.css';
 import './css/darkmode.css';
@@ -24,7 +25,8 @@ class App extends Component {
             <Switch>
               <Route path={'/'} exact component={Home}/>
               <Route path={'/movies'} exact component={Movies}/>
-              <Route path={'/movie/:id'} exact component={MoviePage}/>
+              <Route path={'/movie/:IMDBid/:YTSid'} exact component={MoviePage}/>
+              <Route path={'/watch/:id/:title/:hash'} exact component={WatchMovie}/>
               <Route component={Error}/>
             </Switch>
           </Root>

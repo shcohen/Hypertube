@@ -1,4 +1,5 @@
 import React from 'react';
+import {NavLink} from 'react-router-dom';
 
 import './card.css';
 
@@ -6,6 +7,7 @@ const Card = (props) => {
 
   return (props.movie &&
     <div className="movie__card">
+      <NavLink to={`/movie/${props.movie.imdb_code}/${props.movie.id}`}>
       <div className="movie__poster">
         <div className="movie__poster-background"
              style={props.movie.medium_cover_image && {backgroundImage: `url("${props.movie.large_cover_image}")`}}/>
@@ -24,6 +26,7 @@ const Card = (props) => {
           <div className="movie__poster-info rating">{props.movie.rating}<span>/10</span></div>
         </div>
       </div>
+      </NavLink>
       <div className="movie__title">
         {props.movie.title}
       </div>
