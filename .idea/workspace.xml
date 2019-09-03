@@ -2,15 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6b197a23-2ca4-4817-8907-df7dad551220" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/server/utils/userUtils.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/config/private/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/config/private/config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/models/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/routes/postManagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/postManagement.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/routes/userManagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/userManagement.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/4ceae56e02514d309008b492ad232589" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/6d07987f4a8d5fe15e0937dd4d584bc3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/ca541266ef097ae473632345b819f2d3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/dfad8e1990b79416a66a7c4b9fc853a4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/e01be0c71d8889f6938609babb91ad02" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/uploads/ff7854e2fa33d2a9a230f456b2a975be" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/template/index.html" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -114,7 +112,8 @@
       <workItem from="1564051110294" duration="2621000" />
       <workItem from="1564060718137" duration="2093000" />
       <workItem from="1566392481970" duration="6430000" />
-      <workItem from="1567434594391" duration="6082000" />
+      <workItem from="1567434594391" duration="6239000" />
+      <workItem from="1567517246242" duration="1860000" />
     </task>
     <servers />
   </component>

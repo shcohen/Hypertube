@@ -4,9 +4,8 @@ const mailsUtils = require('../utils/mailUtils');
 const userUtils = require('../utils/userUtils');
 const uuid = require('uuid');
 const multer = require('multer');
-const xss = require('xss');
 const upload = multer({dest: 'uploads/'});
-const Joi = require('@hapi/joi');
+const xss = require('xss');
 const validator = require('email-validator');
 const passwordValidator = require('password-validator');
 const schema = new passwordValidator(); // create a validation schema
@@ -70,14 +69,17 @@ module.exports = {
                                     console.log(error);
                                     return res.status(200).send('error: ', error)
                                 } else {
-                                    //if (validateImage(profilePic.mimetype, profilePic.data)) {
-                                    console.log('done that');
-                                    passport.authenticate('local-signup', {
-                                        successRedirect: '/home',
-                                        failureRedirect: '/api/account/register',
-                                        failureFlash: true
-                                    })(req, res, next);
-                                    // }
+                                    if (validateImage(profilePic.mimetype, profilePic.data) !== false) {
+                                        console.log('done that');
+                                        passport.authenticate('local-signup', {
+                                            successRedirect: '/home',
+                                            failureRedirect: '/api/account/register',
+                                            failureFlash: true
+                                        })(req, res, next);
+                                    } else {
+                                        console.log('error: invalid picture provided');
+                                        return res.status(400).send('error: invalid picture provided')
+                                    }
                                 }
                             })
                         } else {
@@ -109,7 +111,8 @@ module.exports = {
     modify: async (req, res) => {
         let modifyData = {};
         let {acc_id, email, username, password, rpassword, firstname, lastname} = req.body;
-        let profilePic = req.files ? req.files : null;
+        let profilePic = req.file ? req.file : null;
+        console.log(req.file);
         if (!acc_id || !email && !username && !password && !rpassword && !firstname && !lastname && !profilePic) {
             return res.status(400).send('error: invalid request')
         } else {
@@ -170,7 +173,7 @@ module.exports = {
             }
             // profile picture check
             if (profilePic) {
-                if (validateImage(profilePic.mimetype)) {
+                if (await validateImage(profilePic.mimetype, profilePic.data) !== false) {
                     console.log('success: profile picture updated')
                 } else {
                     console.log('error: invalid picture provided');
@@ -231,32 +234,32 @@ module.exports = {
         }
     },
     sendForgotPassword: (req, res) => {
-            let {email} = req.body;
-            User.findOne({
-                email: email
-            }).then((user, error) => {
-                if (user) {
-                    const token = uuid.v4();
-                    user.resetToken = token;
-                    user.save((error) => {
-                        if (error) {
-                            console.log('error:', error);
-                            return res.status(500).send('error: ', error)
-                        } else {
-                            mailsUtils.resetMail(email, token);
-                            console.log('success: reset email sent');
-                            return res.status(200).send('success: reset mail sent')
-                        }
-                    })
-                } else if (error) {
-                    console.log('error: ', error);
-                    return res.status(500).send('error: ', error)
-                } else {
-                    console.log('error: invalid email provided');
-                    return res.status(400).send('error: invalid email provided')
-                }
-            })
-        },
+        let {email} = req.body;
+        User.findOne({
+            email: email
+        }).then((user, error) => {
+            if (user) {
+                const token = uuid.v4();
+                user.resetToken = token;
+                user.save((error) => {
+                    if (error) {
+                        console.log('error:', error);
+                        return res.status(500).send('error: ', error)
+                    } else {
+                        mailsUtils.resetMail(email, token);
+                        console.log('success: reset email sent');
+                        return res.status(200).send('success: reset mail sent')
+                    }
+                })
+            } else if (error) {
+                console.log('error: ', error);
+                return res.status(500).send('error: ', error)
+            } else {
+                console.log('error: invalid email provided');
+                return res.status(400).send('error: invalid email provided')
+            }
+        })
+    },
     resetPassword:
         (req, res) => {
             let {password, rpassword, resetToken} = req.body;

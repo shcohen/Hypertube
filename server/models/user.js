@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-let userSchema = new mongoose.Schema({ // missing profile picture validation
+let userSchema = new mongoose.Schema({
     acc_id: {
         type: String,
         unique: true,
@@ -11,12 +11,12 @@ let userSchema = new mongoose.Schema({ // missing profile picture validation
         type: String,
         lowercase: true,
         trim: true,
-        unique: true,
         required: true
     },
     username: {
         type: String,
         unique: true,
+        trim: true,
         required: true
     },
     password: {
@@ -52,14 +52,15 @@ let userSchema = new mongoose.Schema({ // missing profile picture validation
     githubId: {
         type: String
     },
-    fortyTwoId:{
+    fortyTwoId: {
         type: String
     },
     accessToken: {
         type: String
     },
     profilePic: {
-        type: String
+        data: Buffer,
+        contentType: String
     }
 }, {timestamps: {createdAt: 'created_at'}});
 
