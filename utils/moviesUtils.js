@@ -20,6 +20,15 @@ module.exports = {
             return res.data.imdbID === res.data.yts.imdb_code ? res.data : null;
         })
     },
+    isMovieDownloaded: async (file, filePath) => {
+        try {
+            fs.accessSync(filePath);
+            let fileStat = fs.statSync(filePath);
+            return fileStat.size === file.length;
+        } catch (err) {
+            return false;
+        }
+    },
     filterByGenre: (movies, category) => {
         return movies.filter(movie => {
             return (movie.genres.filter(genre => category.find((g) => (g === genre))).length === category.length);

@@ -8,7 +8,6 @@ const rootDirectory = path.dirname(require.main.filename);
 
 module.exports = {
     getSubtitles: (movieId) => {
-        console.log('Salut');
         !fs.existsSync(`${rootDirectory}/client/public/Subtitles/${movieId}`) ? fs.mkdirSync(`${rootDirectory}/client/public/Subtitles/${movieId}`) : undefined;
         OpenSubtitles.search({imdbid: movieId})
             .then(async data => {
@@ -29,11 +28,6 @@ module.exports = {
                 });
             });
     },
-    // sendSubtitles: (movieId) => {
-    //     fs.createReadStream(`/tmp/Subtitles/${movieId}.fre.srt`)
-    //         .pipe(srt2vtt())
-    //         .pipe(fs.createWriteStream(`/tmp/Subtitles/${movieId}.fre.vtt`))
-    // },
     subtitleManager: (movieId) => {
         !fs.existsSync(`${rootDirectory}/client/public/Subtitles`) ? fs.mkdirSync(`${rootDirectory}/client/public/Subtitles`) : undefined;
         if (!fs.existsSync(`${rootDirectory}/client/public/Subtitles/${movieId}`)) {
