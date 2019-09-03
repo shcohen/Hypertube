@@ -124,12 +124,12 @@ module.exports = {
         });
     },
     torrentManager: async (req, res) => {
-        let {movieId, movieUrlEncoded, movieHash} = req.query;
+        let {movieId, movieNameEncoded, movieHash} = req.query;
         let {range} = req.headers;
 
-        if (movieId && movieId.length && movieUrlEncoded !== undefined && movieUrlEncoded.length && movieHash
+        if (movieId && movieId.length && movieNameEncoded !== undefined && movieNameEncoded.length && movieHash
             && movieHash.length || range === undefined) {
-            let magnet = `magnet:?xt=urn:btih:${movieHash}&dn=${movieUrlEncoded}&tr=http://track.one:1234/announce&tr=udp://track.two:80`;
+            let magnet = `magnet:?xt=urn:btih:${movieHash}&dn=${movieNameEncoded}&tr=http://track.one:1234/announce&tr=udp://track.two:80`;
             if ((new RegExp(/magnet:\?xt=urn:.+/)).test(magnet)) {
                 let directoryName = crypto.createHash('md5').update(magnet).digest('hex');
                 let options = {

@@ -11,7 +11,6 @@ exports.router = (() => {
     apiRouter.route('/library/find_movie_info').get(libraryManagement.findMovieInfo);
 
     /* TORRENT */
-    apiRouter.route('/torrent/get_torrent').post(torrentManagement.findTorrent);
     apiRouter.route('/torrent/download_torrent').get(torrentManagement.torrentManager);
 
 
