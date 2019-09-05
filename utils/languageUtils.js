@@ -12,17 +12,21 @@ module.exports = {
     },
     translateGenres: async movies => {
         if (movies && movies.length) {
-            await Promise.all(movies.map(async movie => {
+            await Promise.all(movies.map(async (movie, i) => {
                 let translatedGenres = [];
-                await Promise.all(movie.genres.map(async genre => {
-                    genre = '|' + genre + '|';
-                    let translated = await module.exports.translateSentence(genre);
-                    if (translated && translated.length) {
-                        translatedGenres = [...translatedGenres, translated.replace(/[|]/g, '').trim()];
+                if (movie.genres) {
+                    await Promise.all(movie.genres.map(async genre => {
+                        genre = '|' + genre + '|';
+                        let translated = await module.exports.translateSentence(genre);
+                        if (translated && translated.length) {
+                            translatedGenres = [...translatedGenres, translated.replace(/[|]/g, '').trim()];
+                        }
+                    }));
+                    if (translatedGenres && translatedGenres.length) {
+                        movie.genres = translatedGenres;
                     }
-                }));
-                if (translatedGenres && translatedGenres.length) {
-                    movie.genres = translatedGenres;
+                } else {
+                    movies.splice(i, 1);
                 }
             }));
         }
