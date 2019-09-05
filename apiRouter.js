@@ -15,6 +15,6 @@ exports.router = (() => {
 
 
     /* SUBTITLES */
-    apiRouter.route('/subtitles/get_subtitles/:movieId').get(subtitleManagement.subtitleManager);
+    apiRouter.route('/subtitles/get_subtitles').get(subtitleManagement.subtitleManager);
     return apiRouter;
 })();

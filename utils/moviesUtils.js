@@ -1,4 +1,5 @@
 const axios = require('axios');
+const fs = require('fs');
 // const rateLimit = require('axios-rate-limit');
 const {translateSentence} = require('./languageUtils');
 const {RAPIDAPI_KEY} = require('../config/apiKey');
