@@ -16,9 +16,9 @@ module.exports = {
     streamVideoFromFile: (res, file, engine, directoryName, start, end) => {
         console.log('Started streaming process from file !');
         let stream = fs.createReadStream(`/tmp/torrentStream/${directoryName}/${file.path}`, {start, end});
-        res.on('close', () => {
-            module.exports.closeStreamingAndDownload(engine);
-        });
+        // stream.on('close', () => {
+        //     module.exports.closeStreamingAndDownload(engine);
+        // });
         const head = {
             'Accept-Ranges': 'bytes',
             'Content-Range': `bytes ${start}-${end}/${file.length}`,
@@ -32,9 +32,9 @@ module.exports = {
     streamVideoWithConversion: (res, file, engine, start, end) => {
         let stream = file.createReadStream({start, end});
         console.log('Stream created !');
-        res.on('close', () => {
-            module.exports.closeStreamingAndDownload(engine);
-        });
+        // stream.on('close', () => {
+        //     module.exports.closeStreamingAndDownload(engine);
+        // });
         let video = ffmpeg(stream)
             .format('webm')
             .videoCodec('libvpx')
@@ -68,9 +68,9 @@ module.exports = {
     },
     streamVideoWithoutConversion: (res, file, engine, start, end) => {
         let stream = file.createReadStream({start, end});
-        res.on('close', () => {
-            module.exports.closeStreamingAndDownload(engine);
-        });
+        // stream.on('close', () => {
+        //     module.exports.closeStreamingAndDownload(engine);
+        // });
         const head = {
             'Accept-Ranges': 'bytes',
             'Content-Range': `bytes ${start}-${end}/${file.length}`,

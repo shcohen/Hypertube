@@ -21,7 +21,7 @@ module.exports = {
                                 .pipe(fs.createWriteStream(`${rootDirectory}/client/public/Subtitles/${IMDBid}/${IMDBid}.${key}.vtt`))
                                 .on('close', () => {
                                     fs.unlinkSync(`${rootDirectory}/client/public/Subtitles/${IMDBid}/${IMDBid}.${key}.srt`);
-                                });
+                                })
                         } else {
                             console.log('Error while recover subtitle !')
                         }
@@ -35,6 +35,6 @@ module.exports = {
         if (!fs.existsSync(`${rootDirectory}/client/public/Subtitles/${IMDBid}`)) {
             await module.exports.getSubtitles(IMDBid);
         }
-        return res.status(200).send('Subtitles created !');
+        return res.status(200).send(fs.readdirSync(`${rootDirectory}/client/public/Subtitles/${IMDBid}`));
     }
 };
