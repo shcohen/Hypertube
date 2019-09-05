@@ -59,8 +59,8 @@ let userSchema = new mongoose.Schema({
         type: String
     },
     profilePic: {
-        data: Buffer,
-        contentType: String
+        type: String,
+        required: true
     }
 }, {timestamps: {createdAt: 'created_at'}});
 

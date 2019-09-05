@@ -3,7 +3,16 @@ const userManagement = require('./routes/userManagement');
 const postManagement = require('./routes/postManagement');
 const strategies = require('./oAuth/strategies');
 const multer = require('multer');
-const upload = multer({dest: 'uploads/'});
+// set picture storage
+let storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads')
+    },
+    filename: function (req, file, cb) {
+        cb(null, `${file.fieldname}-${new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '')}.${file.mimetype.match(/(?<=\/)[a-z]+/gm)}`);
+    }
+});
+const upload = multer({storage: storage});
 
 exports.router = (() => {
     const apiRouter = express.Router();
@@ -30,7 +39,6 @@ exports.router = (() => {
     apiRouter.route('/search/:id/delete').get(postManagement.deleteComment);
     apiRouter.route('/search/:id/favorites').get(postManagement.addMovieToFav);
     apiRouter.route('/favorites').get(postManagement.displayFavMovies);
-
 
     return apiRouter;
 })();

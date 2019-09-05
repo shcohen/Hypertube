@@ -3,13 +3,12 @@ const User = require('../models/user');
 const mailsUtils = require('../utils/mailUtils');
 const userUtils = require('../utils/userUtils');
 const uuid = require('uuid');
-const multer = require('multer');
-const upload = multer({dest: 'uploads/'});
+const fs = require('fs');
 const xss = require('xss');
 const validator = require('email-validator');
 const passwordValidator = require('password-validator');
-const schema = new passwordValidator(); // create a validation schema
-schema // add properties to it
+const schema = new passwordValidator(); // creates a validation schema
+schema // adds properties to it
     .is().min(8)                                    // minimum length 8
     .is().max(20)                                   // maximum length 20
     .has().uppercase()                              // must have uppercase letters
@@ -18,32 +17,27 @@ schema // add properties to it
     .has().not().spaces();                          // should not have spaces
 
 module.exports = {
-    validateImage: (type, tmpBuffer) => {
-        let magic = [];
-        let Buffer = JSON.parse(JSON.stringify(tmpBuffer));
-        let extractMagic = null;
-        switch (type) {
-            case 'image/jpeg':
-                extractMagic = Buffer.data.toString().split(',').join(' ').substr(0, 8).split(' ');
-                extractMagic.pop();
-                for (let i = 0; i < extractMagic.length; i++) {
-                    magic[i] = parseInt(extractMagic[i]).toString(16);
-                }
-                return magic.join(' ') === 'ff d8';
-            case 'image/png':
-                extractMagic = Buffer.data.toString().split(',').join(' ').substr(0, 24).split(' ');
-                for (let i = 0; i < extractMagic.length; i++) {
-                    magic[i] = parseInt(extractMagic[i]).toString(16);
-                }
-                return magic.join(' ') === '89 50 4e 47 d a 1a a';
-            default:
-                return false;
+    validateImage: (profilePic) => {
+        if (profilePic.size > 0 && profilePic.size < 200000) {
+            let img = fs.readFileSync(profilePic.path);
+            let encode_image = img.toString('base64');
+            if (profilePic.mimetype === 'image/jpeg' || profilePic.mimetype === 'image/jpg') {
+                let finalImg = { // defines a JSONobject for the image attributes to save to database
+                    contentType: profilePic.mimetype,
+                    data: new Buffer.from(encode_image, 'base64')
+                };
+                return finalImg;
+            } else {
+                return false
+            }
+        } else {
+            return false
         }
     },
     register: (req, res, next) => {
         console.log('been there');
         let {email, username, password, firstname, lastname} = req.body;
-        let {profilePic} = req.file;
+        let profilePic = req.file;
         if (!email || !username || !password || !firstname || !lastname || !profilePic) {
             return res.status(400).send('error: invalid request')
         } else {
@@ -69,7 +63,7 @@ module.exports = {
                                     console.log(error);
                                     return res.status(200).send('error: ', error)
                                 } else {
-                                    if (validateImage(profilePic.mimetype, profilePic.data) !== false) {
+                                    if (module.exports.validateImage(profilePic) !== false) {
                                         console.log('done that');
                                         passport.authenticate('local-signup', {
                                             successRedirect: '/home',
@@ -112,7 +106,6 @@ module.exports = {
         let modifyData = {};
         let {acc_id, email, username, password, rpassword, firstname, lastname} = req.body;
         let profilePic = req.file ? req.file : null;
-        console.log(req.file);
         if (!acc_id || !email && !username && !password && !rpassword && !firstname && !lastname && !profilePic) {
             return res.status(400).send('error: invalid request')
         } else {
@@ -173,7 +166,8 @@ module.exports = {
             }
             // profile picture check
             if (profilePic) {
-                if (await validateImage(profilePic.mimetype, profilePic.data) !== false) {
+                if (await module.exports.validateImage(profilePic) !== false) {
+                    profilePic = profilePic.path;
                     console.log('success: profile picture updated')
                 } else {
                     console.log('error: invalid picture provided');
@@ -196,6 +190,7 @@ module.exports = {
                     modifyData.password ? user.password = xss(modifyData.password) : null;
                     firstname ? user.firstname = xss(firstname) : null;
                     lastname ? user.lastname = xss(lastname) : null;
+                    profilePic ? user.profilePic = profilePic : null;
                     user.save((error) => {
                         if (error) {
                             console.log('error:', error);

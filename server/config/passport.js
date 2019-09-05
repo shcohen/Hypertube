@@ -20,7 +20,7 @@ module.exports = (passport) => {
                 if (user !== null) {
                     console.log('email already taken');
                     return done(null, false, req.flash('errorMessage', 'Email already taken'))
-                } else { // send the data to schema
+                } else { // send data to schema
                     let validationToken = Math.random().toString(36).substr(2, 9);
                     User.create({
                         acc_id: Math.random().toString(36).substr(2, 9),
