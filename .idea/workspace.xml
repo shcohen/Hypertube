@@ -4,9 +4,8 @@
     <list default="true" id="6b197a23-2ca4-4817-8907-df7dad551220" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/apiRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/apiRouter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/config/passport.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/config/passport.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/models/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/user.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/routes/userManagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/userManagement.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/uploads/profilePic-2019-09-05 14:54:44.jpeg" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -113,7 +112,8 @@
       <workItem from="1567434594391" duration="6239000" />
       <workItem from="1567517246242" duration="2063000" />
       <workItem from="1567674039122" duration="2225000" />
-      <workItem from="1567680767395" duration="6862000" />
+      <workItem from="1567680767395" duration="7191000" />
+      <workItem from="1567695906256" duration="3029000" />
     </task>
     <servers />
   </component>

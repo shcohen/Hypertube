@@ -22,11 +22,10 @@ module.exports = {
             let img = fs.readFileSync(profilePic.path);
             let encode_image = img.toString('base64');
             if (profilePic.mimetype === 'image/jpeg' || profilePic.mimetype === 'image/jpg') {
-                let finalImg = { // defines a JSONobject for the image attributes to save to database
+                return { // defines a JSONobject for the image attributes to save to database
                     contentType: profilePic.mimetype,
                     data: new Buffer.from(encode_image, 'base64')
                 };
-                return finalImg;
             } else {
                 return false
             }
