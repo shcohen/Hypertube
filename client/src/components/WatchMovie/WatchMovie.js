@@ -15,6 +15,10 @@ class WatchMovie extends Component {
             })
     }
 
+    componentWillUnmount() {
+
+    }
+
     render() {
         const {sendVideo} = this.state;
         const {id, title, hash} = this.props.match.params;

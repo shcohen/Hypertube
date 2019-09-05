@@ -16,9 +16,6 @@ module.exports = {
     streamVideoFromFile: (res, file, engine, directoryName, start, end) => {
         console.log('Started streaming process from file !');
         let stream = fs.createReadStream(`/tmp/torrentStream/${directoryName}/${file.path}`, {start, end});
-        // stream.on('close', () => {
-        //     module.exports.closeStreamingAndDownload(engine);
-        // });
         const head = {
             'Accept-Ranges': 'bytes',
             'Content-Range': `bytes ${start}-${end}/${file.length}`,
@@ -32,9 +29,6 @@ module.exports = {
     streamVideoWithConversion: (res, file, engine, start, end) => {
         let stream = file.createReadStream({start, end});
         console.log('Stream created !');
-        // stream.on('close', () => {
-        //     module.exports.closeStreamingAndDownload(engine);
-        // });
         let video = ffmpeg(stream)
             .format('webm')
             .videoCodec('libvpx')
@@ -68,9 +62,6 @@ module.exports = {
     },
     streamVideoWithoutConversion: (res, file, engine, start, end) => {
         let stream = file.createReadStream({start, end});
-        // stream.on('close', () => {
-        //     module.exports.closeStreamingAndDownload(engine);
-        // });
         const head = {
             'Accept-Ranges': 'bytes',
             'Content-Range': `bytes ${start}-${end}/${file.length}`,
@@ -100,8 +91,11 @@ module.exports = {
         let fileSize;
         engine.on('ready', () => {
             engine.files.forEach(async file => {
+                console.log(file);
                 let mimeType = mime.getType(file.path);
+                console.log(mimeType);
                 if ((new RegExp(/^video\//)).test(mimeType)) {
+                    console.log('MimeType OK');
                     file.select();
                     console.log('File selected !');
                     let filePath = '/tmp/torrentStream/' + directoryName + '/' + file.path;
@@ -111,7 +105,8 @@ module.exports = {
                             convert: false,
                             downloaded: true
                         });
-                    } else {
+                    }
+                    else {
                         if (mimeType === 'video/mp4' || mimeType === 'video/ogg' || mimeType === 'video/webm') {
                             fileSize = file.length;
                             module.exports.streamingCenter(res, file, engine, range, directoryName, filePath, movieId, {
@@ -132,8 +127,12 @@ module.exports = {
                 }
             });
             engine.on('download', () => {
-                console.log(Math.round((engine.swarm.downloaded / fileSize) * 100) + '% downloaded');
+                // console.log(engine.swarm.downloaded);
+                // console.log(Math.round((engine.swarm.downloaded / fileSize) * 100) + '% downloaded');
             });
+            engine.on('idle', () => {
+                console.log('Finish !');
+            })
         });
     },
     torrentManager: async (req, res) => {
