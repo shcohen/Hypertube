@@ -28,7 +28,7 @@ class WatchMovie extends Component {
                 {video && <video crossOrigin="anonymous" controls className="wm__player">
                     <source src={`http://localhost:5000/api/torrent/download_torrent?movieId=${id}&movieNameEncoded=${title}&movieHash=${hash}`}/>
                     {subtitles.map((subtitle, i) => (
-                      <track label={subtitle.label} kind="subtitles" src={subtitle.file} srcLang={subtitle.label} key={i}/>
+                      <track label={subtitle.label} kind="subtitles" src={subtitle.file} srcLang={subtitle.code} key={i}/>
                     ))}
                 </video>}
             </div>

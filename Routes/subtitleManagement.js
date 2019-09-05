@@ -5,6 +5,7 @@ const axios = require('axios');
 const OpenSubtitles = new OS({useragent: 'TemporaryUserAgent', ssl: true});
 const srt2vtt = require('srt-to-vtt');
 const rootDirectory = path.dirname(require.main.filename);
+const {getLanguageName} = require('../utils/subtitleUtils');
 
 module.exports = {
   getSubtitles: (IMDBid, res) => {
@@ -72,15 +73,15 @@ module.exports = {
               .on('close', () => {
                 fs.unlinkSync(`${rootDirectory}/client/public/Subtitles/${IMDBid}/${IMDBid}.${key}.srt`);
               });
-            console.log('on ajoute au tableau');
             subArr = [...subArr, {
-              label: key,
+              label: getLanguageName(key),
+              code: key,
               file: `/Subtitles/${IMDBid}/${IMDBid}.${key}.vtt`
             }];
             return Promise.resolve('ok');
           })();
         }));
-        res.status(200).send(subArr);
+        res.status(200).send(subArr.sort((a, b) => ((a.label === b.label) ? 0 : ((a.label > b.label) ? 1 : -1 ))));
       });
   }
 };
