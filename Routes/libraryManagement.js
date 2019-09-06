@@ -1,5 +1,6 @@
 const axios = require('axios');
 const trendsSchema = require('../models/trends');
+const accentRemover = require('remove-accents');
 const {filterByGenre, filterByRatings, filterByYear, sortMovies, getMovieInfo} = require('../utils/moviesUtils');
 const {translateSentence, translateGenres} = require('../utils/languageUtils');
 const {TMDB_API_KEY_V3} = require('../config/apiKey');
@@ -10,7 +11,7 @@ module.exports = {
         let movies = [];
 
         if (search && search.length && quantity) {
-            movies = await module.exports.findMovies(search);
+            movies = await module.exports.findMovies(accentRemover(search));
         } else {
             movies = await module.exports.getTrends();
         }

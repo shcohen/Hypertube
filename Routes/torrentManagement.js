@@ -8,27 +8,10 @@ const torrentStream = require('torrent-stream');
 const {isMovieDownloaded} = require('../utils/moviesUtils');
 
 module.exports = {
-    closeStreamingAndDownload: (engine) => {
-        engine.remove(true, () => {console.log('Engine cleared !')});
-        engine.destroy();
-        console.log('Engine cleared and destroyed !');
-    },
-    streamVideoFromFile: (res, file, engine, directoryName, start, end) => {
-        console.log('Started streaming process from file !');
-        let stream = fs.createReadStream(`/tmp/torrentStream/${directoryName}/${file.path}`, {start, end});
-        const head = {
-            'Accept-Ranges': 'bytes',
-            'Content-Range': `bytes ${start}-${end}/${file.length}`,
-            'Content-Length': parseInt(end - start) + 1,
-            'Content-Type': 'video/mp4',
-        };
-        res.writeHead(206, head);
-        console.log('Header writted !');
-        pump(stream, res);
-    },
-    streamVideoWithConversion: (res, file, engine, start, end) => {
+    streamVideoWithConversion: (res, file, directoryName, start, end) => {
+        console.log(directoryName);
+        console.log('Streaming with conversion');
         let stream = file.createReadStream({start, end});
-        console.log('Stream created !');
         let video = ffmpeg(stream)
             .format('webm')
             .videoCodec('libvpx')
@@ -49,8 +32,7 @@ module.exports = {
             })
             .on('end', function () {
                 console.log('Processing finished successfully');
-            }
-            .saveToFile('/tmp/torrentStream/'));
+            });
         const head = {
             'Cache-Control': 'no-cache, no-store',
             'Content-Length': file.length,
@@ -60,7 +42,7 @@ module.exports = {
         console.log('Header writted !');
         pump(video, res);
     },
-    streamVideoWithoutConversion: (res, file, engine, start, end) => {
+    streamVideoWithoutConversion: (res, file, start, end) => {
         let stream = file.createReadStream({start, end});
         const head = {
             'Accept-Ranges': 'bytes',
@@ -69,70 +51,50 @@ module.exports = {
             'Content-Type': 'video/mp4',
         };
         res.writeHead(206, head);
-        console.log('Header writted !');
         pump(stream, res);
     },
-    streamingCenter: (res, file, engine, range, directoryName, filePath, movieId, options) => {
+    streamingCenter: (res, file, range, directoryName, filePath, movieId, options) => {
         let parts = range.replace(/bytes=/, "").split("-");
         let start = parts ? parseInt(parts[0], 10) : 0;
         let end = parts && parts[1] ? parseInt(parts[1], 10) : file.length - 1;
         if (parts !== undefined && parts.length && start !== undefined && end !== undefined) {
             if (options.convert === false && options.downloaded === false) {
-                module.exports.streamVideoWithoutConversion(res, file, engine, start, end)
+                module.exports.streamVideoWithoutConversion(res, file, directoryName, start, end)
             } else if (options.convert === true) {
-                module.exports.streamVideoWithConversion(res, file, engine, start, end);
-            } else if (options.convert === false && options.downloaded === true) {
-                module.exports.streamVideoFromFile(res, file, engine, directoryName, start, end);
+                module.exports.streamVideoWithConversion(res, file, start, end);
             }
         }
     },
     torrentDownloader: (res, range, directoryName, magnet, movieId, options) => {
+        console.log(directoryName);
         let engine = torrentStream(magnet, options);
         let fileSize;
         engine.on('ready', () => {
             engine.files.forEach(async file => {
-                console.log(file);
                 let mimeType = mime.getType(file.path);
-                console.log(mimeType);
                 if ((new RegExp(/^video\//)).test(mimeType)) {
-                    console.log('MimeType OK');
-                    file.select();
-                    console.log('File selected !');
                     let filePath = '/tmp/torrentStream/' + directoryName + '/' + file.path;
-                    if (await isMovieDownloaded(file, filePath) === true) {
-                        console.log('TORRENT FULLY DOWNLOADED');
-                        module.exports.streamingCenter(res, file, engine, range, directoryName, filePath, movieId, {
+                    if (mimeType === 'video/mp4' || mimeType === 'video/ogg' || mimeType === 'video/webm') {
+                        fileSize = file.length;
+                        module.exports.streamingCenter(res, file, range, directoryName, filePath, movieId, {
                             convert: false,
-                            downloaded: true
+                            downloaded: false
                         });
-                    }
-                    else {
-                        if (mimeType === 'video/mp4' || mimeType === 'video/ogg' || mimeType === 'video/webm') {
-                            fileSize = file.length;
-                            module.exports.streamingCenter(res, file, engine, range, directoryName, filePath, movieId, {
-                                convert: false,
-                                downloaded: false
-                            });
-                        } else {
-                            fileSize = file.length;
-                            module.exports.streamingCenter(res, file, engine, range, directoryName, filePath, movieId, {
-                                convert: true,
-                                downloaded: false
-                            });
-                        }
+                    } else {
+                        fileSize = file.length;
+                        module.exports.streamingCenter(res, file, range, directoryName, filePath, movieId, {
+                            convert: true,
+                            downloaded: false
+                        });
                     }
                 } else {
                     file.deselect();
                     console.log('File deselected !');
                 }
             });
-            engine.on('download', () => {
-                // console.log(engine.swarm.downloaded);
-                // console.log(Math.round((engine.swarm.downloaded / fileSize) * 100) + '% downloaded');
-            });
-            engine.on('idle', () => {
-                console.log('Finish !');
-            })
+        });
+        engine.on('download', () => {
+            console.log(Math.round((engine.swarm.downloaded / fileSize) * 100) + '% downloaded');
         });
     },
     torrentManager: async (req, res) => {

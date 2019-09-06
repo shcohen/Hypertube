@@ -12,16 +12,11 @@ class WatchMovie extends Component {
     componentWillMount() {
         axios.get(`/api/subtitles/get_subtitles?IMDBid=${this.props.match.params.id}`)
             .then((res) => {
-                console.log(res.data);
                 this.setState({
                     video: true,
                     subtitles: res.data
                 })
             })
-    }
-
-    componentWillUnmount() {
-
     }
 
     render() {

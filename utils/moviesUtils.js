@@ -25,6 +25,7 @@ module.exports = {
         try {
             fs.accessSync(filePath);
             let fileStat = fs.statSync(filePath);
+            console.log(fileStat.size, file.length);
             return fileStat.size === file.length;
         } catch (err) {
             return false;
