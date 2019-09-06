@@ -1,16 +1,21 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 
+import './watch-movie.css';
+
 class WatchMovie extends Component {
     state = {
-        sendVideo: false
+        video: false,
+        subtitles: []
     };
 
     componentWillMount() {
         axios.get(`/api/subtitles/get_subtitles?IMDBid=${this.props.match.params.id}`)
-            .then(() => {
+            .then((res) => {
+                console.log(res.data);
                 this.setState({
-                    sendVideo: true
+                    video: true,
+                    subtitles: res.data
                 })
             })
     }
@@ -20,14 +25,16 @@ class WatchMovie extends Component {
     }
 
     render() {
-        const {sendVideo} = this.state;
+        const {video, subtitles} = this.state;
         const {id, title, hash} = this.props.match.params;
         return (
-            sendVideo && <div>
-                <video crossOrigin="anonymous" controls width={'700px'} height={'500px'}>
+            <div className="watch-movie">
+                {video && <video crossOrigin="anonymous" controls className="wm__player">
                     <source src={`http://localhost:5000/api/torrent/download_torrent?movieId=${id}&movieNameEncoded=${title}&movieHash=${hash}`}/>
-                    <track label="French" kind="subtitles" src="/Subtitles/tt4154796/tt4154796.fr.vtt" srcLang="fr"/>
-                </video>
+                    {subtitles.map((subtitle, i) => (
+                      <track label={subtitle.label} kind="subtitles" src={subtitle.file} srcLang={subtitle.code} key={i}/>
+                    ))}
+                </video>}
             </div>
         );
     }
