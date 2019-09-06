@@ -59,7 +59,7 @@ module.exports = {
         let end = parts && parts[1] ? parseInt(parts[1], 10) : file.length - 1;
         if (parts !== undefined && parts.length && start !== undefined && end !== undefined) {
             if (options.convert === false && options.downloaded === false) {
-                module.exports.streamVideoWithoutConversion(res, file, directoryName, start, end)
+                module.exports.streamVideoWithoutConversion(res, file, start, end)
             } else if (options.convert === true) {
                 module.exports.streamVideoWithConversion(res, file, start, end);
             }
@@ -73,6 +73,7 @@ module.exports = {
             engine.files.forEach(async file => {
                 let mimeType = mime.getType(file.path);
                 if ((new RegExp(/^video\//)).test(mimeType)) {
+                    file.select();
                     let filePath = '/tmp/torrentStream/' + directoryName + '/' + file.path;
                     if (mimeType === 'video/mp4' || mimeType === 'video/ogg' || mimeType === 'video/webm') {
                         fileSize = file.length;
