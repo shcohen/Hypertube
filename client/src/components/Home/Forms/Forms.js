@@ -60,7 +60,6 @@ class Forms extends Component {
         <div className="hf__content">
           <h4>{t._SOCIALS_SUBTITLE}</h4>
           <div className="hf__socials">
-            <button className="custom twitter"/>
             <button className="custom google"/>
             <button className="custom api42"/>
             <button className="custom github"/>
