@@ -1,5 +1,4 @@
 const axios = require('axios');
-const trendsSchema = require('../models/trends');
 const accentRemover = require('remove-accents');
 const {filterByGenre, filterByRatings, filterByYear, sortMovies, getMovieInfo} = require('../utils/moviesUtils');
 const {translateSentence, translateGenres} = require('../utils/languageUtils');
