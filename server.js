@@ -4,28 +4,25 @@ const apiRouter = require('./apiRouter').router;
 const torrentSearch = require('torrent-search-api');
 const mongoose = require('mongoose');
 const providers = ['1337x', 'Rarbg'];
-const cors = require('cors')
+const cors = require('cors');
 const CronJob = require('cron').CronJob;
-const {updateTrends} = require('./Routes/libraryManagement');
+const {downloadedMoviesExpirationCheck} = require('./utils/moviesUtils');
 const app = express();
 // updateTrends();
-
+downloadedMoviesExpirationCheck();
 // app.use(express.static('./'));
 
-mongoose.connect('mongodb+srv://root:root@hypertube-yfmfl.mongodb.net/test?retryWrites=true&w=majority', {useNewUrlParser: true})
+mongoose.connect('mongodb+srv://root:root@hypertube-yfmfl.mongodb.net/Hypertube?retryWrites=true&w=majority', {useNewUrlParser: true})
     .then(() => {
         console.log('Connected to mongoDB')
     }).catch(e => {
     console.log('Error while DB connecting');
     console.log(e);
 });
-new CronJob('* 1 * * *', () => {
-    // if (updateTrends() === -1) {
-    //     console.log('Failed to update trends');
-    // } else {
-    //     console.log('Trends updated');
-    // }
-}, null, true, 'America/Los_Angeles');
+new CronJob('0 0 * * *', () => {
+    downloadedMoviesExpirationCheck();
+    console.log('Downloaded movies daily check done');
+}, null, true, 'Europe/Paris');
 
 let urlencodedParser = bodyParser.urlencoded({
     extended: true

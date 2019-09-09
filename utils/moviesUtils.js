@@ -1,5 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
+const rimraf = require('rimraf');
+const downloadedMovies = require('../models/downloadedMovies');
 // const rateLimit = require('axios-rate-limit');
 const {translateSentence} = require('./languageUtils');
 const {RAPIDAPI_KEY} = require('../config/apiKey');
@@ -21,15 +23,26 @@ module.exports = {
             return res.data.imdbID === res.data.yts.imdb_code ? res.data : null;
         })
     },
-    isMovieDownloaded: async (file, filePath) => {
-        try {
-            fs.accessSync(filePath);
-            let fileStat = fs.statSync(filePath);
-            console.log(fileStat.size, file.length);
-            return fileStat.size === file.length;
-        } catch (err) {
-            return false;
+    trackDownloadedMovies: async (movieId, path) => {
+        let date = new Date;
+        let movies = await downloadedMovies.find({movieId: movieId});
+        if (movies && !movies.length) {
+            return downloadedMovies.create({movieId: movieId, path: path, date: date.getTime()});
+        } else {
+            return downloadedMovies.updateOne({date: date.getTime()});
         }
+    },
+    downloadedMoviesExpirationCheck: async () => {
+        let movies = await downloadedMovies.find();
+        movies.map(movie => {
+            let movieDate = Math.floor(movie.date / 1000.0);
+            let date = Math.floor(new Date / 1000.0);
+            let month = 1000 * 60 * 60 * 24 * 30 / 1000;
+            if (date - movieDate >= month) {
+                rimraf.sync(movie.path);
+                downloadedMovies.find({movieId: movie.movieId}).remove();
+            }
+        })
     },
     filterByGenre: (movies, category) => {
         return movies.filter(movie => {
