@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import axios from 'axios';
 
 import PasswordValidator from '../../Utilities/PasswordValidator/PasswordValidator';
 
@@ -26,6 +27,21 @@ const Register = (props) => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
+    let form = new FormData();
+    form.append('email', formData.email);
+    form.append('username', formData.username);
+    form.append('password', formData.password);
+    form.append('confirm', formData.confirm);
+    form.append('firstname', formData.firstname);
+    form.append('lastname', formData.lastname);
+    form.append('profilePic', formData.profilePic);
+    axios.post('/api/account/register', form)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const previewProfilePic = (e) => {
@@ -35,6 +51,7 @@ const Register = (props) => {
       reader.onload = (evt) => {
         const preview = document.getElementById('profile_pic_preview');
         preview.src = evt.target.result;
+        console.log(input.files[0]);
         setFormData({
           ...formData,
           profilePic: input.files[0]
@@ -62,7 +79,11 @@ const Register = (props) => {
       {formData.emailError !== '' && <p><i className="fas fa-times"/> {formData.emailError}</p>}
       <div className="hf__grid">
         <div className="hf__picture">
-          <input id="profile_pic" type="file" hidden onChange={previewProfilePic}/>
+          <input id="profile_pic"
+                 type="file"
+                 name="profile_pic"
+                 hidden
+                 onChange={previewProfilePic}/>
           <label htmlFor="profile_pic">
             <img id="profile_pic_preview" src="" alt="profile pic"/>
           </label>

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import classnames from 'classnames';
 import queryString from 'query-string';
 import {connect} from 'react-redux';
+import axios from 'axios';
 
 import Login from './Login';
 import Register from './Register';
@@ -29,6 +30,36 @@ class Forms extends Component {
     this.setState({
       step: s
     });
+  };
+
+  loginGithub = () => {
+    axios.get('/api/account/github')
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  };
+
+  loginGoogle = () => {
+    axios.get('/api/account/google')
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+  };
+
+  login42 = () => {
+    axios.get('/api/account/42')
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   };
 
   render() {
@@ -60,9 +91,9 @@ class Forms extends Component {
         <div className="hf__content">
           <h4>{t._SOCIALS_SUBTITLE}</h4>
           <div className="hf__socials">
-            <button className="custom google"/>
-            <button className="custom api42"/>
-            <button className="custom github"/>
+            <a href="http://localhost:5000/api/account/google" className="custom google"/>
+            <a href="http://localhost:5000/api/account/42" className="custom api42"/>
+            <a href="http://localhost:5000/api/account/github" className="custom github"/>
           </div>
         </div>
       </div>
