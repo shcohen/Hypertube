@@ -35,55 +35,61 @@ module.exports = {
     },
     register: (req, res, next) => {
         console.log('been there');
-        let {email, username, password, firstname, lastname} = req.body;
+        let {email, username, password, firstname, confirm, lastname} = req.body;
         let profilePic = req.file;
-        if (!email || !username || !password || !firstname || !lastname || !profilePic) {
+        if (!email || !username || !password || !confirm|| !firstname || !lastname || !profilePic) {
             return res.status(400).send('error: invalid request')
         } else {
-            if (validator.validate(email) === true) {
-                User.find({
-                    email: email
-                }).then((user, error) => {
-                    if (user.length) {
-                        console.log('email already taken');
-                        return res.status(400).send('error: email already taken')
-                    } else if (error) {
-                        console.log(error);
-                        return res.status(200).send('error: ', error)
-                    } else {
-                        if (schema.validate(password, {list: false})) {
-                            User.findOne({
-                                username: username
-                            }).then((user, error) => {
-                                if (user) {
-                                    console.log('username already taken');
-                                    return res.status(200).send('username already taken')
-                                } else if (error) {
-                                    console.log(error);
-                                    return res.status(200).send('error: ', error)
-                                } else {
-                                    if (module.exports.validateImage(profilePic) !== false) {
-                                        console.log('done that');
-                                        passport.authenticate('local-signup', {
-                                            successRedirect: '/home',
-                                            failureRedirect: '/api/account/register',
-                                            failureFlash: true
-                                        })(req, res, next);
-                                    } else {
-                                        console.log('error: invalid picture provided');
-                                        return res.status(400).send('error: invalid picture provided')
-                                    }
-                                }
-                            })
-                        } else {
-                            console.log('invalid password provided: missing ' + schema.validate(password, {list: true}));
-                            return res.status(200).send('invalid password provided: missing ' + schema.validate(password, {list: true}))
-                        }
-                    }
-                })
+            if (password !== confirm || !password && confirm || password && !confirm) {
+                console.log('password or password-confirmation is invalid');
+                return res.status(400).send('error: password or password-confirmation is incorrect');
             } else {
-                console.log('invalid email provided');
-                return res.status(200).send('error: invalid email provided')
+                if (validator.validate(email) === true) {
+                    User.find({
+                        email: email
+                    }).then((user, error) => {
+                        if (user.length) {
+                            console.log('email already taken');
+                            return res.status(400).send('error: email already taken')
+                        } else if (error) {
+                            console.log(error);
+                            return res.status(200).send('error: ', error)
+                        } else {
+
+                            if (schema.validate(password, {list: false})) {
+                                User.findOne({
+                                    username: username
+                                }).then((user, error) => {
+                                    if (user) {
+                                        console.log('username already taken');
+                                        return res.status(200).send('username already taken')
+                                    } else if (error) {
+                                        console.log(error);
+                                        return res.status(200).send('error: ', error)
+                                    } else {
+                                        if (module.exports.validateImage(profilePic) !== false) {
+                                            console.log('done that');
+                                            passport.authenticate('local-signup', {
+                                                successRedirect: '/home',
+                                                failureRedirect: '/api/account/register',
+                                                failureFlash: true
+                                            })(req, res, next);
+                                        } else {
+                                            console.log('error: invalid picture provided');
+                                            return res.status(400).send('error: invalid picture provided')
+                                        }
+                                    }
+                                })
+                            } else {
+                                console.log('invalid password provided: missing ' + schema.validate(password, {list: true}));
+                                return res.status(200).send('invalid password provided: missing ' + schema.validate(password, {list: true}))
+                            }
+                        }
+                    })
+                } else {
+                    console.log('invalid email provided');
+                    return res.status(200).send('error: invalid email provided')
+                }
             }
         }
     },
@@ -103,23 +109,23 @@ module.exports = {
     },
     modify: async (req, res) => {
         let modifyData = {};
-        let {acc_id, email, username, password, rpassword, firstname, lastname} = req.body;
+        let {acc_id, email, username, password, confirm, firstname, lastname} = req.body;
         let profilePic = req.file ? req.file : null;
-        if (!acc_id || !email && !username && !password && !rpassword && !firstname && !lastname && !profilePic) {
+        if (!acc_id || !email && !username && !password && !confirm && !firstname && !lastname && !profilePic) {
             return res.status(400).send('error: invalid request')
         } else {
             // password check
-            if (password && password.length && rpassword && rpassword.length) {
-                let passwordCheck = await userUtils.checkPassword(password, rpassword);
+            if (password && password.length && confirm && confirm.length) {
+                let passwordCheck = await userUtils.checkPassword(password, confirm);
                 if (passwordCheck.errorCode === -1)
                     modifyData.passwordCheck = passwordCheck.errorMessage;
                 else {
                     modifyData.passwordCheck = passwordCheck.successMessage;
                     modifyData.password = password;
                 }
-            } else if (!password && rpassword || password && !rpassword) {
-                console.log('missing password or rpassword');
-                modifyData.passwordError = 'error: missing password or repeat-password';
+            } else if (!password && confirm || password && !confirm) {
+                console.log('missing password or confirm');
+                modifyData.passwordError = 'error: missing password or password-confirmation';
             }
             // email check
             if (email && email.length) {
