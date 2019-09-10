@@ -1,8 +1,5 @@
 let passport = require('passport');
-<<<<<<< HEAD
-=======
 const jwt = require('jsonwebtoken');
->>>>>>> fk-dev
 
 module.exports = {
     google: (req, res, next) => { // load login window
@@ -13,13 +10,8 @@ module.exports = {
     googleRedirect: (req, res, next) => { // load data
         console.log('been there');
         passport.authenticate('google', {
-<<<<<<< HEAD
-            successRedirect: '/', // if user already exists --> get logged in
-            failureRedirect: '/api/account/register', // if user is created
-=======
             successRedirect: 'http://localhost:5000/api/jwt',
             failureRedirect: 'http://localhost:5000/api/account/google',
->>>>>>> fk-dev
             failureFlash: true
         })(req, res, next)
     },
@@ -31,17 +23,10 @@ module.exports = {
     githubRedirect: (req, res, next) => { // load data
         console.log('been there');
         passport.authenticate('github', {
-<<<<<<< HEAD
-            successRedirect: '/', // if user already exists --> get logged in
-            failureRedirect: '/api/account/register', // if user is created
-            failureFlash: true
-        })(req, res, next)
-=======
             successRedirect: 'http://localhost:5000/api/jwt',
             failureRedirect: 'http://localhost:5000/api/account/github',
             failureFlash: true
         })(req, res, next);
->>>>>>> fk-dev
     },
     fortyTwo: (req, res, next) => { // load login window
         passport.authenticate('42')(req, res, next)
@@ -49,14 +34,6 @@ module.exports = {
     fortyTwoRedirect: (req, res, next) => { // load data
         console.log('been there');
         passport.authenticate('42', {
-<<<<<<< HEAD
-            successRedirect: '/', // if user already exists --> get logged in
-            failureRedirect: '/api/account/register', // if user is created
-            failureFlash: true
-        })(req, res, next)
-    }
-};
-=======
             successRedirect: 'http://localhost:5000/api/jwt',
             failureRedirect: 'http://localhost:5000/api/account/42',
             failureFlash: true
@@ -82,4 +59,3 @@ module.exports = {
         }
     }
 };
->>>>>>> fk-dev
