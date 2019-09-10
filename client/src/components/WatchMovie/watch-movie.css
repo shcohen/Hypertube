@@ -1,0 +1,14 @@
+/*VIDEO PLAYER PAGE*/
+
+.watch-movie {
+    width: 100vw;
+    height: calc(100vh - var(--header-height));
+    background-color: black;
+}
+
+/*PLAYER*/
+
+.wm__player {
+    width: 100%;
+    height: 100%;
+}

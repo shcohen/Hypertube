@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css?family=Orbitron&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Ubuntu:300,300i,400,400i,500,500i,700,700i&display=swap');
+@font-face {
+    font-family: myTN;
+    src: url(../assets/fonts/TuesdayNight.otf);
+}
+
+/*VARIABLES*/
+
+html {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+/*GLOBAL RULES*/
+
+* {
+    box-sizing: border-box;
+    font-family: inherit;
+    color: var(--color-text);
+}
+
+a {
+    text-decoration: none;
+}
+
+/*BODY CSS*/
+
+html {
+    --header-height: 4rem;
+    --footer-height: 10rem;
+}
+
+@media screen and (max-width: 800px) {
+    html {
+        --header-height: 5.5rem;
+    }
+}
+
+body {
+    background-color: var(--bg-container);
+}
+
+#wrapper {
+    position: relative;
+    padding: var(--header-height) 0 var(--footer-height) 0;
+    min-height: 100vh;
+}
+
+#container {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100vw;
+}
+
+/*USEFUL CLASSES*/
+
+.centered {
+    display: grid;
+    justify-items: center;
+}
+
+.centered > div {
+    width: 100vw;
+    max-width: 70rem;
+}
+
+i.fas {
+    color: inherit;
+}
+
+hr {
+    margin: 0;
+    border: none;
+    border-bottom: 1px solid var(--color-borders);
+}
+
+hr.or {
+    position: relative;
+}
+
+hr.or::after {
+    content: "or";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0.2rem 0.5rem;
+    background-color: var(--color-borders);
+    color: var(--bg);
+    border-radius: 1rem;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+}
+
+svg.loading circle {
+    fill: var(--color-headings-transparent);
+}
+
+/*INPUTS*/
+
+form:not(.custom) input:not([type="submit"]):not([type="radio"]):not([type="checkbox"]),
+form:not(.custom) select {
+    height: 2rem;
+    border-radius: 0.3rem;
+    background-color: var(--bg-container);
+    border: 1px solid var(--color-borders);
+    padding: 0 0.5rem;
+    outline: none;
+    font-size: 0.8rem;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+form:not(.custom) input:not([type="submit"]):not([type="radio"]):not([type="checkbox"]):hover,
+form:not(.custom) select:hover {
+    border: 1px solid var(--color-borders-hover);
+    background-color: var(--bg-container-hover);
+}
+
+form:not(.custom) input:not([type="submit"]):not([type="radio"]):not([type="checkbox"]):focus,
+form:not(.custom) select:focus {
+    border: 1px solid var(--color-headings);
+    box-shadow: 0 0 0 2px var(--color-headings-transparent);
+    background-color: var(--bg-container-active);
+}
+
+form:not(.custom) input.validation:valid,
+form:not(.custom) select.validation:valid {
+    padding-right: 2rem !important;
+    background-image: url("../assets/img/input-valid.svg");
+    background-position: calc(100% - 0.5rem);
+    background-repeat: no-repeat;
+    background-size: 1rem !important;
+}
+
+button.custom,
+form:not(.custom) input[type="submit"] {
+    padding: 0.5rem 2rem;
+    border-radius: 2rem;
+    outline: none;
+    background-color: var(--color-headings);
+    opacity: 0.85;
+    color: white;
+    background-size: 1.2rem;
+    background-position: center;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 0 0 transparent;
+    transition: opacity 0.2s, box-shadow 0.2s, background-color 0.2s;
+    white-space: nowrap;
+}
+
+button.custom:hover,
+form:not(.custom) input[type="submit"]:hover {
+    opacity: 0.75;
+}
+
+button.custom:active,
+form:not(.custom) input[type="submit"]:active {
+    box-shadow: 0 0 0 3px var(--color-headings-transparent);
+    transition: box-shadow 0s;
+}

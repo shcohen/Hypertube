@@ -1,0 +1,319 @@
+/*MOVIE PAGE*/
+
+#movie h1 {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+/*TRAILER*/
+
+.movie__trailer {
+    position: relative;
+    width: 100%;
+    height: 25rem;
+    overflow: hidden;
+    background-color: black;
+    transition: height 0.4s ease-in-out;
+}
+
+.movie__trailer.bigger {
+    height: calc(100vh - var(--header-height));
+}
+
+.movie__trailer iframe {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100vh;
+    transform: translate(-50%, -50%);
+    /*object-fit: cover;*/
+    transition: width 0.4s ease-in-out, height 0.4s ease-in-out;
+}
+
+.movie__trailer.bigger iframe {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.trailer__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    padding: 2rem;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    color: white;
+    text-shadow: 0 0 2px black;
+    background-color: #00000080;
+    opacity: 0;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.trailer__overlay:hover {
+    opacity: 1;
+}
+
+@media screen and (max-width: 900px) {
+    .movie__trailer {
+        height: 15rem;
+    }
+
+    .movie__trailer iframe {
+        width: 300vw;
+        height: 150%;
+    }
+
+    .trailer__overlay {
+        align-items: start;
+    }
+}
+
+/*CONTENT GRID*/
+
+.movie__grid {
+    position: relative;
+    z-index: 3;
+    display: grid;
+    grid-template-columns: 20rem auto;
+}
+
+@media screen and (max-width: 700px) {
+    .movie__grid {
+        grid-template-columns: 1fr;
+    }
+
+    .movie__side {
+        margin-top: -10rem !important;
+    }
+}
+
+/*SIDE PANEL*/
+
+.movie__side {
+    margin-top: -12.5rem;
+    transition: margin-top 0.4s ease-in-out;
+}
+
+.movie__grid.video .movie__side {
+    margin-top: 0 !important;
+}
+
+.side__poster {
+    width: 18rem;
+    max-width: 95%;
+    margin: 0 auto;
+    height: 26rem;
+    background-image: url("../../assets/img/movie-not-found.jpg");
+    background-color: black;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 0.2rem;
+    border: 3px solid var(--color-borders);
+    box-shadow: 0 0 16px -4px #00000080;
+}
+
+.side__title {
+    font-size: 1rem;
+    padding: 0.6rem 1.2rem;
+    margin: 1rem auto 0 auto;
+    width: fit-content;
+    background-color: var(--color-headings);
+    border-radius: 1.35rem;
+    color: white;
+    display: none;
+    box-shadow: 0 8px 8px -3px var(--color-headings-transparent);
+    max-width: calc(100vw - 3rem);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media screen and (max-width: 720px) {
+    .side__title {
+        display: block;
+    }
+}
+
+.side__download {
+    width: 18rem;
+    max-width: 95%;
+    margin: 1rem auto 0 auto;
+    background-color: var(--bg);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    color: white;
+}
+
+.side__download * {
+    color: inherit;
+}
+
+.download__label {
+    margin-bottom: 1rem !important;
+}
+
+.download__torrent {
+    position: relative;
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 0.2rem;
+    text-transform: capitalize;
+    opacity: 0.6;
+}
+
+.download__torrent:hover {
+    background-color: #00000020;
+    opacity: 1;
+}
+
+.download__torrent:active {
+    background-color: #00000040;
+}
+
+.download__torrent > span {
+    opacity: 0.4;
+    font-size: 0.7rem;
+}
+
+.download__p2p {
+    position: absolute;
+    top: 50%;
+    right: 0.5rem;
+    transform: translateY(-50%);
+    width: fit-content;
+}
+
+.download__p2p > div {
+    position: relative;
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 0 0.2rem 0 0.7rem;
+    opacity: 0.6;
+}
+
+.download__torrent:hover .download__p2p {
+    opacity: 0;
+}
+
+.download__p2p > div::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 0.5rem;
+    height: 0.5rem;
+    transform: translateY(-50%);
+    background: url("../../assets/img/movie-torrent-arrow.svg") center no-repeat;
+    background-size: 0.4rem;
+}
+
+.download__p2p > .download__seeds::before {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+.download__play {
+    position: absolute;
+    top: 50%;
+    right: 0.5rem;
+    transform: translateY(-50%);
+    width: 1rem;
+    height: 1rem;
+    background: url("../../assets/img/movie-torrent-play.svg") center no-repeat;
+    background-size: 100%;
+    opacity: 0;
+}
+
+.download__torrent:hover .download__play {
+    opacity: 1;
+}
+
+/*MAIN DETAILS*/
+
+.movie__main {
+    position: relative;
+}
+
+.main__label {
+    margin: 2rem 1rem 0 1rem !important;
+}
+
+.main__title, .main__subtitle {
+    position: absolute;
+    left: 1rem;
+    top: -5.5rem;
+    z-index: 5;
+    max-width: 90%;
+    font-size: 2rem;
+    color: white;
+    opacity: 1;
+    transition: opacity 0.4s;
+    text-shadow: 0 0 2px black;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.main__subtitle {
+    top: -3rem;
+    font-size: 1rem;
+    color: lightgrey;
+}
+
+@media screen and (max-width: 720px) {
+    .main__title, .main__subtitle {
+        display: none;
+    }
+}
+
+.main__title.hidden, .main__subtitle.hidden {
+    opacity: 0;
+}
+
+.main__content {
+    margin: 1rem 2rem 1rem 1rem;
+    border: 1px solid var(--color-borders);
+    border-radius: 0.2rem;
+    overflow: hidden;
+}
+
+.main__group {
+    padding: 1rem 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+.main__group > div {
+    padding: 0 1rem;
+}
+
+.main__group.special {
+    grid-template-columns: 1fr;
+}
+
+.main__group:nth-child(odd) {
+    background-color: var(--bg);
+}
+
+.main__group:not(:last-child) {
+    border-bottom: 1px solid var(--color-borders);
+}
+
+.main__g_name {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+.main__g_text {
+    color: var(--color-text-hover);
+    font-size: 0.8rem;
+    padding-top: 0.5rem;
+    line-height: 1.1rem;
+}

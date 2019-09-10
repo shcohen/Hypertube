@@ -1,0 +1,69 @@
+/*LOADING CARDS*/
+
+.loading-cards {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    padding-bottom: 1rem;
+    opacity: 0.2;
+}
+
+html[data-theme="dark"] .loading-cards {
+    opacity: 0.05;
+}
+
+.lc__card {
+    width: 18rem;
+    max-width: 90vw;
+    height: 29rem;
+    margin: 1rem 1rem 0 1rem;
+    flex-shrink: 0;
+    flex-grow: 0;
+}
+
+.lc__poster {
+    position: relative;
+    width: 100%;
+    height: 26rem;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 16px -4px #00000060;
+}
+
+.lc__poster-background {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    background-color: grey;
+    background-image: linear-gradient(to right, grey, lightgrey, grey);
+    background-size: 400%;
+    background-position: center;
+    background-repeat: no-repeat;
+    animation: loading-cards 1s infinite linear;
+}
+
+.lc__title {
+    width: 10rem;
+    max-width: 90%;
+    margin: 0.5rem auto;
+    height: 2rem;
+    padding: 0.5rem 0.7rem;
+    border-radius: 2rem;
+    text-align: center;
+    background-color: grey;
+}
+
+@keyframes loading-cards {
+    from {
+        background-position: 150% 50%;
+    }
+    to {
+        background-position: -50% 50%;
+    }
+}

@@ -1,0 +1,221 @@
+/*MOVIES PAGE*/
+
+#movies {
+    width: 100%;
+    min-height: calc(100vh - var(--header-height ) - var(--footer-height));
+    background-color: var(--bg-container);
+}
+
+.movies {
+    transition: filter 0.2s;
+    margin-top: 8.5rem;
+}
+
+/*TOPBAR*/
+
+.topbar {
+    position: fixed;
+    top: var(--header-height);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    width: 30rem;
+    height: 3rem;
+    max-width: 90vw;
+    border-radius: 0.2rem;
+    margin: 3rem auto 2rem auto;
+    transition: height 0.4s, top 0.5s;
+}
+
+.topbar:hover {
+    height: 30rem;
+}
+
+.topbar.up {
+    top: -1.25rem;
+}
+
+/*SIDEBAR*/
+
+.sidebar {
+    position: relative;
+    z-index: 5;
+    top: calc(3rem - 0.4rem);
+    width: 100%;
+    height: 0;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    overflow: hidden;
+    transition: height 0.4s, opacity 0.4s;
+    border-radius: 0 0 0.2rem 0.2rem;
+    opacity: 0;
+}
+
+.topbar:hover .sidebar {
+    height: 32rem;
+    opacity: 1;
+}
+
+.sidebar:hover {
+    height: 20rem;
+}
+
+.sidebar:hover ~ .movies {
+    filter: blur(4px);
+}
+
+.sidebar__container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.sidebar__scrollable {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    padding: 0.65rem 0.25rem 0.25rem 0.25rem;
+    /*display: grid;*/
+    /*grid-template-columns: 1fr 1fr;*/
+    /*grid-template-areas: "sort filter" "button filter";*/
+}
+
+.sidebar__scrollable > div {
+    background-color: var(--bg);
+    border-radius: 0.5rem;
+    margin: 0.5rem 1rem;
+    border: 1px solid var(--color-borders);
+    padding: 1rem;
+    box-shadow: 0 0 8px -3px #00000030;
+}
+
+/*.sidebar__scrollable > div:nth-child(1) {*/
+/*   grid-area: sort;*/
+/*}*/
+/*.sidebar__scrollable > div:nth-child(2) {*/
+/*    grid-area: filter;*/
+/*}*/
+/*.sidebar__scrollable > div:nth-child(3) {*/
+/*    grid-area: button;*/
+/*}*/
+
+/*SIDEBAR CONTENT*/
+
+.sidebar__title {
+    position: relative;
+    padding: 0.4rem 0.6rem;
+    margin: 0 auto 1rem auto;
+    width: fit-content;
+    font-weight: 300;
+    color: var(--color-headings) !important;
+}
+
+.sidebar__title::after {
+    content: "";
+    position: absolute;
+    bottom: 0.1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 2px;
+    background-color: var(--color-headings);
+    transition: opacity 0.2s, width 0.2s;
+    width: 60%;
+    opacity: 0.7;
+}
+
+.sidebar__group input[type="text"], select {
+    width: 100%;
+}
+
+.sidebar__group label:first-child {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.sidebar__group-genres {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+@media screen and (max-width: 800px) {
+    .sidebar__group-genres {
+        grid-template-columns: 1fr 1fr;
+        max-height: 10rem;
+        overflow: auto;
+    }
+}
+
+.sidebar__group-genres label {
+    display: block;
+    background-color: var(--bg-container);
+    margin: 0.2rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 0.9rem;
+    /*border: 1px solid var(--color-borders);*/
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.sidebar__group-genres input[type="checkbox"]:checked + label {
+    background-color: var(--color-headings);
+    color: white;
+    /*border: 1px solid var(--color-headings);*/
+}
+
+input#genres:not(:checked) ~ .sidebar__group-genres {
+    display: none !important;
+}
+
+.sidebar__group.genres label:first-child {
+    position: relative;
+    cursor: pointer;
+}
+
+.sidebar__group.genres label:first-child::after {
+    content: "+";
+    display: block;
+    text-align: center;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(calc(-50%));
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 0.75rem;
+    font-size: 1.2rem;
+}
+
+.sidebar__group.genres label:first-child:hover::after {
+    background-color: var(--bg-container-hover);
+}
+
+.sidebar__group .noUiSlider {
+    position: relative !important;
+}
+
+/*MOVIE CARDS*/
+
+.movie__cards {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+    padding-bottom: 1rem;
+}
+
+/*LOADING*/
+
+.movie__loading {
+    margin: 1rem auto;
+    width: 100%;
+    text-align: center;
+}
+
+.movie__loading svg {
+    width: 5rem;
+    height: 5rem;
+}

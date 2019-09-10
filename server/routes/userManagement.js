@@ -18,10 +18,17 @@ schema // adds properties to it
 
 module.exports = {
     validateImage: (profilePic) => {
+<<<<<<< HEAD
         if (profilePic.size > 0 && profilePic.size < 200000) {
             let img = fs.readFileSync(profilePic.path);
             let encode_image = img.toString('base64');
             if (profilePic.mimetype === 'image/jpeg' || profilePic.mimetype === 'image/jpg') {
+=======
+        if (profilePic.size > 0 && profilePic.size < 2000000) {
+            let img = fs.readFileSync(profilePic.path);
+            let encode_image = img.toString('base64');
+            if (profilePic.mimetype === 'image/jpeg' || profilePic.mimetype === 'image/jpg' || profilePic.mimetype === 'image/png') {
+>>>>>>> fk-dev
                 return { // defines a JSONobject for the image attributes to save to database
                     contentType: profilePic.mimetype,
                     data: new Buffer.from(encode_image, 'base64')
@@ -37,8 +44,15 @@ module.exports = {
         console.log('been there');
         let {email, username, password, firstname, confirm, lastname} = req.body;
         let profilePic = req.file;
+<<<<<<< HEAD
         if (!email || !username || !password || !confirm|| !firstname || !lastname || !profilePic) {
             return res.status(400).send('error: invalid request')
+=======
+        console.log(req.body);
+        console.log(profilePic);
+        if (!email || !username || !password || !confirm|| !firstname || !lastname || !profilePic) {
+            return res.status(400).send('error: invalid request');
+>>>>>>> fk-dev
         } else {
             if (password !== confirm || !password && confirm || password && !confirm) {
                 console.log('password or password-confirmation is invalid');
@@ -70,8 +84,14 @@ module.exports = {
                                         if (module.exports.validateImage(profilePic) !== false) {
                                             console.log('done that');
                                             passport.authenticate('local-signup', {
+<<<<<<< HEAD
                                                 successRedirect: '/home',
                                                 failureRedirect: '/api/account/register',
+=======
+                                                successRedirect: '/library',
+                                                failureRedirect: '/account',
+                                                session: false,
+>>>>>>> fk-dev
                                                 failureFlash: true
                                             })(req, res, next);
                                         } else {
@@ -82,13 +102,21 @@ module.exports = {
                                 })
                             } else {
                                 console.log('invalid password provided: missing ' + schema.validate(password, {list: true}));
+<<<<<<< HEAD
                                 return res.status(200).send('invalid password provided: missing ' + schema.validate(password, {list: true}))
+=======
+                                return res.status(400).send('invalid password provided: missing ' + schema.validate(password, {list: true}))
+>>>>>>> fk-dev
                             }
                         }
                     })
                 } else {
                     console.log('invalid email provided');
+<<<<<<< HEAD
                     return res.status(200).send('error: invalid email provided')
+=======
+                    return res.status(400).send('error: invalid email provided')
+>>>>>>> fk-dev
                 }
             }
         }
