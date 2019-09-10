@@ -63,7 +63,7 @@ module.exports = (passport) => {
             }).then((user, error) => { // check if user exists + user info in database
                 if (error) {
                     console.log(error);
-                    return done(null, error)
+                    return done(error, false)
                 } else if (!user) {
                     console.log('error: not registered');
                     return done(null, false, req.flash('errorMessage', 'No account found'))
@@ -108,7 +108,7 @@ module.exports = (passport) => {
                         return done(null, user, req.flash('successMessage', 'User logged in'))
                     } else if (error) {
                         console.log(error);
-                        return done(null, error);
+                        return done(error, false);
                     } else {
                         User.findOne({
                             email: profile._json.email
@@ -119,7 +119,7 @@ module.exports = (passport) => {
                                 }, {googleId: profile.id}).then((updated, error) => {
                                     if (error) {
                                         console.log(error);
-                                        return done(null, error);
+                                        return done(error, false);
                                     } else if (updated) {
                                         console.log('success: user info updated');
                                         return done(null, updated, req.flash('successMessage', 'User info updated'))
@@ -130,7 +130,7 @@ module.exports = (passport) => {
                                 })
                             } else if (error) {
                                 console.log(error);
-                                return done(null, error);
+                                return done(error, false);
                             } else {
                                 let validationToken = Math.random().toString(36).substr(2, 9);
                                 User.create({
@@ -184,8 +184,8 @@ module.exports = (passport) => {
                         console.log('success: user logged in');
                         return done(null, user, req.flash('successMessage', 'User logged in'))
                     } else if (error) {
-                        console.log(error);
-                        return done(null, error);
+                        // console.log(error);
+                        return done(error, false);
                     } else {
                         User.findOne({
                             email: profile._json.email
@@ -195,8 +195,8 @@ module.exports = (passport) => {
                                     email: profile._json.email
                                 }, {githubId: profile._json.id}).then((updated, error) => {
                                     if (error) {
-                                        console.log(error);
-                                        return done(null, error);
+                                        // console.log(error);
+                                        return done(error, false);
                                     } else if (updated) {
                                         console.log('success: user info updated');
                                         return done(null, updated, req.flash('successMessage', 'User info updated'))
@@ -206,8 +206,8 @@ module.exports = (passport) => {
                                     }
                                 })
                             } else if (error) {
-                                console.log(error);
-                                return done(null, error);
+                                // console.log(error);
+                                return done(error, false);
                             } else {
                                 let validationToken = Math.random().toString(36).substr(2, 9);
                                 User.create({
@@ -262,7 +262,7 @@ module.exports = (passport) => {
                         return done(null, user, req.flash('successMessage', 'User logged in'))
                     } else if (error) {
                         console.log(error);
-                        return done(null, error);
+                        return done(error, false);
                     } else {
                         User.findOne({
                             email: profile._json.email
@@ -273,7 +273,7 @@ module.exports = (passport) => {
                                 }, {fortyTwoId: profile._json.id}).then((updated, error) => {
                                     if (error) {
                                         console.log(error);
-                                        return done(null, error);
+                                        return done(error, false);
                                     } else if (updated) {
                                         console.log('success: user info updated');
                                         return done(null, updated, req.flash('successMessage', 'User info updated'))
@@ -284,7 +284,7 @@ module.exports = (passport) => {
                                 })
                             } else if (error) {
                                 console.log(error);
-                                return done(null, error);
+                                return done(error, false);
                             } else {
                                 let validationToken = Math.random().toString(36).substr(2, 9);
                                 User.create({
@@ -326,8 +326,8 @@ module.exports = (passport) => {
     }); // used to serialize the user for the session
 
     passport.deserializeUser((id, done) => {
-        User.findById(id, (error, user) => {
-            done(error, user);
+        User.findById(id, (user, error) => {
+            done(user, error);
         });
     }); // used to deserialize the user for the session
 };

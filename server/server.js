@@ -33,10 +33,6 @@ app.use(cors());
 app.use(urlencodedParser);
 app.use(bodyParser.json());
 
-// passport middleware
-app.use(passport.initialize());
-app.use(passport.session());
-
 // flash
 app.use(session({
     cookie: {maxAge: 60000},
@@ -44,6 +40,10 @@ app.use(session({
     resave: false,
     saveUninitialized: false
 }));
+
+// passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 // routes
 app.use(flash());

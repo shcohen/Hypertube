@@ -40,7 +40,7 @@ module.exports = {
         console.log(req.body);
         console.log(profilePic);
         if (!email || !username || !password || !confirm|| !firstname || !lastname || !profilePic) {
-            return res.status(400).send('error: invalid request')
+            return res.status(400).send('error: invalid request');
         } else {
             if (password !== confirm || !password && confirm || password && !confirm) {
                 console.log('password or password-confirmation is invalid');
