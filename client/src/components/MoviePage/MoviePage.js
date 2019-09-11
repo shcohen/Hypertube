@@ -28,7 +28,7 @@ class MoviePage extends Component {
           movie: res.data
         });
         const img = res.data.Poster;
-        if (img && img !== "") {
+        if (img && img !== '' && img !== 'N/A') {
           getAverageColor(img)
             .then((rgb) => {
               this.setState({
@@ -48,6 +48,7 @@ class MoviePage extends Component {
   render() {
     const {bigger, movie, rgb} = this.state;
     const t = this.props.text || {};
+    const runtime = movie.Runtime === 'N/A' ? movie.yts.runtime : movie.Runtime;
     if (movie === 'empty') {
       return (<Loading/>);
     }
@@ -75,7 +76,7 @@ class MoviePage extends Component {
             'video': bigger
           })}>
             <div className="movie__side">
-              <div className="side__poster" style={{backgroundImage: `url("${movie.Poster}")`}}/>
+              <div className="side__poster" style={{backgroundImage: movie.Poster !== 'N/A' && `url("${movie.Poster}")`}}/>
               <div className="side__title">
                 {movie.Title}
               </div>
@@ -104,14 +105,14 @@ class MoviePage extends Component {
               <div className={classnames('main__subtitle', {
                 'hidden': bigger
               })}>
-                {movie.Year} • {movie.Director} {movie.Runtime !== 'N/A' && `• ${Math.floor(parseInt(movie.Runtime) / 60)}h${parseInt(movie.Runtime) % 60 < 10 ? '0' : ''}${parseInt(movie.Runtime) % 60}`}
+                {movie.Year} • {movie.Director} {runtime && `• ${Math.floor(parseInt(runtime) / 60)}h${parseInt(runtime) % 60 < 10 ? '0' : ''}${parseInt(runtime) % 60}`}
               </div>
               <h1 className="main__label">{t._MAIN_LABEL}</h1>
               <div className="main__content">
                 <div className="main__group special">
                   <div>
                     <div className="main__g_name">{t._SYNOPSIS}</div>
-                    <div className="main__g_text">{movie.Plot}</div>
+                    <div className="main__g_text">{movie.Plot === 'N/A' ? movie.yts.description_full : movie.Plot}</div>
                   </div>
                 </div>
                 <div className="main__group">
@@ -127,7 +128,7 @@ class MoviePage extends Component {
                 <div className="main__group">
                   <div>
                     <div className="main__g_name">{t._RELEASE_DATE}</div>
-                    <div className="main__g_text">{movie.Released}</div>
+                    <div className="main__g_text">{movie.Released === 'N/A' ? movie.Year : movie.Released}</div>
                   </div>
                   <div>
                     <div className="main__g_name">{t._RATINGS}</div>

@@ -1,6 +1,6 @@
-import {GET_TRANSLATION, TRANSLATION_LOADING} from '../actions/constants';
+import {GET_TRANSLATION, TRANSLATION_LOADING, SET_LANGUAGE} from '../actions/constants';
 
-const translateReducer = (state = [], {type, payload}) => {
+const translateReducer = (state = {loading: false, lang: 'en'}, {type, payload}) => {
     switch (type) {
       case GET_TRANSLATION:
         return {
@@ -11,6 +11,11 @@ const translateReducer = (state = [], {type, payload}) => {
         return {
           ...state,
           loading: payload
+        };
+      case SET_LANGUAGE:
+        return {
+          ...state,
+          lang: payload
         };
       default:
         return state;

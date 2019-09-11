@@ -1,0 +1,30 @@
+/*LANGUAGE PICKER*/
+
+.dropdown__section.language {
+    padding: 0;
+}
+
+.lang-picker {
+    height: calc(100% - 6px - 1.9rem);;
+    overflow: auto;
+}
+
+.lang-picker label {
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    padding: 0.7rem;
+    border-radius: 0.2rem;
+}
+
+.lang-picker label:hover {
+    background-color: var(--color-borders);
+}
+
+.lang-picker input:checked + label {
+    color: var(--color-text-hover);
+    background-image: url("../../assets/img/input-valid.svg");
+    background-repeat: no-repeat;
+    background-position: calc(100% - 0.7rem);
+    background-size: 0.8rem;
+}

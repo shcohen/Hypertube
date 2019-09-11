@@ -29,7 +29,14 @@ require('./config/passport')(passport);
 let urlencodedParser = bodyParser.urlencoded({
     extended: true
 });
-app.use(cors());
+
+// CORS
+const corsMiddleware = cors({
+  allowedHeaders: 'Authorization',
+  origin: [process.env.URL, 'http://localhost:3000']
+});
+app.use(corsMiddleware);
+app.options('*', cors(corsMiddleware));
 app.use(urlencodedParser);
 app.use(bodyParser.json());
 

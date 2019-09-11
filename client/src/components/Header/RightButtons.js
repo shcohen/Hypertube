@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 
 import {logoutUser} from '../../store/actions/auth';
 import cookies from '../../utils/cookies';
+import LanguagePicker from './LanguagePicker';
 
 class RightButtons extends Component {
   state = {
@@ -77,7 +78,7 @@ class RightButtons extends Component {
 
   render() {
     const {opened1, opened2, theme} = this.state;
-    const {isAuthenticated, user} = this.props.user;
+    const {isAuthenticated} = this.props.user;
     const t = this.props.text || {};
 
       return (<React.Fragment>
@@ -124,6 +125,7 @@ class RightButtons extends Component {
             <div className="dropdown__title">
               <i className="fas fa-globe-europe"/> Language
             </div>
+            <LanguagePicker/>
           </div>
         </div>
         {isAuthenticated && <div className="logout">

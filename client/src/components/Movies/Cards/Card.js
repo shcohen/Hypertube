@@ -29,10 +29,10 @@ const Card = (props) => {
           <div className="movie__poster-info rating">{props.movie.rating}<span>/10</span></div>
         </div>
       </div>
+        <div className="movie__title">
+          {props.movie.title}
+        </div>
       </NavLink>
-      <div className="movie__title">
-        {props.movie.title}
-      </div>
     </div>
   );
 };
