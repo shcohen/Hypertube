@@ -53,12 +53,12 @@
 }
 
 .topbar:hover .sidebar {
-    height: 32rem;
+    height: 50rem;
     opacity: 1;
 }
 
 .sidebar:hover {
-    height: 20rem;
+    height: 50rem;
 }
 
 .sidebar:hover ~ .movies {
@@ -193,6 +193,12 @@ input#genres:not(:checked) ~ .sidebar__group-genres {
 
 .sidebar__group .noUiSlider {
     position: relative !important;
+}
+
+.sidebar__submit {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 /*MOVIE CARDS*/

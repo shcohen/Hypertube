@@ -300,7 +300,7 @@ class Movies extends Component {
                       </div>
                     </div>
                     <div>
-                      <input type="submit"/>
+                      <input className="sidebar__submit" type="submit" value={' ' + t._SEARCH_SUBMIT + ' '}/>
                     </div>
                   </div>
                 </div>

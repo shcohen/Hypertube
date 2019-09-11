@@ -82,7 +82,8 @@ module.exports = {
     _G_WAR: "War",
     _G_WESTERN: "Western",
     _FILTER_YEAR_TITLE: "Filter by release date :",
-    _FILTER_RATING_TITLE: "Filter by ratings :"
+    _FILTER_RATING_TITLE: "Filter by ratings :",
+    _SEARCH_SUBMIT: "Search for movies"
   },
   _MOVIE_PAGE: {
     _SIDE_LABEL: "Streaming :",
