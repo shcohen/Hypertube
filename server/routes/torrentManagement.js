@@ -1,11 +1,12 @@
 const crypto = require('crypto');
 const mime = require('mime');
-const fs = require('fs');
 const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfmpegPath('/Users/yadouble/.brew/Cellar/ffmpeg/4.1.4_1/bin/ffmpeg');
 const pump = require('pump');
 const torrentStream = require('torrent-stream');
-const {isMovieDownloaded} = require('../utils/moviesUtils');
+const watchedMovie = require('../models/watchedMovie');
+const {getUserInfos} = require('../utils/jwt_check');
+const {trackDownloadedMovies} = require('../utils/moviesUtils');
 
 module.exports = {
     streamVideoWithConversion: (res, file, directoryName, start, end) => {
@@ -66,7 +67,6 @@ module.exports = {
         }
     },
     torrentDownloader: (res, range, directoryName, magnet, movieId, options) => {
-        console.log(directoryName);
         let engine = torrentStream(magnet, options);
         let fileSize;
         engine.on('ready', () => {
@@ -107,15 +107,17 @@ module.exports = {
             let magnet = `magnet:?xt=urn:btih:${movieHash}&dn=${movieNameEncoded}&tr=http://track.one:1234/announce&tr=udp://track.two:80`;
             if ((new RegExp(/magnet:\?xt=urn:.+/)).test(magnet)) {
                 let directoryName = crypto.createHash('md5').update(magnet).digest('hex');
+                let path = `/tmp/torrentStream/${directoryName}`;
                 let options = {
                     connections: 100,
                     uploads: 10,
                     verify: true,
                     dht: true,
                     tracker: true,
-                    path: `/tmp/torrentStream/${directoryName}`
+                    path: path
                 };
-                module.exports.torrentDownloader(res, range, directoryName, magnet, movieId, options);
+                await trackDownloadedMovies(movieId, path);
+                // module.exports.torrentDownloader(res, range, directoryName, magnet, movieId, options);
             } else {
                 return res.status(400).send('Wrong magnet link !')
             }

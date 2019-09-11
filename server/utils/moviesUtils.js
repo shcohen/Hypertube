@@ -1,9 +1,10 @@
 const axios = require('axios');
 const fs = require('fs');
-// const rateLimit = require('axios-rate-limit');
+const rimraf = require('rimraf');
+const downloadedMovies = require('../models/downloadedMovies');
+const watchedMovie = require('../models/watchedMovie');
 const {translateSentence} = require('./languageUtils');
 const {RAPIDAPI_KEY} = require('../config/apiKey');
-// const limitedRequest = rateLimit(axios.create(), {maxRequests: 35, perMilliseconds: 10000});
 
 module.exports = {
     getMovieInfo: async (IMDBid, YTSid) => {
@@ -18,18 +19,37 @@ module.exports = {
             // res.data.Plot = await translateSentence(res.data.Plot);
             let yts = await axios.get(`https://yts.lt/api/v2/movie_details.json?movie_id=${YTSid}`);
             res.data.yts = yts ? yts.data.data.movie : {};
+            // res.data.yts.description_full =  await translateSentence(res.data.yts.description_full);
             return res.data.imdbID === res.data.yts.imdb_code ? res.data : null;
         })
     },
-    isMovieDownloaded: async (file, filePath) => {
-        try {
-            fs.accessSync(filePath);
-            let fileStat = fs.statSync(filePath);
-            console.log(fileStat.size, file.length);
-            return fileStat.size === file.length;
-        } catch (err) {
-            return false;
+    trackWatchedMovie: async (accId, movieId) => {
+        let date = new Date;
+        let movie = await watchedMovie.find({accId: accId, movieId: movieId});
+        if (movie && !movie.length) {
+            return watchedMovie.create({accId: accId, movieId: movieId, date: date.getTime()});
         }
+    },
+    trackDownloadedMovies: async (movieId, path) => {
+        let date = new Date;
+        let movies = await downloadedMovies.find({movieId: movieId});
+        if (movies && !movies.length) {
+            return downloadedMovies.create({movieId: movieId, path: path, date: date.getTime()});
+        } else {
+            return downloadedMovies.updateOne({date: date.getTime()});
+        }
+    },
+    downloadedMoviesExpirationCheck: async () => {
+        let movies = await downloadedMovies.find();
+        movies.map(movie => {
+            let movieDate = Math.floor(movie.date / 1000.0);
+            let date = Math.floor(new Date / 1000.0);
+            let month = 1000 * 60 * 60 * 24 * 30 / 1000;
+            if (date - movieDate >= month) {
+                rimraf.sync(movie.path);
+                downloadedMovies.find({movieId: movie.movieId}).remove();
+            }
+        })
     },
     filterByGenre: (movies, category) => {
         return movies.filter(movie => {
