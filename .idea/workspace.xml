@@ -3,7 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="6b197a23-2ca4-4817-8907-df7dad551220" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/apiRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/apiRouter.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/routes/userManagement.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/userManagement.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -12,27 +15,29 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
+        <entry file="file://$PROJECT_DIR$/server/apiRouter.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-226" />
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/package.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="21">
-              <caret line="1" column="12" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="12" />
+            <state relative-caret-position="-83">
+              <caret line="43" column="30" lean-forward="true" selection-start-line="43" selection-start-column="30" selection-end-line="43" selection-end-column="30" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/server/oAuth/strategies.js">
+        <entry file="file://$PROJECT_DIR$/server/routes/userManagement.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-630" />
+            <state relative-caret-position="147">
+              <caret line="88" column="81" selection-start-line="88" selection-start-column="81" selection-end-line="88" selection-end-column="81" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/utils/userUtils.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-1323" />
           </provider>
         </entry>
       </file>
@@ -57,7 +62,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/server/apiRouter.js" />
+        <option value="$PROJECT_DIR$/server/routes/userManagement.js" />
       </list>
     </option>
   </component>
@@ -79,6 +85,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -89,19 +96,12 @@
             <path>
               <item name="Hypertube" type="b2602c69:ProjectViewProjectNode" />
               <item name="Hypertube" type="462c0819:PsiDirectoryNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Hypertube" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Hypertube" type="462c0819:PsiDirectoryNode" />
-              <item name="server" type="462c0819:PsiDirectoryNode" />
-              <item name="oAuth" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -180,11 +180,13 @@
       <workItem from="1567695906256" duration="3029000" />
       <workItem from="1568032334332" duration="420000" />
       <workItem from="1568131332937" duration="628000" />
+      <workItem from="1568132127332" duration="1802000" />
+      <workItem from="1568136216686" duration="7000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1048000" />
+    <option name="totallyTimeSpent" value="1336000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1299" height="743" extended-state="6" />
@@ -245,21 +247,23 @@
     </option>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/.gitignore">
+    <entry file="file://$PROJECT_DIR$/server/apiRouter.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-226" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="1" column="12" selection-start-line="1" selection-start-column="12" selection-end-line="1" selection-end-column="12" />
+        <state relative-caret-position="-83">
+          <caret line="43" column="30" lean-forward="true" selection-start-line="43" selection-start-column="30" selection-end-line="43" selection-end-column="30" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/oAuth/strategies.js">
+    <entry file="file://$PROJECT_DIR$/server/utils/userUtils.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-630" />
+        <state relative-caret-position="-1323" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/routes/userManagement.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="88" column="81" selection-start-line="88" selection-start-column="81" selection-end-line="88" selection-end-column="81" />
+        </state>
       </provider>
     </entry>
   </component>
