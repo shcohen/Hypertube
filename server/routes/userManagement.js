@@ -72,7 +72,6 @@ module.exports = {
                                         return res.status(500).send('error: ', error)
                                     } else {
                                         if (module.exports.validateImage(profilePic) !== false) {
-                                            if (!checkData) {
                                                 console.log('done that');
                                                 passport.authenticate('local-signup', {
                                                     successRedirect: '/',
@@ -80,9 +79,6 @@ module.exports = {
                                                     session: false,
                                                     failureFlash: true
                                                 })(req, res, next);
-                                            } else {
-                                                return res.status(400).send('invalid data provided: ' + checkData)
-                                            }
                                         } else {
                                             console.log('error: invalid picture provided');
                                             checkData.pictureError = 'Invalid picture provided';
@@ -108,11 +104,12 @@ module.exports = {
         console.log('been there');
         let {username, password} = req.body;
         if (!username || !password) {
-            return res.status(200).send('error: invalid request')
+            console.log('error: invalid request');
+            return res.status(400).send('error: invalid request')
         } else {
             console.log('done that');
             passport.authenticate('local-signin', {
-                successRedirect: '/',
+                successRedirect: '/api/jwt',
                 failureRedirect: '/api/account/login',
                 failureFlash: true
             })(req, res, next);

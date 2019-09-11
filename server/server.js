@@ -47,9 +47,6 @@ app.use(passport.session());
 
 // routes
 app.use(flash());
-app.use('/home', (req, res) => {
-  res.redirect('http://localhost:3000/#HYPER');
-});
 app.use('/api/', apiRouter);
 
 // start

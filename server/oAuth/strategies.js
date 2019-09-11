@@ -10,8 +10,8 @@ module.exports = {
     googleRedirect: (req, res, next) => { // load data
         console.log('been there');
         passport.authenticate('google', {
-            successRedirect: 'http://localhost:5000/api/jwt',
-            failureRedirect: 'http://localhost:5000/api/account/google',
+            successRedirect: '/api/jwt',
+            failureRedirect: '/api/account/google',
             failureFlash: true
         })(req, res, next)
     },
@@ -23,8 +23,8 @@ module.exports = {
     githubRedirect: (req, res, next) => { // load data
         console.log('been there');
         passport.authenticate('github', {
-            successRedirect: 'http://localhost:5000/api/jwt',
-            failureRedirect: 'http://localhost:5000/api/account/github',
+            successRedirect: '/api/jwt',
+            failureRedirect: '/api/account/github',
             failureFlash: true
         })(req, res, next);
     },
@@ -34,8 +34,8 @@ module.exports = {
     fortyTwoRedirect: (req, res, next) => { // load data
         console.log('been there');
         passport.authenticate('42', {
-            successRedirect: 'http://localhost:5000/api/jwt',
-            failureRedirect: 'http://localhost:5000/api/account/42',
+            successRedirect: '/api/jwt',
+            failureRedirect: '/api/account/42',
             failureFlash: true
         })(req, res, next)
     },

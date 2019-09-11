@@ -27,10 +27,10 @@ module.exports = {
     },
     checkEmail: async (email) => {
         let emailCheck = await User.findOne({email: email});
-        if (emailCheck.user) {
+        if (emailCheck && emailCheck.email) {
             console.log('email already taken');
             return {errorCode: -1, errorMessage: 'email already taken'}
-        } else if (emailCheck.error) {
+        } else if (emailCheck && emailCheck.error) {
             console.log(emailCheck.error);
             return {errorCode: -1, errorMessage: 'error: ' + emailCheck.error}
         } else {
@@ -45,10 +45,10 @@ module.exports = {
     },
     checkUsername: async (username) => {
         let usernameCheck = await User.findOne({username: username});
-        if (usernameCheck.user) {
+        if (usernameCheck && usernameCheck.username) {
             console.log('username already taken');
             return {errorCode: -1, errorMessage: 'username already taken'}
-        } else if (usernameCheck.error) {
+        } else if (usernameCheck && usernameCheck.error) {
             console.log(usernameCheck.error);
             return {errorCode: -1, errorMessage: 'error: ' + usernameCheck.error}
         } else {
