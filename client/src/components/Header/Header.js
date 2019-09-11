@@ -10,8 +10,7 @@ import './header.css';
 class Header extends Component {
   state = {
     hidden: false,
-    old: 0,
-    loggedIn: true
+    old: 0
   };
 
   componentDidMount() {
@@ -28,11 +27,8 @@ class Header extends Component {
   }
 
   getLinks = (t) => {
-    if (this.state.loggedIn) {
+    if (this.props.user.isAuthenticated) {
       return (<React.Fragment>
-        <NavLink to="/" exact>
-          {t._HOME}
-        </NavLink>
         <NavLink to="/movies">
           {t._ALL_MOVIES}
         </NavLink>
@@ -42,7 +38,9 @@ class Header extends Component {
       </React.Fragment>)
     } else {
       return (<React.Fragment>
-
+        {/*<NavLink to="/" exact>*/}
+        {/*  {t._HOME}*/}
+        {/*</NavLink>*/}
       </React.Fragment>)
     }
   };
@@ -73,7 +71,8 @@ class Header extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  text: state.translate._HEADER
+  text: state.translate._HEADER,
+  user: state.user
 });
 
 export default connect(mapStateToProps)(Header);

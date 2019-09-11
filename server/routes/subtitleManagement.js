@@ -1,20 +1,18 @@
 const fs = require('fs');
-const path = require('path');
 const OS = require('opensubtitles-api');
 const axios = require('axios');
 const OpenSubtitles = new OS({useragent: 'TemporaryUserAgent', ssl: true});
 const srt2vtt = require('srt-to-vtt');
-const rootDirectory = path.dirname(require.main.filename);
 const {getLanguageName} = require('../utils/subtitleUtils');
 
 module.exports = {
   subtitleManager: async (req, res) => {
     let {IMDBid} = req.query;
-    if (!fs.existsSync(`${rootDirectory}/client/public/Subtitles`)) {
-      fs.mkdirSync(`${rootDirectory}/client/public/Subtitles`);
+    if (!fs.existsSync(`${HOME_DIR}/client/public/subtitles`)) {
+      fs.mkdirSync(`${HOME_DIR}/client/public/subtitles`);
     }
-    if (!fs.existsSync(`${rootDirectory}/client/public/Subtitles/${IMDBid}`)) {
-      fs.mkdirSync(`${rootDirectory}/client/public/Subtitles/${IMDBid}`);
+    if (!fs.existsSync(`${HOME_DIR}/client/public/subtitles/${IMDBid}`)) {
+      fs.mkdirSync(`${HOME_DIR}/client/public/subtitles/${IMDBid}`);
     }
     OpenSubtitles.search({
       imdbid: IMDBid
@@ -27,17 +25,17 @@ module.exports = {
               return Promise.resolve('no');
             }
             let srtData = await axios.get(data[key].url);
-            fs.writeFileSync(`${rootDirectory}/client/public/Subtitles/${IMDBid}/${IMDBid}.${key}.srt`, srtData.data);
-            fs.createReadStream(`${rootDirectory}/client/public/Subtitles/${IMDBid}/${IMDBid}.${key}.srt`)
+            fs.writeFileSync(`${HOME_DIR}/client/public/subtitles/${IMDBid}/${IMDBid}.${key}.srt`, srtData.data);
+            fs.createReadStream(`${HOME_DIR}/client/public/subtitles/${IMDBid}/${IMDBid}.${key}.srt`)
               .pipe(srt2vtt())
-              .pipe(fs.createWriteStream(`${rootDirectory}/client/public/Subtitles/${IMDBid}/${IMDBid}.${key}.vtt`))
+              .pipe(fs.createWriteStream(`${HOME_DIR}/client/public/subtitles/${IMDBid}/${IMDBid}.${key}.vtt`))
               .on('close', () => {
-                fs.unlinkSync(`${rootDirectory}/client/public/Subtitles/${IMDBid}/${IMDBid}.${key}.srt`);
+                fs.unlinkSync(`${HOME_DIR}/client/public/subtitles/${IMDBid}/${IMDBid}.${key}.srt`);
               });
             subArr = [...subArr, {
               label: getLanguageName(key),
               code: key,
-              file: `/Subtitles/${IMDBid}/${IMDBid}.${key}.vtt`
+              file: `/subtitles/${IMDBid}/${IMDBid}.${key}.vtt`
             }];
             return Promise.resolve('ok');
           })();

@@ -318,12 +318,13 @@ html[data-theme="dark"] header .right .settings button {
     background-image: url("../../assets/img/settings-dm.svg");
 }
 
-header .right .account button {
-    background-image: url("../../assets/img/account.svg");
+header .right .language button {
+    background-image: url("../../assets/img/language.svg");
+    background-size: 1.1rem;
 }
 
-html[data-theme="dark"] header .right .account button {
-    background-image: url("../../assets/img/account-dm.svg");
+html[data-theme="dark"] header .right .language button {
+    background-image: url("../../assets/img/language-dm.svg");
 }
 
 header .right .logout button {
