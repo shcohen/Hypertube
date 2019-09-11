@@ -91,9 +91,9 @@ class Forms extends Component {
         <div className="hf__content">
           <h4>{t._SOCIALS_SUBTITLE}</h4>
           <div className="hf__socials">
-            <a href="http://localhost:5000/api/account/google" className="custom google"/>
-            <a href="http://localhost:5000/api/account/42" className="custom api42"/>
-            <a href="http://localhost:5000/api/account/github" className="custom github"/>
+            <a href="http://localhost:5000/api/account/google" className="custom google"> </a>
+            <a href="http://localhost:5000/api/account/42" className="custom api42"> </a>
+            <a href="http://localhost:5000/api/account/github" className="custom github"> </a>
           </div>
         </div>
       </div>

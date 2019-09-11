@@ -8,8 +8,13 @@ const session = require('express-session');
 const config = require('./config/private/config');
 const cors = require('cors');
 const CronJob = require('cron').CronJob;
+const {downloadedMoviesExpirationCheck} = require('./utils/moviesUtils');
 
 global.HOME_DIR = __dirname.replace('/server', '');
+
+new CronJob('0 0 * * * *', () => {
+    downloadedMoviesExpirationCheck();
+}, null, true, 'Europe/Paris');
 
 // connecting to database
 mongoose.connect('mongodb+srv://root:root@hypertube-yfmfl.mongodb.net/Hypertube?retryWrites=true&w=majority', {useNewUrlParser: true})
@@ -29,7 +34,14 @@ require('./config/passport')(passport);
 let urlencodedParser = bodyParser.urlencoded({
     extended: true
 });
-app.use(cors());
+
+// CORS
+const corsMiddleware = cors({
+  allowedHeaders: 'Authorization',
+  origin: [process.env.URL, 'http://localhost:3000']
+});
+app.use(corsMiddleware);
+app.options('*', cors(corsMiddleware));
 app.use(urlencodedParser);
 app.use(bodyParser.json());
 
