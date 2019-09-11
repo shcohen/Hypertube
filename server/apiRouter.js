@@ -36,6 +36,9 @@ exports.router = (() => {
     apiRouter.route('/account/register').post(upload.single('profilePic'), userManagement.register);
     apiRouter.route('/account/validate').post(userManagement.validateAccount);
     apiRouter.route('/account/login').post(userManagement.authenticate);
+    // apiRouter.route('/account/login').get(function (req, res) {
+    //     res.render('login', {message: req.flash('errorMessage')})
+    // });
     apiRouter.route('/account/modify').post(upload.single('profilePic'), userManagement.modify);
     apiRouter.route('/account/forgot_password').post(userManagement.sendForgotPassword);
     apiRouter.route('/account/reset_password').post(userManagement.resetPassword);
