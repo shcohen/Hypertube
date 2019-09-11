@@ -1,5 +1,3 @@
-import jwt_decode from 'jwt-decode';
-
 import cookies from '../../utils/cookies';
 import setAuthToken from '../../utils/setAuthToken';
 

@@ -42,7 +42,13 @@ module.exports = {
     jwt: (req, res, next) => {
         if (req && req.user) {
             const payload = {
-                acc_id: req.user.acc_id
+                acc_id: req.user.acc_id,
+                email: req.user.email,
+                firstname: req.user.firstname,
+                lastname: req.user.lastname,
+                lang: req.user.lang,
+                profilePic: req.user.profilePic,
+
             };
             jwt.sign(payload, 'hypertube', {expiresIn: "1d"}, (err, token) => {
                 console.log(token);

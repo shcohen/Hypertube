@@ -10,6 +10,7 @@ import Error from './components/Error/Error';
 import Movies from './components/Movies/Movies';
 import MoviePage from './components/MoviePage/MoviePage';
 import WatchMovie from './components/WatchMovie/WatchMovie';
+import ProtectedRoute from './components/Utilities/ProtectedRoute/ProtectedRoute';
 
 import setAuthToken from './utils/setAuthToken';
 import cookies from './utils/cookies';
@@ -38,10 +39,10 @@ class App extends Component {
         <BrowserRouter>
           <Root>
             <Switch>
-              <Route path={'/'} exact component={Home}/>
-              <Route path={'/movies'} exact component={Movies}/>
-              <Route path={'/movie/:IMDBid/:YTSid'} exact component={MoviePage}/>
-              <Route path={'/watch/:id/:title/:hash'} exact component={WatchMovie}/>
+              <ProtectedRoute path={'/'} exact component={Home} needsLoggedIn={false} redirectTo={'/movies'}/>
+              <ProtectedRoute path={'/movies'} exact component={Movies} needsLoggedIn={true} redirectTo={'/'}/>
+              <ProtectedRoute path={'/movie/:IMDBid/:YTSid'} exact component={MoviePage} needsLoggedIn={true} redirectTo={'/'}/>
+              <ProtectedRoute path={'/watch/:id/:title/:hash'} exact component={WatchMovie} needsLoggedIn={true} redirectTo={'/'}/>
               <Route component={Error}/>
             </Switch>
           </Root>
