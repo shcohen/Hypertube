@@ -2,10 +2,9 @@ const axios = require('axios');
 const fs = require('fs');
 const rimraf = require('rimraf');
 const downloadedMovies = require('../models/downloadedMovies');
-// const rateLimit = require('axios-rate-limit');
+const watchedMovie = require('../models/watchedMovie');
 const {translateSentence} = require('./languageUtils');
 const {RAPIDAPI_KEY} = require('../config/apiKey');
-// const limitedRequest = rateLimit(axios.create(), {maxRequests: 35, perMilliseconds: 10000});
 
 module.exports = {
     getMovieInfo: async (IMDBid, YTSid) => {
@@ -22,6 +21,13 @@ module.exports = {
             res.data.yts = yts ? yts.data.data.movie : {};
             return res.data.imdbID === res.data.yts.imdb_code ? res.data : null;
         })
+    },
+    trackWatchedMovie: async (accId, movieId) => {
+        let date = new Date;
+        let movie = await watchedMovie.find({accId: accId, movieId: movieId});
+        if (movie && !movie.length) {
+            return watchedMovie.create({accId: accId, movieId: movieId, date: date.getTime()});
+        }
     },
     trackDownloadedMovies: async (movieId, path) => {
         let date = new Date;
