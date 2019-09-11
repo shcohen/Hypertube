@@ -51,10 +51,6 @@ module.exports = {
 
             };
             jwt.sign(payload, 'hypertube', {expiresIn: "1d"}, (err, token) => {
-                console.log(token);
-                console.log(err);
-                console.log(req.user);
-                console.log(typeof req.user);
                 res.cookie('jwtToken', token, {
                     maxAge: 1000 * 60 * 60 * 24
                 });

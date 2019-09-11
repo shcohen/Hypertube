@@ -153,7 +153,6 @@ module.exports = {
             let acc_id = connectedUser.acc_id;
             let { post_id } = req.body;
             if (!post_id || !acc_id) {
-                console.log(req.body);
                 return res.status(400).send('error: invalid request')
             } else {
                 User.findOne({

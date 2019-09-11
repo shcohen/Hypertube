@@ -1,10 +1,11 @@
 import React, {useState} from 'react';
+import axios from 'axios';
 
 const Login = (props) => {
   let [formData, setFormData] = useState({
-    login: '',
+    username: '',
     password: '',
-    loginError: '',
+    usernameError: '',
     passwordError: 'Identifiants incorrects.'
   });
 
@@ -14,6 +15,13 @@ const Login = (props) => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
+    axios.post('/api/account/login', formData)
+      .then(res => {
+
+      })
+      .catch(err => {
+
+      });
   };
 
   const t = props.text || {};
@@ -22,15 +30,15 @@ const Login = (props) => {
     <form onSubmit={onFormSubmit}>
       <h4>{t._LOGIN_SUBTITLE}</h4>
       <label>{t._EMAIL_OR_USERNAME}</label><br/>
-      <input name="login"
+      <input name="username"
              type="text"
              placeholder={t._EMAIL_OR_USERNAME_PLACEHOLDER}
              minLength="1"
              maxLength="64"
              required
              onChange={onInputChange}
-             value={formData.login}/><br/>
-      {formData.loginError !== '' && <p><i className="fas fa-times"/> {formData.loginError}</p>}
+             value={formData.username}/><br/>
+      {formData.usernameError !== '' && <p><i className="fas fa-times"/> {formData.usernameError}</p>}
       <label>{t._PASSWORD} <span onClick={props.goToForgotPwd}>({t._FORGOTTEN} ?)</span></label><br/>
       <input name="password"
              type="password"

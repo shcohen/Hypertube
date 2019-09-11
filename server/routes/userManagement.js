@@ -7,6 +7,7 @@ const fs = require('fs');
 const xss = require('xss');
 const validator = require('email-validator');
 const passwordValidator = require('password-validator');
+const {getUserInfos} = require('../utils/jwt_check');
 const schema = new passwordValidator(); // creates a validation schema
 schema // adds properties to it
     .is().min(8)                                    // minimum length 8

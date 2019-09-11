@@ -15,6 +15,7 @@ import ProtectedRoute from './components/Utilities/ProtectedRoute/ProtectedRoute
 import setAuthToken from './utils/setAuthToken';
 import cookies from './utils/cookies';
 import {setCurrentUser, logoutUser} from './store/actions/auth';
+import {setLanguageNoDispatch} from './store/actions/translate';
 
 import './css/normalize.css';
 import './css/darkmode.css';
@@ -27,6 +28,9 @@ if (jwtToken && jwtToken !== 'undefined') {
   setAuthToken(jwtToken);
   const decoded = jwt_decode(jwtToken);
   store.dispatch(setCurrentUser(decoded));
+  if (decoded) {
+    store.dispatch(setLanguageNoDispatch(decoded.lang));
+  }
 } else {
   store.dispatch(logoutUser());
   // window.location.href = '/';

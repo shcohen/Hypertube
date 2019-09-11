@@ -41,7 +41,6 @@ class LanguagePicker extends Component {
 
   onLangChange = (e) => {
     this.props.setLanguage(e.target.value);
-    this.props.getTranslation();
   };
 
   render() {
@@ -49,7 +48,7 @@ class LanguagePicker extends Component {
       <form className="lang-picker">
         {this.languages.map((l, i) => (
           <div className="dropdown__section language" key={i}>
-            <input hidden type="radio" id={l[0]} name="language" value={l[0]} onChange={this.onLangChange}/>
+            <input hidden type="radio" id={l[0]} name="language" value={l[0]} onChange={this.onLangChange} checked={l[0] === this.props.oldLang}/>
             <label htmlFor={l[0]}>{l[1]}</label>
           </div>
         ))}

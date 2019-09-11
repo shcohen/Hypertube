@@ -10,7 +10,6 @@ const {trackDownloadedMovies} = require('../utils/moviesUtils');
 
 module.exports = {
     streamVideoWithConversion: (res, file, directoryName, start, end) => {
-        console.log(directoryName);
         console.log('Streaming with conversion');
         let stream = file.createReadStream({start, end});
         let video = ffmpeg(stream)

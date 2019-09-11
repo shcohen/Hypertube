@@ -7,34 +7,37 @@ import english from '../../utils/english';
 
 export const getTranslation = () => async dispatch => {
   const state = store.getState();
-  const {lang} = state.translate || 'en';
+  // const {lang} = state.translate || 'en';
+  const lang = 'en';
   dispatch({
     type: TRANSLATION_LOADING,
     payload: true
   });
+  dispatch({
+    type: GET_TRANSLATION,
+    payload: english
+  });
   if (lang === 'en') {
-    dispatch({
-      type: GET_TRANSLATION,
-      payload: english
-    });
     dispatch({
       type: TRANSLATION_LOADING,
       payload: false
     });
     return;
   }
-  const storeToken = axios.defaults.headers.common['Authorization'];
-  delete axios.defaults.headers.common['Authorization'];
   const tab = Object.entries(english);
   let res = {};
   await Promise.all(tab.map(async ([page, textObj]) => {
     let textArr = Object.entries(textObj);
     let tmp = {};
     await Promise.all(textArr.map(async ([textName, textContent]) => {
-      let response = await axios.get('https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190827T162414Z.8f955b0b6efe7dc0.af0b47eb7ccf2bdb8e1b3f93191aa497966ad560'
-        + `&text=${'|' + textContent + '|'}&lang=en-${lang}`);
-      let textTranslated = response.data.text[0];
-      tmp = {...tmp, [textName]: textTranslated.replace(/[|]/gm, '')};
+      await fetch('https://translate.yandex.net/api/v1.5/tr.json/translate?key=trnsl.1.1.20190827T162414Z.8f955b0b6efe7dc0.af0b47eb7ccf2bdb8e1b3f93191aa497966ad560'
+        + `&text=${'|' + textContent + '|'}&lang=en-${lang}`)
+        .then(res => res.json())
+        .then(data => {
+          let textTranslated = data.text[0];
+          tmp = {...tmp, [textName]: textTranslated.replace(/[|]/gm, '')};
+        })
+        .catch(err => {});
     }));
     res = {...res, [page]: tmp}
   }));
@@ -42,7 +45,6 @@ export const getTranslation = () => async dispatch => {
     type: GET_TRANSLATION,
     payload: res
   });
-  axios.defaults.headers.common['Authorization'] = storeToken;
   dispatch({
     type: TRANSLATION_LOADING,
     payload: false
@@ -54,4 +56,18 @@ export const setLanguage = (lang) => dispatch => {
     type: SET_LANGUAGE,
     payload: lang
   });
+  dispatch(getTranslation());
+  const {user} = store.getState();
+  if (user && user.isAuthenticated) {
+    axios.post('/api/account/language', {lang: lang})
+      .then(res => {})
+      .catch(err => {});
+  }
+};
+
+export const setLanguageNoDispatch = (lang) => {
+  return {
+    type: SET_LANGUAGE,
+    payload: lang
+  };
 };
