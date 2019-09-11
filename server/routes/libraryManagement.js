@@ -7,11 +7,11 @@ const {TMDB_API_KEY_V3} = require('../config/apiKey');
 
 module.exports = {
     libraryManager: async (req, res) => {
-        const connectedUser = getUserInfos(req.headers.authorization);
+        const connectedUser = await getUserInfos(req.headers.authorization);
         let {search, quantity, genres, ratingMin, ratingMax, yearMin, yearMax, sort} = req.body;
         let movies = [];
 
-        if (connectedUser && connectedUser.length) {
+        if (connectedUser && connectedUser.acc_id.length) {
             if (search && search.length && quantity) {
                 movies = await module.exports.findMovies(accentRemover(search));
             } else {
@@ -34,7 +34,7 @@ module.exports = {
         const connectedUser = getUserInfos(req.headers.authorization);
         let {IMDBid, YTSid} = req.query;
 
-        if (connectedUser && connectedUser.length) {
+        if (connectedUser && connectedUser.acc_id.length) {
             if (IMDBid !== undefined && IMDBid.length && YTSid !== undefined && YTSid.length) {
                 let data = await getMovieInfo(IMDBid, YTSid);
                 return data ? res.status(200).send(data) : res.status(400).send('IMDB id doesn\'t match');

@@ -5,12 +5,14 @@ const OpenSubtitles = new OS({useragent: 'TemporaryUserAgent', ssl: true});
 const srt2vtt = require('srt-to-vtt');
 const {getUserInfos} = require('../utils/jwt_check');
 const {getLanguageName} = require('../utils/subtitleUtils');
+const {trackWatchedMovie} = require('../utils/moviesUtils');
 
 module.exports = {
     subtitleManager: async (req, res) => {
         const connectedUser = getUserInfos(req.headers.authorization);
         let {IMDBid} = req.query;
-        if (connectedUser && connectedUser.length) {
+        if (connectedUser && connectedUser.acc_id.length) {
+            await trackWatchedMovie(connectedUser.acc_id, IMDBid);
             if (!fs.existsSync(`${HOME_DIR}/client/public/subtitles`)) {
                 fs.mkdirSync(`${HOME_DIR}/client/public/subtitles`);
             }

@@ -6,7 +6,7 @@ const pump = require('pump');
 const torrentStream = require('torrent-stream');
 const watchedMovie = require('../models/watchedMovie');
 const {getUserInfos} = require('../utils/jwt_check');
-const {trackDownloadedMovies, trackWatchedMovie} = require('../utils/moviesUtils');
+const {trackDownloadedMovies} = require('../utils/moviesUtils');
 
 module.exports = {
     streamVideoWithConversion: (res, file, directoryName, start, end) => {
@@ -100,35 +100,29 @@ module.exports = {
     },
     torrentManager: async (req, res) => {
         let {movieId, movieNameEncoded, movieHash} = req.query;
-        const connectedUser = getUserInfos(req.headers.authorization);
         let {range} = req.headers;
 
-        if (connectedUser && connectedUser.length) {
-            if (movieId && movieId.length && movieNameEncoded !== undefined && movieNameEncoded.length && movieHash
-                && movieHash.length || range === undefined) {
-                let magnet = `magnet:?xt=urn:btih:${movieHash}&dn=${movieNameEncoded}&tr=http://track.one:1234/announce&tr=udp://track.two:80`;
-                if ((new RegExp(/magnet:\?xt=urn:.+/)).test(magnet)) {
-                    let directoryName = crypto.createHash('md5').update(magnet).digest('hex');
-                    let path = `/tmp/torrentStream/${directoryName}`;
-                    let options = {
-                        connections: 100,
-                        uploads: 10,
-                        verify: true,
-                        dht: true,
-                        tracker: true,
-                        path: path
-                    };
-                    await trackDownloadedMovies(movieId, path);
-                    await trackDownloadedMovies(connectedUser.acc_id, movieId);
-                    // module.exports.torrentDownloader(res, range, directoryName, magnet, movieId, options);
-                } else {
-                    return res.status(400).send('Wrong magnet link !')
-                }
+        if (movieId && movieId.length && movieNameEncoded !== undefined && movieNameEncoded.length && movieHash
+            && movieHash.length || range === undefined) {
+            let magnet = `magnet:?xt=urn:btih:${movieHash}&dn=${movieNameEncoded}&tr=http://track.one:1234/announce&tr=udp://track.two:80`;
+            if ((new RegExp(/magnet:\?xt=urn:.+/)).test(magnet)) {
+                let directoryName = crypto.createHash('md5').update(magnet).digest('hex');
+                let path = `/tmp/torrentStream/${directoryName}`;
+                let options = {
+                    connections: 100,
+                    uploads: 10,
+                    verify: true,
+                    dht: true,
+                    tracker: true,
+                    path: path
+                };
+                await trackDownloadedMovies(movieId, path);
+                // module.exports.torrentDownloader(res, range, directoryName, magnet, movieId, options);
             } else {
-                return res.status(400).send('Wrong data sent');
+                return res.status(400).send('Wrong magnet link !')
             }
         } else {
-            return res.status(403).send('Unauthorized');
+            return res.status(400).send('Wrong data sent');
         }
     }
 };
