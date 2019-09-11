@@ -8,12 +8,10 @@ const subtitleManagement = require('./routes/subtitleManagement');
 const strategies = require('./oAuth/strategies');
 const multer = require('multer');
 const uuid = require('uuid');
-let axios = require('axios');
 
 // set picture storage
 let storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        console.log(file);
         if (!fs.existsSync(`${HOME_DIR}/client/public/uploads`)) {
             fs.mkdirSync(`${HOME_DIR}/client/public/uploads`);
         }
@@ -25,12 +23,8 @@ let storage = multer.diskStorage({
 });
 const upload = multer({
     storage: storage, fileFilter: function (req, file, cb) {
-        console.log('hello');
         if (file.mimetype !== 'image/jpeg' && file.mimetype !== 'image/jpg' && file.mimetype !== 'image/png') {
             return cb(null, false)
-        // } if (getFileSize(file) <= 0 || getFileSize(file) >= 200000) {
-        //     console.log('bug');
-        //     return cb(null, false)
         } else
             return cb(null, true)
     }
@@ -45,6 +39,7 @@ exports.router = (() => {
     apiRouter.route('/account/modify').post(upload.single('profilePic'), userManagement.modify);
     apiRouter.route('/account/forgot_password').post(userManagement.sendForgotPassword);
     apiRouter.route('/account/reset_password').post(userManagement.resetPassword);
+    apiRouter.route('/account/language').post(userManagement.changeLang);
 
     /* STRATEGIES */
     apiRouter.route('/account/google/').get(strategies.google);
@@ -60,7 +55,7 @@ exports.router = (() => {
     apiRouter.route('/search/:id/modify').get(postManagement.modifyComment);
     apiRouter.route('/search/:id/delete').get(postManagement.deleteComment);
     apiRouter.route('/search/:id/favorites').get(postManagement.addMovieToFav);
-    apiRouter.route('/favorites').get(postManagement.displayFavMovies);
+    apiRouter.route('/library/favorites').get(postManagement.displayFavMovies);
 
     /* MOVIE LIBRARY */
     apiRouter.route('/library/find_movie').post(libraryManagement.libraryManager);
