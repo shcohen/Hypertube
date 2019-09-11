@@ -19,6 +19,7 @@ module.exports = {
             // res.data.Plot = await translateSentence(res.data.Plot);
             let yts = await axios.get(`https://yts.lt/api/v2/movie_details.json?movie_id=${YTSid}`);
             res.data.yts = yts ? yts.data.data.movie : {};
+            // res.data.yts.description_full =  await translateSentence(res.data.yts.description_full);
             return res.data.imdbID === res.data.yts.imdb_code ? res.data : null;
         })
     },
