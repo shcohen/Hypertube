@@ -110,10 +110,9 @@ module.exports = {
     registerFailure: (req, res) => {
         return res.status(409);
     },
-    registerSuccess:
-        (req, res) => {
-            return res.status(200);
-        },
+    registerSuccess: (req, res) => {
+        return res.status(200);
+    },
     authenticate:
         (req, res, next) => {
             console.log('been there');
@@ -124,12 +123,16 @@ module.exports = {
             } else {
                 console.log('done that');
                 passport.authenticate('local-signin', {
-                    successRedirect: '/api/test123',
-                    failureRedirect: '/api/account/login',
+                    successRedirect: '/api/jwt',
+                    failureRedirect: '/api/account/loginFailure',
                     failureFlash: true
                 })(req, res, next);
             }
         },
+    loginFailure: (req, res) => {
+        let loginError = req.flash('errorMessage');
+        return res.status(400).send(loginError);
+    },
     modify:
         async (req, res) => {
             const connectedUser = getUserInfos(req.headers.authorization);
