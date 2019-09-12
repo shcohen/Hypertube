@@ -3,6 +3,8 @@ import axios from 'axios';
 import classnames from 'classnames';
 import {connect} from 'react-redux';
 
+import MovieItem from './MovieItem';
+
 import './profile.css';
 
 class Profile extends Component {
@@ -21,10 +23,14 @@ class Profile extends Component {
       .then(res => {
         this.setState({...res.data});
       });
+    axios.get(`/api/profile/watched?acc_id=${this.props.userId}`)
+      .then(res => {
+        this.setState({movies: res.data});
+      });
   }
 
   render() {
-    const {step, ...p} = this.state;
+    const {step, movies, ...p} = this.state;
     const t = this.props.text || {};
     return (
       <div className="profile">
@@ -53,7 +59,9 @@ class Profile extends Component {
               <div className="profile__info_content">{p.lastname}</div>
             </div>}
             {step === 1 && <div>
-
+              {movies.map((m, i) => (
+                <MovieItem key={i} movieId={m.movieId}/>
+              ))}
             </div>}
           </div>
         </div>

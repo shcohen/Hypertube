@@ -57,7 +57,6 @@ exports.router = (() => {
     apiRouter.route('/comments/submit').post(postManagement.createComment);
     apiRouter.route('/comments/modify').post(postManagement.modifyComment);
     apiRouter.route('/comments/delete').post(postManagement.deleteComment);
-    apiRouter.route('/library/watched').get(postManagement.getWatchedMovies);
 
     /* MOVIE LIBRARY */
     apiRouter.route('/library/find_movie').post(libraryManagement.libraryManager);
@@ -71,6 +70,7 @@ exports.router = (() => {
 
     // USER
     apiRouter.route('/profile').get(userManagement.getProfile);
+    apiRouter.route('/profile/watched').get(postManagement.getWatchedMovies);
 
     return apiRouter;
 })();

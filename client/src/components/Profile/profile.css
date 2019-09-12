@@ -19,10 +19,10 @@
 .profile__window {
     display: none;
     position: absolute;
-    top: 35%;
-    left: 65%;
+    top: 25%;
+    left: 75%;
     transform: translateY(calc(-100%));
-    border-radius: 1rem;
+    border-radius: 1rem 1rem 1rem 0;
     width: 15rem;
     height: 20rem;
     background-color: var(--bg-contrast);

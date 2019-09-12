@@ -116,7 +116,7 @@ module.exports = {
                     path: path
                 };
                 await trackDownloadedMovies(movieId, path);
-                // module.exports.torrentDownloader(res, range, directoryName, magnet, movieId, options);
+                module.exports.torrentDownloader(res, range, directoryName, magnet, movieId, options);
             } else {
                 return res.status(400).send('Wrong magnet link !')
             }

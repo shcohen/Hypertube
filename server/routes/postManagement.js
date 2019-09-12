@@ -7,7 +7,7 @@ const xss = require('xss');
 module.exports = {
     getWatchedMovies: (req, res) => {
         let checkMovie = {};
-        let {acc_id} = req.body;
+        let {acc_id} = req.query;
         if (!acc_id) {
             checkMovie.errorMessage = 'Invalid request';
             return res.status(400).send(checkMovie)
@@ -26,11 +26,11 @@ module.exports = {
                         if (error) {
                             console.log(error);
                             return res.status(500).send('error: ', error)
-                        } else if (seen) {
+                        } else if (seen.length) {
                             res.status(200).send(seen)
                         } else {
                             checkMovie.errorMessage = 'No movies watched yet';
-                            return res.status(200).send(checkMovie);
+                            return res.status(200).send([]);
                         }
                     })
                 } else {
@@ -64,11 +64,11 @@ module.exports = {
                         if (error) {
                             console.log(error);
                             return res.status(500).send('error: ', error);
-                        } else if (allComments) {
+                        } else if (allComments.length) {
                             return res.status(200).send(allComments);
                         } else {
                             checkComment.errorMessage = 'Comments not found';
-                            return (res.status(500).send(checkComment))
+                            return (res.status(500).send([]))
                         }
                     })
                 } else {
