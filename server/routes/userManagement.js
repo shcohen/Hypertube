@@ -133,8 +133,8 @@ module.exports = {
         let loginError = req.flash('errorMessage');
         return res.status(400).send(loginError);
     },
-    modify:
-        async (req, res) => {
+    modify: async (req, res) => {
+            let modifyData = {};
             const connectedUser = getUserInfos(req.headers.authorization);
             if (!connectedUser) {
                 res.status(401).send('Unauthorized')
@@ -235,8 +235,7 @@ module.exports = {
                     }
                 })
             }
-        }
-    },
+        },
     validateAccount: (req, res) => {
         let checkToken = {};
         let token = req.params.id;
