@@ -177,5 +177,37 @@ module.exports = {
                 })
             }
         }
+    },
+    getComments: (req, res) => {
+        const connectedUser = getUserInfos(req.headers.authorization);
+        if (!connectedUser) {
+            res.status(401).send('Unauthorized');
+        }
+        const {acc_id} = connectedUser;
+        const {movie_id} = req.query;
+        if (!movie_id) {
+            return res.status(400).send('error: invalid request');
+        }
+        User.findOne({
+            acc_id: acc_id
+        }).then((user, error) => {
+            if (error) {
+                console.log(error);
+                return res.status(401).send('error: account not found')
+            }
+            if (user) {
+                Comment.find({
+                    movie_id: xss(movie_id)
+                }).then((allComments, error) => {
+                    if (error) {
+                        console.log(error);
+                        return res.status(500).send('error: comments not found');
+                    }
+                    if (allComments) {
+                        return res.status(200).send(allComments);
+                    }
+                })
+            }
+        });
     }
 };

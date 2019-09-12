@@ -369,6 +369,44 @@ module.exports = {
                     })
                 }
             }
-        }
+        },
+    getProfile: (req, res) => {
+            const connectedUser = getUserInfos(req.headers.authorization);
+            if (!connectedUser) {
+                res.status(401).send('Unauthorized');
+            }
+            const {acc_id} = connectedUser;
+            const {user_id} = req.query;
+            if (!user_id) {
+                return res.status(400).send('error: invalid request');
+            }
+            User.findOne({
+                acc_id: acc_id
+            }).then((user, error) => {
+                if (error) {
+                    console.log(error);
+                    return res.status(401).send('error: account not found')
+                }
+                if (user) {
+                    User.findOne({
+                        acc_id: xss(user_id)
+                    }).then((profile, error) => {
+                        if (error) {
+                            console.log(error);
+                            return res.status(500).send('error: comments not found');
+                        }
+                        if (profile) {
+                            return res.status(200).send({
+                                acc_id: profile.acc_id,
+                                username: profile.username,
+                                firstname: profile.firstname,
+                                lastname: profile.lastname,
+                                profilePic: profile.profilePic,
+                            });
+                        }
+                    })
+                }
+            });
+    }
 }
 ;

@@ -96,6 +96,16 @@ module.exports = {
     _PRODUCTION: "Production :",
     _AWARDS: "Awards :",
     _COMMENTS_LABEL: "Comments :",
-    _WRITE_COMMENT: "Write a comment..."
+    _WRITE_COMMENT: "Write a comment...",
+    _COMMENTS_BUTTON: "Send the comment",
+    _COMMENTS_PLACEHOLDER: "Give your opinion about this movie.",
+    _COMMENTS_NONE: "There are no comments for this movie yet."
+  },
+  _PROFILE: {
+    _TAB_INFOS: "Infos",
+    _TAB_MOVIES: "Movies",
+    _USERNAME: "Username",
+    _FIRSTNAME: "First name",
+    _LASTNAME: "Last name",
   }
 };
