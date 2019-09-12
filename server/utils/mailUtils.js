@@ -14,18 +14,18 @@ function mailOptions(email, token) {
         from: 'hypertube-no-reply@gmail.com',
         to: email,
         subject: 'Welcome to Hyper!',
-        html: '<p>Click <a href="http://localhost:3000/validate' + token + '">here</a> to validate your account!</p>'
+        html: '<p>Click <a href="http://localhost:3000/api/account/validate/' + token + '">here</a> to validate your account!</p>'
     };
     return mailOption;
 }
 
 let resetMail = (email, token) => {
     let mail = {
-        from: 'hypertube.no.reply.42@gmail.com',
+        from: 'hypertube.no.reply@gmail.com',
         to: email,
         subject: 'Forgot your password? Let\'s get you a new one.',
         html: '<p>You are receiving this e-mail because you requested a password reset for your Hyper account. Click ' +
-            '<a href="http://localhost:3000/reset/' + token + '">here</a> ' +
+            '<a href="http://localhost:3000/api/account/reset_password/' + token + '">here</a> ' +
             'to set up a new password. If you are not the author of this request, please contact our support team.</p>'
     };
     return mail;
@@ -49,11 +49,10 @@ module.exports = {
                 console.log(error);
                 return false
             } else {
-                console.log('success: reset password mail sent');
+                console.log('success: password reset mail sent');
                 return true
             }
         });
     }
 };
-
 

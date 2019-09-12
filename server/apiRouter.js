@@ -34,13 +34,13 @@ exports.router = (() => {
 
     /* ACCOUNT */
     apiRouter.route('/account/register').post(upload.single('profilePic'), userManagement.register);
-    apiRouter.route('/account/validate').post(userManagement.validateAccount);
+    apiRouter.route('/account/validate/:id').get(userManagement.validateAccount);
     apiRouter.route('/account/login').post(userManagement.authenticate);
     apiRouter.route('/account/registerSuccess').get(userManagement.registerSuccess);
     apiRouter.route('/account/registerFailure').get(userManagement.registerFailure);
     apiRouter.route('/account/modify').post(upload.single('profilePic'), userManagement.modify);
     apiRouter.route('/account/forgot_password').post(userManagement.sendForgotPassword);
-    apiRouter.route('/account/reset_password').post(userManagement.resetPassword);
+    apiRouter.route('/account/reset_password/:id').post(userManagement.resetPassword);
     apiRouter.route('/account/language').post(userManagement.changeLang);
 
     /* STRATEGIES */
@@ -52,13 +52,12 @@ exports.router = (() => {
     apiRouter.route('/account/42/redirect').get(strategies.fortyTwoRedirect);
     apiRouter.route('/jwt').get(strategies.jwt);
 
-  /* MOVIE */
+    /* MOVIE */
+    apiRouter.route('/comments').get(postManagement.getComments);
     apiRouter.route('/comments/submit').post(postManagement.createComment);
     apiRouter.route('/comments/modify').post(postManagement.modifyComment);
     apiRouter.route('/comments/delete').post(postManagement.deleteComment);
-    apiRouter.route('/comments').get(postManagement.getComments);
-    // apiRouter.route('/library/favorites').post(postManagement.addMovieToFav);
-    // apiRouter.route('/library/favorites').get(postManagement.displayFavMovies);
+    apiRouter.route('/library/watched').get(postManagement.getWatchedMovies);
 
     /* MOVIE LIBRARY */
     apiRouter.route('/library/find_movie').post(libraryManagement.libraryManager);

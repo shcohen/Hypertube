@@ -1,96 +1,101 @@
 const Comment = require('../models/comment');
 const User = require('../models/user');
-const favMovie = require('../models/favmovie');
-const { getUserInfos } = require('../utils/jwt_check');
+const Movies = require('../models/watchedMovie');
+const {getUserInfos} = require('../utils/jwt_check');
 const xss = require('xss');
 
 module.exports = {
-    addMovieToFav: (req, res) => {
-        const connectedUser = getUserInfos(req.headers.authorization);
-        if (!connectedUser) {
-            res.status(401).send('Unauthorized')
+    getWatchedMovies: (req, res) => {
+        let checkMovie = {};
+        let {acc_id} = req.body;
+        if (!acc_id) {
+            checkMovie.errorMessage = 'Invalid request';
+            return res.status(400).send(checkMovie)
         } else {
-            let acc_id = connectedUser.acc_id;
-            let { movie_id } = req.body;
-            if (!acc_id || !movie_id) {
-                return res.status(400).send('error: invalid request')
-            } else {
-                User.findOne({
-                    acc_id: acc_id
-                }).then((user, error) => {
-                    if (error) {
-                        console.log(error);
-                        return res.status(401).send('error: account not found')
-                    } else if (user) {
-                        favMovie.create({
-                            acc_id: acc_id,
-                            movie_id: movie_id
-                        }).then((isAdded, error) => {
-                            if (error) {
-                                console.log(error);
-                                return res.status(500).send('error: movie was not added to favorites')
-                            } else if (isAdded) {
-                                return res.status(201).send('success: movie was added to Favorites')
-                            }
-                        })
-                    }
-                })
-            }
+            User.findOne({
+                acc_id: acc_id
+            }).then((user, error) => {
+                if (error) {
+                    console.log(error);
+                    return res.status(500).send('error: ', error)
+                } else if (user) {
+                    console.log(user);
+                    Movies.find({
+                        accId: acc_id
+                    }).then((seen, error) => {
+                        if (error) {
+                            console.log(error);
+                            return res.status(500).send('error: ', error)
+                        } else if (seen) {
+                            res.status(200).send(seen)
+                        } else {
+                            checkMovie.errorMessage = 'No movies watched yet';
+                            return res.status(200).send(checkMovie);
+                        }
+                    })
+                } else {
+                    checkMovie.errorMessage = 'Account not found';
+                    return res.status(401).send(checkMovie);
+                }
+            })
         }
     },
-    displayFavMovies: (req, res) => {
+    getComments: (req, res) => {
+        let checkComment = {};
         const connectedUser = getUserInfos(req.headers.authorization);
-        if (!connectedUser) {
-            res.status(401).send('Unauthorized')
+        if (!connectedUser)
+            res.status(401).send('Unauthorized');
+        const {acc_id} = connectedUser;
+        const {movie_id} = req.query;
+        if (!acc_id || !movie_id) {
+            checkComment.errorMessage = 'Invalid request';
+            return res.status(400).send(checkComment);
         } else {
-            let acc_id = connectedUser.acc_id;
-            if (!acc_id) {
-                return res.status(400).send('error: invalid request')
-            } else {
-                User.findOne({
-                    acc_id: acc_id
-                }).then((user, error) => {
-                    if (error) {
-                        console.log(error);
-                        return res.status(401).send('error: account not found')
-                    } else if (user) {
-                        favMovie.find({
-                            acc_id: acc_id
-                        }).then((favMovies, error) => {
-                            if (error) {
-                                console.log(error);
-                                return res.status(400).send('error: invalid request')
-                            } else if (favMovies) {
-                                let favMaps = {};
-                                favMovies.forEach((fav) => {
-                                    favMaps[fav._id] = fav;
-                                });
-                                return res.send(favMaps)
-                            }
-                        })
-                    } else {
-                        return res.status(200).send('no movies was added as favorites');
-                    }
-                })
-            }
+            User.findOne({
+                acc_id: acc_id
+            }).then((user, error) => {
+                if (error) {
+                    console.log(error);
+                    return res.status(500).send('error: ', error)
+                } else if (user) {
+                    Comment.find({
+                        movie_id: xss(movie_id)
+                    }).then((allComments, error) => {
+                        if (error) {
+                            console.log(error);
+                            return res.status(500).send('error: ', error);
+                        } else if (allComments) {
+                            return res.status(200).send(allComments);
+                        } else {
+                            checkComment.errorMessage = 'Comments not found';
+                            return (res.status(500).send(checkComment))
+                        }
+                    })
+                } else {
+                    checkComment.errorMessage = 'Account not found';
+                    return (res.status(401).send(checkComment))
+                }
+            });
         }
     },
     createComment: (req, res) => {
+        let checkComment = {};
         const connectedUser = getUserInfos(req.headers.authorization);
         if (!connectedUser) {
             res.status(401).send('Unauthorized')
         } else {
             let acc_id = connectedUser.acc_id;
-            let { movie_id, message } = req.body;
+            let {movie_id, message} = req.body;
             if (!acc_id || !movie_id || !message) {
-                return res.status(400).send('error: invalid request')
+                checkComment.errorMessage = 'Invalid request';
+                return res.status(400).send(checkComment)
             } else {
                 User.findOne({
                     acc_id: acc_id
                 }).then((user, error) => {
                     if (error) {
                         console.log(error);
-                        return res.status(401).send('error: account not found')
+                        return res.status(500).send('error: ', error)
                     } else if (user) {
                         Comment.create({
                             post_id: Math.random().toString(36).substr(2, 9),
@@ -100,32 +105,41 @@ module.exports = {
                         }).then((isStored, error) => {
                             if (error) {
                                 console.log(error);
-                                return res.status(500).send('error: comment not stored')
+                                return res.status(500).send('error: ', error)
                             } else if (isStored) {
-                                return res.status(201).send('success: comment stored')
+                                checkComment.successMessage = 'Comment stored';
+                                return res.status(201).send(checkComment)
+                            } else {
+                                checkComment.errorMessage = 'Comment not stored';
+                                return res.status(500).send(checkComment);
                             }
                         })
+                    } else {
+                        checkComment.errorMessage = 'Account not found';
+                        return res.status(401).send(checkComment)
                     }
                 })
             }
         }
     },
     modifyComment: (req, res) => {
+        let checkComment = {};
         const connectedUser = getUserInfos(req.headers.authorization);
         if (!connectedUser) {
             res.status(401).send('Unauthorized')
         } else {
             let acc_id = connectedUser.acc_id;
-            let { post_id, movie_id, message } = req.body;
+            let {post_id, movie_id, message} = req.body;
             if (!post_id || !acc_id || !movie_id || !message) {
-                return res.status(400).send('error: invalid request')
+                checkComment.errorMessage = 'Invalid request';
+                return res.status(400).send(checkComment)
             } else {
                 User.findOne({
                     acc_id: acc_id
                 }).then((user, error) => {
                     if (error) {
                         console.log(error);
-                        return res.status(401).send('error: account not found')
+                        return res.status(500).send('error: ', error)
                     } else if (user) {
                         Comment.findOneAndUpdate({
                             post_id: xss(post_id),
@@ -135,32 +149,41 @@ module.exports = {
                         }).then((isModified, error) => {
                             if (error) {
                                 console.log(error);
-                                return res.status(500).send('error: comment not modified')
+                                return res.status(500).send('error: ', error)
                             } else if (isModified) {
-                                return res.status(200).send('success: comment modified')
+                                checkComment.successMessage = 'Comment modified';
+                                return res.status(200).send(checkComment)
+                            } else {
+                                checkComment.errorMessage = 'Comment not modified';
+                                return res.status(500).send(checkComment)
                             }
                         })
+                    } else {
+                        checkComment.errorMessage = 'Account not found';
+                        return res.status(401).send(checkComment)
                     }
                 })
             }
         }
     },
     deleteComment: (req, res) => {
+        let checkComment = {};
         const connectedUser = getUserInfos(req.headers.authorization);
         if (!connectedUser) {
             res.status(401).send('Unauthorized')
         } else {
             let acc_id = connectedUser.acc_id;
-            let { post_id } = req.body;
+            let {post_id} = req.body;
             if (!post_id || !acc_id) {
-                return res.status(400).send('error: invalid request')
+                checkComment.errorMessage = 'Invalid request';
+                return res.status(400).send(checkComment)
             } else {
                 User.findOne({
                     acc_id: acc_id
                 }).then((user, error) => {
                     if (error) {
                         console.log(error);
-                        return res.status(401).send('error: account not found')
+                        return res.status(401).send('error: ', error)
                     } else if (user) {
                         Comment.findOneAndDelete({
                             post_id: xss(post_id),
@@ -168,46 +191,21 @@ module.exports = {
                         }).then((isDeleted, error) => {
                             if (error) {
                                 console.log(error);
-                                return res.status(500).send('error: comment not deleted')
+                                return res.status(500).send('error: ', error)
                             } else if (isDeleted) {
-                                return res.status(200).send('success: comment deleted')
+                                checkComment.successMessage = 'Comment deleted';
+                                return res.status(200).send(checkComment)
+                            } else {
+                                checkComment.errorMessage = 'Comment not deleted';
+                                return res.status(500).send(checkComment)
                             }
                         })
+                    } else {
+                        checkComment.errorMessage = 'Account not found';
+                        return res.status(401).send(checkComment)
                     }
                 })
             }
         }
-    },
-    getComments: (req, res) => {
-        const connectedUser = getUserInfos(req.headers.authorization);
-        if (!connectedUser) {
-            res.status(401).send('Unauthorized');
-        }
-        const {acc_id} = connectedUser;
-        const {movie_id} = req.query;
-        if (!movie_id) {
-            return res.status(400).send('error: invalid request');
-        }
-        User.findOne({
-            acc_id: acc_id
-        }).then((user, error) => {
-            if (error) {
-                console.log(error);
-                return res.status(401).send('error: account not found')
-            }
-            if (user) {
-                Comment.find({
-                    movie_id: xss(movie_id)
-                }).then((allComments, error) => {
-                    if (error) {
-                        console.log(error);
-                        return res.status(500).send('error: comments not found');
-                    }
-                    if (allComments) {
-                        return res.status(200).send(allComments);
-                    }
-                })
-            }
-        });
     }
 };
