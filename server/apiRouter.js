@@ -52,13 +52,12 @@ exports.router = (() => {
     apiRouter.route('/account/42/redirect').get(strategies.fortyTwoRedirect);
     apiRouter.route('/jwt').get(strategies.jwt);
 
-  /* MOVIE */
+    /* MOVIE */
+    apiRouter.route('/comments').get(postManagement.getComments);
     apiRouter.route('/comments/submit').post(postManagement.createComment);
     apiRouter.route('/comments/modify').post(postManagement.modifyComment);
     apiRouter.route('/comments/delete').post(postManagement.deleteComment);
-    apiRouter.route('/comments').get(postManagement.getComments);
-    // apiRouter.route('/library/favorites').post(postManagement.addMovieToFav);
-    // apiRouter.route('/library/favorites').get(postManagement.displayFavMovies);
+    apiRouter.route('/library/watched').get(postManagement.getWatchedMovies);
 
     /* MOVIE LIBRARY */
     apiRouter.route('/library/find_movie').post(libraryManagement.libraryManager);

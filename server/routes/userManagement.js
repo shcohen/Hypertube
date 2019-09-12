@@ -325,7 +325,7 @@ module.exports = {
                     } else {
                         if (!schema.validate(password, {list: false})) {
                             console.log('invalid password provided: missing ' + schema.validate(password, {list: true}));
-                            checkPassword.errorMessage = 'invalid password provided: missing ' + schema.validate(password, {list: true});
+                            checkPassword.errorMessage = 'Invalid password provided: missing ' + schema.validate(password, {list: true});
                             return res.status(400).send(checkPassword)
                         } else {
                             user.password = password;
@@ -385,41 +385,49 @@ module.exports = {
         }
     },
     getProfile: (req, res) => {
+        let checkProfile = {};
         const connectedUser = getUserInfos(req.headers.authorization);
         if (!connectedUser) {
             res.status(401).send('Unauthorized');
-        }
-        const {acc_id} = connectedUser;
-        const {user_id} = req.query;
-        if (!user_id) {
-            return res.status(400).send('error: invalid request');
-        }
-        User.findOne({
-            acc_id: acc_id
-        }).then((user, error) => {
-            if (error) {
-                console.log(error);
-                return res.status(401).send('error: account not found')
-            }
-            if (user) {
+        } else {
+            const {acc_id} = connectedUser;
+            const {user_id} = req.query;
+            if (!user_id) {
+                checkProfile.errorMessage = 'Invalid request';
+                return res.status(400).send(checkProfile);
+            } else {
                 User.findOne({
-                    acc_id: xss(user_id)
-                }).then((profile, error) => {
+                    acc_id: acc_id
+                }).then((user, error) => {
                     if (error) {
                         console.log(error);
-                        return res.status(500).send('error: comments not found');
+                        return res.status(401).send('error: ', error)
+                    } else if (user) {
+                        User.findOne({
+                            acc_id: xss(user_id)
+                        }).then((profile, error) => {
+                            if (error) {
+                                console.log(error);
+                                return res.status(500).send('error: ', error);
+                            } else if (profile) {
+                                return res.status(200).send({
+                                    acc_id: profile.acc_id,
+                                    username: profile.username,
+                                    firstname: profile.firstname,
+                                    lastname: profile.lastname,
+                                    profilePic: profile.profilePic,
+                                });
+                            } else {
+                                checkProfile.errorMessage = 'No profile found';
+                                return res.status(500).status(checkProfile)
+                            }
+                        })
+                    } else {
+                        checkProfile.errorMessage = 'Account not found';
+                        return res.status(401).send(checkProfile)
                     }
-                    if (profile) {
-                        return res.status(200).send({
-                            acc_id: profile.acc_id,
-                            username: profile.username,
-                            firstname: profile.firstname,
-                            lastname: profile.lastname,
-                            profilePic: profile.profilePic,
-                        });
-                    }
-                })
+                });
             }
-        });
+        }
     }
 };
