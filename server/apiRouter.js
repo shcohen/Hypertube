@@ -38,6 +38,7 @@ exports.router = (() => {
     apiRouter.route('/account/login').post(userManagement.authenticate);
     apiRouter.route('/account/registerSuccess').get(userManagement.registerSuccess);
     apiRouter.route('/account/registerFailure').get(userManagement.registerFailure);
+    apiRouter.route('/api/account/loginFailure').get(userManagement.loginFailure);
     apiRouter.route('/account/modify').post(upload.single('profilePic'), userManagement.modify);
     apiRouter.route('/account/forgot_password').post(userManagement.sendForgotPassword);
     apiRouter.route('/account/reset_password/:id').post(userManagement.resetPassword);

@@ -110,10 +110,9 @@ module.exports = {
     registerFailure: (req, res) => {
         return res.status(409);
     },
-    registerSuccess:
-        (req, res) => {
-            return res.status(200);
-        },
+    registerSuccess: (req, res) => {
+        return res.status(200);
+    },
     authenticate:
         (req, res, next) => {
             console.log('been there');
@@ -124,24 +123,21 @@ module.exports = {
             } else {
                 console.log('done that');
                 passport.authenticate('local-signin', {
-                    successRedirect: '/api/test123',
-                    failureRedirect: '/api/account/login',
+                    successRedirect: '/api/jwt',
+                    failureRedirect: '/api/account/loginFailure',
                     failureFlash: true
                 })(req, res, next);
             }
         },
-    modify: async (req, res) => {
-        const connectedUser = getUserInfos(req.headers.authorization);
-        if (!connectedUser) {
-            res.status(401).send('Unauthorized')
-        } else {
-            let modifyData = {};
-            let acc_id = connectedUser.acc_id;
-            let profilePic = req.file ? req.file : null;
-            let {email, username, password, confirm, firstname, lastname} = req.body;
-            if (!acc_id || !email && !username && !password && !confirm && !firstname && !lastname && !profilePic) {
-                modifyData.errorMessage = 'Invalid request';
-                return res.status(400).send(modifyData)
+    loginFailure: (req, res) => {
+        let loginError = req.flash('errorMessage');
+        return res.status(400).send(loginError);
+    },
+    modify:
+        async (req, res) => {
+            const connectedUser = getUserInfos(req.headers.authorization);
+            if (!connectedUser) {
+                res.status(401).send('Unauthorized')
             } else {
                 // password check
                 if (password && password.length && confirm && confirm.length) {
