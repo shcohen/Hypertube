@@ -94,6 +94,8 @@ module.exports = {
     _RELEASE_DATE: "Release date :",
     _RATINGS: "Ratings :",
     _PRODUCTION: "Production :",
-    _AWARDS: "Awards :"
+    _AWARDS: "Awards :",
+    _COMMENTS_LABEL: "Comments :",
+    _WRITE_COMMENT: "Write a comment..."
   }
 };

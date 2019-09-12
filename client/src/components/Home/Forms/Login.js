@@ -20,7 +20,7 @@ const Login = (props) => {
           console.log(res.data);
       })
       .catch(err => {
-
+        setFormData({...formData, ...err.response.data});
       });
   };
 

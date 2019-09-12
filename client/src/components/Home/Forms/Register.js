@@ -96,7 +96,7 @@ const Register = (props) => {
                  placeholder="ex : YannisCohen007"
                  minLength="1"
                  maxLength="32"
-                 // pattern="^[a-zA-Z0-9]{1,32}$"
+                 pattern="^[a-zA-Z0-9]{1,32}$"
                  required
                  onChange={onInputChange}
                  value={formData.username}/><br/>
@@ -111,7 +111,7 @@ const Register = (props) => {
              placeholder="ex : Florent"
              minLength="1"
              maxLength="32"
-             // pattern="^([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$"
+             pattern="^([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$"
              required
              onChange={onInputChange}
              value={formData.firstname}/>
@@ -121,7 +121,7 @@ const Register = (props) => {
              placeholder="ex : Klein"
              minLength="1"
              maxLength="32"
-             // pattern="^([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$"
+             pattern="^([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$"
              required
              onChange={onInputChange}
              value={formData.lastname}/><br/>
@@ -135,7 +135,7 @@ const Register = (props) => {
                placeholder={t._PASSWORD_PLACEHOLDER}
                minLength="1"
                maxLength="64"
-               // pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,64}$"
+               pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,64}$"
                required
                onChange={onInputChange}
                value={formData.password}/><br/>
@@ -149,7 +149,7 @@ const Register = (props) => {
              placeholder={t._CONFIRMATION_PLACEHOLDER}
              minLength="1"
              maxLength="64"
-             // pattern={'^' + formData.password + '$'}
+             pattern={'^' + formData.password + '$'}
              required
              onChange={onInputChange}
              value={formData.confirm}/><br/>

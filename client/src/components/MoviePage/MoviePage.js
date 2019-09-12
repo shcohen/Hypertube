@@ -7,6 +7,7 @@ import {NavLink} from 'react-router-dom';
 
 import Error from '../Error/Error';
 import Loading from '../Utilities/Loading/Loading';
+import Comments from './Comments';
 
 import './movie-page.css';
 
@@ -148,6 +149,7 @@ class MoviePage extends Component {
                   </div>
                 </div>
               </div>
+              <Comments movieId={movie.imdbID} t={t}/>
             </div>
           </div>
         </div>

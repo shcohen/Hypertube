@@ -1,0 +1,40 @@
+/*MOVIE PAGE COMMENTS*/
+
+.comments__panel {
+    margin: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--color-borders);
+    border-radius: 0.2rem;
+    background-color: var(--bg);
+}
+
+.comments__label {
+    display: block;
+    margin-bottom: 1rem;
+    font-weight: 700;
+
+}
+
+.comments__input {
+    margin-bottom: 1rem;
+    width: 100% !important;
+    min-height: 2rem;
+    border-radius: 0.3rem;
+    background-color: var(--bg-container);
+    border: 1px solid var(--color-borders);
+    padding: 0.5rem;
+    outline: none;
+    font-size: 0.8rem;
+    transition: background-color 0.2s, box-shadow 0.2s;
+}
+
+.comments__input:hover {
+    border: 1px solid var(--color-borders-hover);
+    background-color: var(--bg-container-hover);
+}
+
+.comments__input:focus {
+    border: 1px solid var(--color-headings);
+    box-shadow: 0 0 0 2px var(--color-headings-transparent);
+    background-color: var(--bg-container-active);
+}
