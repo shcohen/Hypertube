@@ -161,3 +161,9 @@ form:not(.custom) input[type="submit"]:active {
     box-shadow: 0 0 0 3px var(--color-headings-transparent);
     transition: box-shadow 0s;
 }
+
+button.custom:disabled,
+form:not(.custom) input[type="submit"]:disabled {
+    filter: grayscale(100%);
+    cursor: not-allowed;
+}

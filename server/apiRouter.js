@@ -38,9 +38,6 @@ exports.router = (() => {
     apiRouter.route('/account/login').post(userManagement.authenticate);
     apiRouter.route('/account/registerSuccess').get(userManagement.registerSuccess);
     apiRouter.route('/account/registerFailure').get(userManagement.registerFailure);
-    // apiRouter.route('/account/login').get(function (req, res) {
-    //     res.render('login', {message: req.flash('errorMessage')})
-    // });
     apiRouter.route('/account/modify').post(upload.single('profilePic'), userManagement.modify);
     apiRouter.route('/account/forgot_password').post(userManagement.sendForgotPassword);
     apiRouter.route('/account/reset_password/:id').post(userManagement.resetPassword);
@@ -56,11 +53,12 @@ exports.router = (() => {
     apiRouter.route('/jwt').get(strategies.jwt);
 
   /* MOVIE */
-    apiRouter.route('/search/:id/submit').get(postManagement.createComment);
-    apiRouter.route('/search/:id/modify').get(postManagement.modifyComment);
-    apiRouter.route('/search/:id/delete').get(postManagement.deleteComment);
-    apiRouter.route('/search/:id/favorites').get(postManagement.addMovieToFav);
-    apiRouter.route('/library/favorites').get(postManagement.displayFavMovies);
+    apiRouter.route('/comments/submit').post(postManagement.createComment);
+    apiRouter.route('/comments/modify').post(postManagement.modifyComment);
+    apiRouter.route('/comments/delete').post(postManagement.deleteComment);
+    apiRouter.route('/comments').get(postManagement.getComments);
+    // apiRouter.route('/library/favorites').post(postManagement.addMovieToFav);
+    // apiRouter.route('/library/favorites').get(postManagement.displayFavMovies);
 
     /* MOVIE LIBRARY */
     apiRouter.route('/library/find_movie').post(libraryManagement.libraryManager);
@@ -71,6 +69,9 @@ exports.router = (() => {
 
     /* SUBTITLES */
     apiRouter.route('/subtitles/get_subtitles').get(subtitleManagement.subtitleManager);
+
+    // USER
+    apiRouter.route('/profile').get(userManagement.getProfile);
 
     return apiRouter;
 })();
