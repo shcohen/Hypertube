@@ -43,22 +43,24 @@ module.exports = {
             checkData.dataError = 'Missing data';
             return res.status(400).send(checkData);
         } else {
-            if (password !== confirm || !password && confirm || password && !confirm) {
-                console.log('password or password-confirmation is invalid');
-                checkData.passwordError = 'Password or password-confirmation is incorrect';
+            if (!password && confirm) {
+                checkData.passwordError = 'Password is missing';
+            }
+            if (password !== confirm || password && !confirm) {
+                checkData.confirmError = 'Password dosen\'t match';
             }
             if (validator.validate(email) === false) {
                 console.log('invalid email provided');
                 checkData.emailError = 'Invalid email provided';
             }
             if (!username.match(/^[a-zA-Z0-9]{1,32}$/)) {
-                checkData.usernameError = 'Invalid username';
+                checkData.usernameError = 'Your username must be alphanumeric and less than 32 characters';
             }
             if (firstname.length > 32 || !firstname.match(/^([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$/)) {
-                checkData.firstnameError = 'Invalid firstname';
+                checkData.firstnameError = 'Your firstname must only contain letters and be less than 32 characters';
             }
             if (lastname.length > 32 || !lastname.match(/^([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$/)) {
-                checkData.lastnameError = 'Invalid lastname';
+                checkData.lastnameError = 'Your lastname must only contain letters and be less than 32 characters';
             }
             User.find({
                 email: email
@@ -71,7 +73,7 @@ module.exports = {
                     return res.status(500).send('error: ', error)
                 }
                 if (!schema.validate(password, {list: false})) {
-                    checkData.passwordError = 'invalid password provided: missing ' + schema.validate(password, {list: true});
+                    checkData.passwordError = 'Your password is missing: ' + schema.validate(password, {list: true});
                 }
                 User.findOne({
                     username: username
@@ -89,7 +91,7 @@ module.exports = {
                     }
                     if (module.exports.validateImage(profilePic) === false) {
                         console.log('error: invalid picture provided');
-                        checkData.pictureError = 'Invalid picture provided';
+                        checkData.pictureError = 'Only PNG or JPEG format allowed';
                     }
                     if (checkData && !Object.values(checkData).length) {
                         passport.authenticate('local-signup', {
@@ -127,11 +129,6 @@ module.exports = {
                     failureFlash: true
                 })(req, res, next);
             }
-        },
-    testRedirect:
-        (req, res) => {
-            let flashMessage = req.flash('successMessage');
-            res.status(200).send(flashMessage);
         },
     modify:
         async (req, res) => {
