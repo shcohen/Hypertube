@@ -125,8 +125,8 @@ const Register = (props) => {
              required
              onChange={onInputChange}
              value={formData.lastname}/><br/>
-      {(formData.firstnameError !== '' || formData.lastnameError !== '') &&
-      <p><i className="fas fa-times"/> {formData.firstnameError}{formData.lastnameError}</p>}
+      {formData.firstnameError !== ''  && <p><i className="fas fa-times"/> {formData.firstnameError}</p>}
+      {formData.lastnameError !== '' && <p><i className="fas fa-times"/> {formData.lastnameError}</p>}
       <label>{t._PASSWORD}</label><br/>
       <div className="pwd-validator">
         <input className="validation"
