@@ -51,6 +51,15 @@ module.exports = {
                 console.log('invalid email provided');
                 checkData.emailError = 'Invalid email provided';
             }
+            if (!username.match(/^[a-zA-Z0-9]{1,32}$/)) {
+                checkData.usernameError = 'Invalid username';
+            }
+            if (firstname.length > 32 || !firstname.match(/^([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$/)) {
+                checkData.firstnameError = 'Invalid firstname';
+            }
+            if (lastname.length > 32 || !lastname.match(/^([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$/)) {
+                checkData.lastnameError = 'Invalid lastname';
+            }
             User.find({
                 email: email
             }).then((user, error) => {
@@ -97,7 +106,7 @@ module.exports = {
         }
     },
     registerFailure: (req, res) => {
-        return res.status(201);
+        return res.status(409);
     },
     registerSuccess:
         (req, res) => {
