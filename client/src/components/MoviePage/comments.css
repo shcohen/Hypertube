@@ -75,14 +75,17 @@
     background-color: var(--bg-container);
     border: 1px dotted var(--color-borders);
     width: fit-content;
-    max-width: calc(100% - 10rem);
     border-radius: 0.5rem;
     padding: 0.7rem;
     font-size: 0.9rem;
     line-height: 1.15rem;
     height: fit-content;
+    word-break: break-word;
 }
 
 .comment__date {
-    width: 4rem;
+    font-size: 0.6rem;
+    white-space: nowrap;
+    margin-top: 0.5rem;
+    line-height: 0.6rem;
 }

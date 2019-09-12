@@ -1,5 +1,31 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import {connect} from 'react-redux';
+import moment from 'moment';
+import 'moment/locale/be';
+import 'moment/locale/ca';
+import 'moment/locale/cs';
+import 'moment/locale/da';
+import 'moment/locale/de';
+import 'moment/locale/el';
+import 'moment/locale/es';
+import 'moment/locale/et';
+import 'moment/locale/fi';
+import 'moment/locale/fr';
+import 'moment/locale/hu';
+import 'moment/locale/it';
+import 'moment/locale/lt';
+import 'moment/locale/lv';
+import 'moment/locale/mk';
+import 'moment/locale/nl';
+import 'moment/locale/pt';
+import 'moment/locale/ru';
+import 'moment/locale/sk';
+import 'moment/locale/sl';
+import 'moment/locale/sq';
+import 'moment/locale/sv';
+import 'moment/locale/tr';
+import 'moment/locale/uk';
 
 import Profile from '../Profile/Profile';
 
@@ -52,6 +78,8 @@ class Comments extends Component {
   render() {
     const {t} = this.props || {};
     const {comments, newComment} = this.state;
+    moment.locale('fr');
+    console.log(moment.locale());
 
     return (
       <React.Fragment>
@@ -71,18 +99,21 @@ class Comments extends Component {
                       onChange={this.onFormChange}
                       placeholder={t._COMMENTS_PLACEHOLDER}
             />
-            <input className="comments__button" type="submit" value={' ' + t._COMMENTS_BUTTON + ' '} disabled={!newComment.length}/>
+            <input className="comments__button" type="submit" value={' ' + t._COMMENTS_BUTTON + ' '}
+                   disabled={!newComment.length}/>
           </form>
           <hr className="comments__hr"/>
           <div className="comments__list">
             {comments.map((c, i) => (
               <div className="comment" key={i}>
                 <Profile userId={c.acc_id}/>
-                <div className="comment__content">
-                  {c.message}
-                </div>
-                <div className="comment__date">
-                  {c.date}
+                <div>
+                  <div className="comment__content">
+                    {c.message}
+                    <div className="comment__date">
+                      {moment(c.created_at).fromNow()}
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -94,4 +125,8 @@ class Comments extends Component {
   }
 }
 
-export default Comments;
+const mapStateToProps = (state) => ({
+  lang: state.translate.lang
+});
+
+export default connect(mapStateToProps)(Comments);

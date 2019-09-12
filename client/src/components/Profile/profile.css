@@ -5,6 +5,7 @@
     width: 4rem;
     height: 4rem;
     border-radius: 2rem;
+    flex-shrink: 0;
 }
 
 .profile__picture {
@@ -12,13 +13,14 @@
     height: 100%;
     object-fit: cover;
     border-radius: 2rem;
+    border-color: var(--bg-container-active);
 }
 
 .profile__window {
     display: none;
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 35%;
+    left: 65%;
     transform: translateY(calc(-100%));
     border-radius: 1rem;
     width: 15rem;

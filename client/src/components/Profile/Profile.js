@@ -12,7 +12,8 @@ class Profile extends Component {
     username: '',
     lastname: '',
     firstname: '',
-    profilePic: ''
+    profilePic: '',
+    movies: []
   };
 
   componentWillMount() {
