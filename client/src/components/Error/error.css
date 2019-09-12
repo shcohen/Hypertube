@@ -1,0 +1,73 @@
+/*ERROR PAGE*/
+
+.error-page {
+    margin: 5rem auto;
+    width: 90%;
+    max-width: 30rem;
+    padding: 2rem;
+    border: 1px solid var(--color-borders);
+    border-radius: 0.5rem;
+    background-color: var(--bg);
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-text-hover);
+}
+
+.error__image {
+    width: 100%;
+    border: 10px solid black;
+    border-radius: 1rem;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.error-page img {
+    width: 100%;
+    object-fit: cover;
+    animation: nosignal 2s linear infinite;
+    transform: scale(1.2);
+}
+
+@keyframes nosignal {
+    from {
+        filter: blur(0);
+        transform: scale(1.2);
+    }
+    1% {
+        filter: blur(5px);
+        transform: scale(1.25) translateX(-10px);
+    }
+    2% {
+        filter: blur(0);
+        transform: scale(1.2);
+    }
+    9% {
+        filter: blur(0);
+        transform: scale(1.2);
+    }
+    10% {
+        filter: blur(5px);
+        transform: scale(1.15) translateX(30px);
+    }
+    11% {
+        filter: blur(0);
+        transform: scale(1.2);
+    }
+    69% {
+        filter: blur(0);
+        transform: scale(1.2);
+    }
+    70% {
+        filter: blur(5px);
+        transform: scale(1.25) translateX(-15px);
+    }
+    71% {
+        filter: blur(0);
+        transform: scale(1.2);
+    }
+    to {
+        filter: blur(0);
+        transform: scale(1.2);
+    }
+}

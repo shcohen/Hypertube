@@ -8,6 +8,8 @@ const xss = require('xss');
 const validator = require('email-validator');
 const passwordValidator = require('password-validator');
 const {getUserInfos} = require('../utils/jwt_check');
+const axios = require('axios');
+const {RAPIDAPI_KEY} = require('../config/apiKey');
 const schema = new passwordValidator(); // creates a validation schema
 schema // adds properties to it
     .is().min(8)                                    // minimum length 8
@@ -134,10 +136,17 @@ module.exports = {
         return res.status(400).send(loginError);
     },
     modify: async (req, res) => {
+        const connectedUser = getUserInfos(req.headers.authorization);
+        if (!connectedUser) {
+            res.status(401).send('Unauthorized')
+        } else {
             let modifyData = {};
-            const connectedUser = getUserInfos(req.headers.authorization);
-            if (!connectedUser) {
-                res.status(401).send('Unauthorized')
+            let acc_id = connectedUser.acc_id;
+            let profilePic = req.file ? req.file : null;
+            let {email, username, password, confirm, firstname, lastname} = req.body;
+            if (!acc_id || !email && !username && !password && !confirm && !firstname && !lastname && !profilePic) {
+                modifyData.errorMessage = 'Invalid request';
+                return res.status(400).send(modifyData)
             } else {
                 // password check
                 if (password && password.length && confirm && confirm.length) {
@@ -235,7 +244,8 @@ module.exports = {
                     }
                 })
             }
-        },
+        }
+    },
     validateAccount: (req, res) => {
         let checkToken = {};
         let token = req.params.id;
@@ -424,5 +434,24 @@ module.exports = {
                 });
             }
         }
-    }
+    },
+    watchedMovieInfo: async (req, res) => {
+        const {IMDBid} = req.query;
+        if (!IMDBid) {
+            return res.status(400).send('error');
+        }
+        axios.get(`https://movie-database-imdb-alternative.p.rapidapi.com/?i=${IMDBid}&r=json`, {
+            headers: {
+                "X-RapidAPI-Host": "movie-database-imdb-alternative.p.rapidapi.com",
+                "X-RapidAPI-Key": RAPIDAPI_KEY
+            }
+        })
+          .then(async resp => {
+            res.status(200).send(resp.data);
+        })
+          .catch(err => {
+              console.log(err);
+              return res.status(400).send('error');
+          });
+    },
 };

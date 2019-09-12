@@ -72,6 +72,16 @@
     .trailer__overlay {
         align-items: start;
     }
+
+    .movie__trailer.bigger .trailer__overlay {
+        width: fit-content;
+        height: fit-content;
+        display: block;
+        left: 50%;
+        transform: translateX(-50%);
+        border-radius: 4rem;
+        margin-top: 1rem;
+    }
 }
 
 /*CONTENT GRID*/

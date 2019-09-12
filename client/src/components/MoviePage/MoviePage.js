@@ -51,7 +51,9 @@ class MoviePage extends Component {
     const t = this.props.text || {};
     const runtime = movie.Runtime === 'N/A' ? movie.yts.runtime : movie.Runtime;
     if (movie === 'empty') {
-      return (<Loading/>);
+      return (<div style={{height: '8rem'}}>
+        <Loading/>
+      </div>);
     }
     if (movie === 'error') {
       return (<Error/>);

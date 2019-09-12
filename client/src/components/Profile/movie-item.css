@@ -1,1 +1,31 @@
 /*MOVIE ITEM FOR LIST*/
+
+.movie-item {
+    display: grid;
+    grid-template-columns: 3rem auto;
+    margin-bottom: 1rem;
+}
+
+.m-item__poster {
+    width: 2.5rem;
+    height: 3.75rem;
+    object-fit: cover;
+    border-radius: 0.2rem;
+}
+
+.m-item__infos {
+    overflow: hidden;
+}
+
+.m-item__title {
+    color: var(--color-text-contrast-hover) !important;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.m-item__subtitle {
+    opacity: 0.8;
+    font-size: 0.8rem;
+    word-break: break-word;
+}

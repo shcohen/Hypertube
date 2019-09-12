@@ -72,6 +72,7 @@ exports.router = (() => {
     // USER
     apiRouter.route('/profile').get(userManagement.getProfile);
     apiRouter.route('/profile/watched').get(postManagement.getWatchedMovies);
+    apiRouter.route('/profile/watched/infos').get(userManagement.watchedMovieInfo);
 
     return apiRouter;
 })();

@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import MovieItem from './MovieItem';
 
 import './profile.css';
+import notFound from '../../assets/img/movie-not-found.jpg';
 
 class Profile extends Component {
   state = {
@@ -14,7 +15,6 @@ class Profile extends Component {
     username: '',
     lastname: '',
     firstname: '',
-    profilePic: '',
     movies: []
   };
 
@@ -34,7 +34,7 @@ class Profile extends Component {
     const t = this.props.text || {};
     return (
       <div className="profile">
-        <img className="profile__picture" src={p.profilePic} alt="profile"/>
+        <img className="profile__picture" src={p.profilePic || notFound} alt="profile"/>
         <div className="profile__window">
           <div className="profile__title-bar">
             <div className={classnames('profile__title-bar_tab', {
@@ -58,7 +58,7 @@ class Profile extends Component {
               <div className="profile__info_label">{t._LASTNAME}</div>
               <div className="profile__info_content">{p.lastname}</div>
             </div>}
-            {step === 1 && <div>
+            {step === 1 && <div className="profile__watched">
               {movies.map((m, i) => (
                 <MovieItem key={i} movieId={m.movieId}/>
               ))}

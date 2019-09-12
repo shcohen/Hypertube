@@ -107,5 +107,8 @@ module.exports = {
     _USERNAME: "Username",
     _FIRSTNAME: "First name",
     _LASTNAME: "Last name",
+  },
+  _ERROR: {
+    _ERROR_TEXT: "Oops! Something went wrong."
   }
 };

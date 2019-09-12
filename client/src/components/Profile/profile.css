@@ -29,6 +29,7 @@
     color: var(--color-text-contrast);
     box-shadow: 0 8px 16px -3px #00000080;
     padding: 1rem;
+    overflow: hidden;
 }
 
 .profile:hover .profile__window {
@@ -102,4 +103,12 @@
 .profile__info_content {
     font-size: 0.9rem;
     margin-bottom: 0.7rem;
+    color: var(--color-text-contrast-hover) !important;
+}
+
+/*MOVIES*/
+
+.profile__watched {
+    overflow: auto;
+    height: 14.4rem;
 }

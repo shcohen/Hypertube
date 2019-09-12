@@ -33,8 +33,8 @@ html[data-theme="dark"] {
     --color-text-contrast: #333333;
     --color-text-contrast-hover: #131313;
 
-    --color-borders: #505050;
-    --color-borders-hover: #606060;
+    --color-borders: #404040;
+    --color-borders-hover: #505050;
     --color-borders-contrast: #dadada;
 }
 
@@ -46,8 +46,4 @@ html.transition *::before,
 html.transition *::after {
     transition: all 0.5s !important;
     transition-delay: 0s !important;
-}
-
-html[data-theme="dark"] body {
-    background-color: var(--bg);
 }
