@@ -23,7 +23,7 @@ const Card = (props) => {
           ))}
         </div>
         <div className={classnames('movie__poster-more with-toolbox', {
-          'already-seen': true
+          'already-seen': props.movie.seen
         })}>
           <div className="toolbox">{true ? 'Vous avez déjà vu ce film' : 'Aller sur la page du film'}</div>
         </div>

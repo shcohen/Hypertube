@@ -2,7 +2,7 @@ const axios = require('axios');
 const accentRemover = require('remove-accents');
 const popcornTime = require('../models/popcornTime');
 const {getUserInfos} = require('../utils/jwt_check');
-const {filterDuplicateMovies, filterByGenre, filterByRatings, filterByYear, sortMovies, getMovieInfo} = require('../utils/moviesUtils');
+const {filterDuplicateMovies, filterByGenre, filterByRatings, filterByYear, sortMovies, getMovieInfo, isWatched} = require('../utils/moviesUtils');
 const {translateSentence, translateGenres} = require('../utils/languageUtils');
 const {TMDB_API_KEY_V3} = require('../config/apiKey');
 
@@ -21,6 +21,7 @@ module.exports = {
             movies = await module.exports.filterMovies(movies, genres, ratingMin, ratingMax, yearMin, yearMax);
             await translateGenres(movies, req);
             movies = await sortMovies(sort, movies);
+            movies = await isWatched(connectedUser.acc_id, movies);
             return res.status(200).send(movies.slice(0, parseInt(quantity)));
         } else {
             res.status(403).send('Unauthorized');
