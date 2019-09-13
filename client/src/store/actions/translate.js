@@ -45,6 +45,7 @@ export const getTranslation = () => async dispatch => {
     type: GET_TRANSLATION,
     payload: res
   });
+  axios.defaults.headers.common['lang'] = lang;
   dispatch({
     type: TRANSLATION_LOADING,
     payload: false
