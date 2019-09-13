@@ -5,8 +5,7 @@ const Login = (props) => {
   let [formData, setFormData] = useState({
     username: '',
     password: '',
-    usernameError: '',
-    passwordError: 'Identifiants incorrects.'
+    loginError: ''
   });
 
   const onInputChange = (e) => {
@@ -21,7 +20,7 @@ const Login = (props) => {
           window.location.reload(true);
       })
       .catch(err => {
-        setFormData({...formData, ...err.response.data});
+        setFormData({...formData, ...err.response.data[0]});
       });
   };
 
@@ -39,7 +38,6 @@ const Login = (props) => {
              required
              onChange={onInputChange}
              value={formData.username}/><br/>
-      {formData.usernameError !== '' && <p><i className="fas fa-times"/> {formData.usernameError}</p>}
       <label>{t._PASSWORD} <span onClick={props.goToForgotPwd}>({t._FORGOTTEN} ?)</span></label><br/>
       <input name="password"
              type="password"
@@ -49,7 +47,7 @@ const Login = (props) => {
              required
              onChange={onInputChange}
              value={formData.password}/><br/>
-      {formData.passwordError !== '' && <p><i className="fas fa-times"/> {formData.passwordError}</p>}
+      {formData.loginError !== '' && <p><i className="fas fa-times"/> {formData.loginError}</p>}
       <input type="submit" value={' ' + t._LOGIN_BUTTON + ' '}/>
     </form>
   );

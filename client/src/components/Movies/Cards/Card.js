@@ -1,6 +1,7 @@
 import React from 'react';
 import {NavLink} from 'react-router-dom';
 import classnames from 'classnames';
+import {connect} from 'react-redux';
 
 import './card.css';
 import noImg from '../../../assets/img/movie-not-found.jpg';
@@ -8,6 +9,7 @@ import noImg from '../../../assets/img/movie-not-found.jpg';
 const Card = (props) => {
 
   let image = props.movie.large_cover_image || props.movie.medium_cover_image;
+  const t = props.text || {};
 
   return (props.movie &&
     <div className="movie__card">
@@ -25,7 +27,7 @@ const Card = (props) => {
         <div className={classnames('movie__poster-more with-toolbox', {
           'already-seen': props.movie.seen
         })}>
-          <div className="toolbox">{true ? 'Vous avez déjà vu ce film' : 'Aller sur la page du film'}</div>
+          <div className="toolbox">{props.movie.seen ? t._SEEN : t._NOT_SEEN}</div>
         </div>
         <div className="movie__poster-infos">
           <div className="movie__poster-info">{props.movie.year}</div>
@@ -40,4 +42,8 @@ const Card = (props) => {
   );
 };
 
-export default Card;
+const mapStateToProps = (state) => ({
+  text: state.translate._MOVIES
+});
+
+export default connect(mapStateToProps)(Card);

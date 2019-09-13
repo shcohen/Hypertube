@@ -27,6 +27,15 @@ const Register = (props) => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
+    setFormData({
+      ...formData,
+      emailError: '',
+      usernameError: '',
+      passwordError: '',
+      confirmError: '',
+      firstnameError: '',
+      lastnameError: '',
+      profilePicError: ''});
     let form = new FormData();
     form.append('email', formData.email);
     form.append('username', formData.username);

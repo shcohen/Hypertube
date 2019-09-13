@@ -17,6 +17,7 @@ class Forms extends Component {
   };
 
   componentWillMount() {
+    console.log(this.props.location.search);
     const params = queryString.parse(this.props.location.search);
     if (params.action === 'forgot-password') {
       this.setState({
@@ -24,42 +25,25 @@ class Forms extends Component {
         params: params
       });
     }
+    if (params.action === 'validate') {
+      axios.post('/api/account/validate', params)
+        .then(() => {
+          this.setState({
+            step: 4
+          });
+        })
+        .catch(() => {
+          this.setState({
+            step: 'error'
+          });
+        });
+    }
   }
 
   goToStep = (s) => {
     this.setState({
       step: s
     });
-  };
-
-  loginGithub = () => {
-    axios.get('/api/account/github')
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  };
-
-  loginGoogle = () => {
-    axios.get('/api/account/google')
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-  };
-
-  login42 = () => {
-    axios.get('/api/account/42')
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
   };
 
   render() {
@@ -86,6 +70,12 @@ class Forms extends Component {
           {step === 1 && <Login goToForgotPwd={() => this.goToStep(2)} text={t}/>}
           {step === 2 && <ForgotPassword text={t}/>}
           {step === 3 && <ChangePassword text={t}/>}
+          {step === 4 && <div>
+            ok validate
+          </div>}
+          {step === 'error' && <div>
+            error validate
+          </div>}
         </div>
         <hr className="or"/>
         <div className="hf__content">

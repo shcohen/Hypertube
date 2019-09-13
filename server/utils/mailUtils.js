@@ -14,7 +14,7 @@ function mailOptions(email, token) {
         from: 'hypertube-no-reply@gmail.com',
         to: email,
         subject: 'Welcome to Hyper!',
-        html: '<p>Click <a href="http://localhost:3000/api/account/validate/' + token + '">here</a> to validate your account!</p>'
+        html: '<p>Click <a href="http://localhost:3000?action=validate&token=' + token + '">here</a> to validate your account!</p>'
     };
     return mailOption;
 }
@@ -25,7 +25,7 @@ let resetMail = (email, token) => {
         to: email,
         subject: 'Forgot your password? Let\'s get you a new one.',
         html: '<p>You are receiving this e-mail because you requested a password reset for your Hyper account. Click ' +
-            '<a href="http://localhost:3000/api/account/reset_password/' + token + '">here</a> ' +
+            '<a href="http://localhost:3000?action=reset_password&token=' + token + '">here</a> ' +
             'to set up a new password. If you are not the author of this request, please contact our support team.</p>'
     };
     return mail;

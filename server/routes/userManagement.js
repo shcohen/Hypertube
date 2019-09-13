@@ -93,9 +93,10 @@ module.exports = {
                         checkData.profilePicError = await translateSentence('Missing profile picture', req);
                         return res.status(400).send(checkData);
                     }
-                    if (module.exports.validateImage(profilePic) === false) {
+                    if (await module.exports.validateImage(profilePic) === false) {
+                        console.log(profilePic)
                         console.log('error: invalid picture provided');
-                        checkData.profilePicError = 'Only PNG or JPEG format allowed';
+                        checkData.profilePicError = 'PNG or JPEG, less than 2MB';
                     }
                     if (checkData && !Object.values(checkData).length) {
                         passport.authenticate('local-signup', {
@@ -251,7 +252,7 @@ module.exports = {
     },
     validateAccount: async (req, res) => {
         let checkToken = {};
-        let token = req.params.id;
+        let {token} = req.body;
         if (token) {
             return User.findOne({
                 validationToken: token
@@ -319,8 +320,7 @@ module.exports = {
     },
     resetPassword: (req, res) => {
         let checkPassword = {};
-        let resetToken = req.params.id;
-        let {password, confirm} = req.body;
+        let {password, confirm, resetToken} = req.body;
         User.findOne({
             resetToken: resetToken
         }).then(async (user, error) => {

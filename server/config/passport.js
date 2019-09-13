@@ -18,7 +18,7 @@ module.exports = (passport) => {
             User.create({
                 acc_id: Math.random().toString(36).substr(2, 9),
                 email: xss(email),
-                username: xss(req.body.username) + Math.random().toString().substr(5, 3),
+                username: xss(req.body.username),
                 password: xss(password),
                 firstname: xss(req.body.firstname),
                 lastname: xss(req.body.lastname),
@@ -54,7 +54,7 @@ module.exports = (passport) => {
                     return done(error, false)
                 } else if (!user) {
                     console.log('error: not registered');
-                    return done(null, false, req.flash('errorMessage', {loginError: 'No account found'}))
+                    return done(null, false, req.flash('errorMessage', {loginError: 'Incorrect username and/or password'}))
                 } else { // checking password
                     if (user.validation) {
                         const Method = new User;
@@ -65,12 +65,12 @@ module.exports = (passport) => {
                                     return done(null, user, req.flash('successMessage', {loginSuccess: user.acc_id}))
                                 } else {
                                     console.log('error: wrong password');
-                                    return done(null, false, req.flash('errorMessage', {loginError: 'Wrong password'}))
+                                    return done(null, false, req.flash('errorMessage', {loginError: 'Incorrect username and/or password'}))
                                 }
                             })
                     } else {
                         console.log('error: account not confirmed');
-                        return done(null, false, req.flash('errorMessage', {loginError: 'Account not confirmed'}))
+                        return done(null, false, req.flash('errorMessage', {loginError: 'Account not verified'}))
                     }
                 }
             })

@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import axios from 'axios';
 
 const ForgotPassword = (props) => {
   let [formData, setFormData] = useState({
@@ -12,6 +13,13 @@ const ForgotPassword = (props) => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
+    axios.post('/api/account/forgot_password', formData)
+      .then((res) => {
+        console.log('forgot password sent');
+      })
+      .catch((err) => {
+        setFormData({...err.response.data});
+      });
   };
 
   const t = props.text || {};

@@ -34,14 +34,14 @@ exports.router = (() => {
 
     /* ACCOUNT */
     apiRouter.route('/account/register').post(upload.single('profilePic'), userManagement.register);
-    apiRouter.route('/account/validate/:id').get(userManagement.validateAccount);
+    apiRouter.route('/account/validate').post(userManagement.validateAccount);
     apiRouter.route('/account/login').post(userManagement.authenticate);
     apiRouter.route('/account/registerSuccess').get(userManagement.registerSuccess);
     apiRouter.route('/account/registerFailure').get(userManagement.registerFailure);
-    apiRouter.route('/api/account/loginFailure').get(userManagement.loginFailure);
+    apiRouter.route('/account/loginFailure').get(userManagement.loginFailure);
     apiRouter.route('/account/modify').post(upload.single('profilePic'), userManagement.modify);
     apiRouter.route('/account/forgot_password').post(userManagement.sendForgotPassword);
-    apiRouter.route('/account/reset_password/:id').post(userManagement.resetPassword);
+    apiRouter.route('/account/reset_password').post(userManagement.resetPassword);
     apiRouter.route('/account/language').post(userManagement.changeLang);
 
     /* STRATEGIES */
