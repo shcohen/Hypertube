@@ -7,8 +7,8 @@ import english from '../../utils/english';
 
 export const getTranslation = () => async dispatch => {
   const state = store.getState();
-  // const {lang} = state.translate || 'en';
-  const lang = 'en';
+  const {lang} = state.translate || 'en';
+  // const lang = 'en';
   dispatch({
     type: TRANSLATION_LOADING,
     payload: true

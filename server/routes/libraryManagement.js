@@ -19,7 +19,7 @@ module.exports = {
                 movies = await module.exports.getTrends();
             }
             movies = await module.exports.filterMovies(movies, genres, ratingMin, ratingMax, yearMin, yearMax);
-            await translateGenres(movies);
+            await translateGenres(movies, req);
             movies = await sortMovies(sort, movies);
             return res.status(200).send(movies.slice(0, parseInt(quantity)));
         } else {
@@ -42,7 +42,7 @@ module.exports = {
 
         if (connectedUser && connectedUser.acc_id.length) {
             if (IMDBid !== undefined && IMDBid.length) {
-                let data = await getMovieInfo(IMDBid, YTSid);
+                let data = await getMovieInfo(IMDBid, YTSid, req);
                 return data ? res.status(200).send(data) : res.status(400).send('IMDB id doesn\'t match');
             } else {
                 return res.status(400).send(await translateSentence('No ID provided'));
