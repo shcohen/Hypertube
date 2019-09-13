@@ -38,9 +38,26 @@ const scrapPopcornTime = async () => {
                 synopsis: movie.synopsis,
                 yt_trailer_code: movie.trailer ? movie.trailer.replace('http://youtube.com/watch?v=', '') : null,
                 runtime: movie.runtime,
-                torrents: movie.torrents,
                 large_cover_image: movie.images ? movie.images.poster : 'N/A',
-                rating: movie.rating.percentage / 10
+                rating: movie.rating.percentage / 10,
+                torrents: [
+                    {
+                        quality: '720p',
+                        seeds: movie.torrents['720p'].seed,
+                        peers: movie.torrents['720p'].peer,
+                        size: movie.torrents['720p'].filesize,
+                        type: 'Web',
+                        hash: movie.torrents['720p'].url.replace('', ''),
+                    },
+                    {
+                        quality: '1080p',
+                        seeds: movie.torrents['1080p'].seed,
+                        peers: movie.torrents['1080p'].peer,
+                        size: movie.torrents['1080p'].filesize,
+                        type: 'Web',
+                        hash: movie.torrents['1080p'].url.replace('', ''),
+                    },
+                ]
             }];
         })
     }
