@@ -32,6 +32,19 @@ module.exports = {
         let mixedMovies = [...ytsMovies, ...popcornMovies];
         return mixedMovies.filter((thing, i, self) => self.findIndex(t => t.imdb_code === thing.imdb_code) === i);
     },
+    isWatched: async (acc_id, movies) => {
+        let watched = await watchedMovie.find({accId: acc_id});
+        let allMovies = [];
+        await Promise.all(movies.map(async (movie, i) => {
+            allMovies = [...allMovies, movie];
+            allMovies[i].seen = false;
+            return await Promise.all(watched.map(seen => {
+                allMovies[i].seen = movie.imdb_code === seen.movieId;
+                return Promise.resolve();
+            }));
+        }));
+        return allMovies;
+    },
     watchedMovieInfo: async (IMDBid) => {
         return await axios.get(`https://movie-database-imdb-alternative.p.rapidapi.com/?i=${IMDBid}&r=json`, {
             headers: {
