@@ -115,5 +115,9 @@ module.exports = {
     _A_INFOS_TITLE: "My infos :",
     _A_MOVIES_TITLE: "My watched movies :",
     _UPDATE_INFOS: "Update my infos"
+  },
+  _FOOTER: {
+    _WELCOME: "Welcome",
+    _BY: "By"
   }
 };

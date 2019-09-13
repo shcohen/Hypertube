@@ -4,8 +4,24 @@
     width: 100vw;
     height: var(--footer-height);
     background-color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 0.8rem !important;
 }
 
 html[data-theme="dark"] #footer {
-    background-color: #232323;
+    background-color: #171717;
+}
+
+#footer a.logo {
+    font-size: 0.8rem !important;
+}
+
+@media screen and (max-width: 800px) {
+    #footer {
+        flex-direction: column;
+        justify-content: space-evenly;
+    }
 }
