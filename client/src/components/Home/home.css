@@ -161,3 +161,63 @@
     font-size: 1.5rem;
     text-align: right;
 }
+
+/*LAST TWO PARTS*/
+
+.triptych__part.two, .triptych__part.three {
+    position: relative;
+}
+
+.triptych__part.two .background, .triptych__part.three .background {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    width: calc(100% + 20px);
+    height: calc(100% + 20px);
+    opacity: 0.5;
+    filter: blur(10px);
+}
+
+.triptych__part.two .window, .triptych__part.three .window {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 30rem;
+    text-align: center;
+    padding: 2rem;
+    background-color: var(--bg);
+    border: 1px solid var(--color-borders);
+    border-radius: 0.5rem;
+    box-shadow: 0 8px 64px -12px #00000080;;
+}
+
+.triptych__part.two h1, .triptych__part.three h1 {
+    font-size: 2.5rem;
+    color: var(--color-headings);
+}
+
+.triptych__part.two p, .triptych__part.three p {
+    font-size: 1.5rem;
+}
+
+/*PART TWO*/
+
+.triptych__part.two .background {
+    background: url("../../assets/img/home-2.jpg") no-repeat center;
+    background-size: cover;
+}
+
+.triptych__part.two h1 {
+}
+
+/*PART THREE*/
+
+.triptych__part.three .background {
+    background: url("../../assets/img/home-3.jpg") no-repeat center;
+    background-size: cover;
+}
+
+.triptych__part.three .window {
+}

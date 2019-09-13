@@ -48,7 +48,7 @@ module.exports = {
                 lastname: req.user.lastname,
                 lang: req.user.lang,
                 profilePic: req.user.profilePic,
-
+                username: req.user.username
             };
             jwt.sign(payload, 'hypertube', {expiresIn: "1d"}, (err, token) => {
                 res.cookie('jwtToken', token, {

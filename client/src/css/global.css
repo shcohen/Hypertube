@@ -27,12 +27,13 @@ a {
 
 html {
     --header-height: 4rem;
-    --footer-height: 10rem;
+    --footer-height: 4rem;
 }
 
 @media screen and (max-width: 800px) {
     html {
         --header-height: 5.5rem;
+        --footer-height: 8rem;
     }
 }
 

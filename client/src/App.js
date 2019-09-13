@@ -11,6 +11,7 @@ import Movies from './components/Movies/Movies';
 import MoviePage from './components/MoviePage/MoviePage';
 import WatchMovie from './components/WatchMovie/WatchMovie';
 import ProtectedRoute from './components/Utilities/ProtectedRoute/ProtectedRoute';
+import Account from './components/Account/Account';
 
 import setAuthToken from './utils/setAuthToken';
 import cookies from './utils/cookies';
@@ -47,6 +48,7 @@ class App extends Component {
               <ProtectedRoute path={'/movies'} exact component={Movies} needsLoggedIn={true} redirectTo={'/'}/>
               <ProtectedRoute path={'/movie/:IMDBid/:YTSid'} exact component={MoviePage} needsLoggedIn={true} redirectTo={'/'}/>
               <ProtectedRoute path={'/watch/:id/:title/:hash'} exact component={WatchMovie} needsLoggedIn={true} redirectTo={'/'}/>
+              <ProtectedRoute path={'/account'} exact component={Account} needsLoggedIn={true} redirectTo={'/'}/>
               <Route component={Error}/>
             </Switch>
           </Root>

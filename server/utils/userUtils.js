@@ -26,9 +26,9 @@ module.exports = {
             }
         }
     },
-    checkEmail: async (email) => {
+    checkEmail: async (email, acc_id) => {
         let emailCheck = await User.findOne({ email: email });
-        if (emailCheck && emailCheck.email) {
+        if (emailCheck && emailCheck.email && emailCheck.acc_id !== acc_id) {
             console.log('email already taken');
             return { errorCode: -1, errorMessage: 'email already taken' }
         } else if (emailCheck && emailCheck.error) {
@@ -44,9 +44,9 @@ module.exports = {
             }
         }
     },
-    checkUsername: async (username) => {
+    checkUsername: async (username, acc_id) => {
         let usernameCheck = await User.findOne({ username: username });
-        if (usernameCheck && usernameCheck.username) {
+        if (usernameCheck && usernameCheck.username && usernameCheck.acc_id !== acc_id) {
             console.log('username already taken');
             return { errorCode: -1, errorMessage: 'username already taken' }
         } else if (usernameCheck && usernameCheck.error) {
