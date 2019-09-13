@@ -1,4 +1,5 @@
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const mailsUtils = require('../utils/mailUtils');
 const userUtils = require('../utils/userUtils');
@@ -10,6 +11,7 @@ const passwordValidator = require('password-validator');
 const {getUserInfos} = require('../utils/jwt_check');
 const axios = require('axios');
 const {RAPIDAPI_KEY} = require('../config/apiKey');
+const {translateSentence} = require('../utils/languageUtils');
 const schema = new passwordValidator(); // creates a validation schema
 schema // adds properties to it
     .is().min(8)                                    // minimum length 8
@@ -42,53 +44,53 @@ module.exports = {
         let profilePic = req.file;
         let {email, username, password, firstname, confirm, lastname} = req.body;
         if (!email || !username || !password || !confirm || !firstname || !lastname) {
-            checkData.dataError = 'Missing data';
+            checkData.dataError = await translateSentence('Missing data', req);
             return res.status(400).send(checkData);
         } else {
             if (!password && confirm) {
-                checkData.passwordError = 'Password is missing';
+                checkData.passwordError = await translateSentence('Password missing', req);
             }
             if (password !== confirm || password && !confirm) {
-                checkData.confirmError = 'Password dosen\'t match';
+                checkData.confirmError = await translateSentence('Passwords do not match', req);
             }
             if (validator.validate(email) === false) {
                 console.log('invalid email provided');
-                checkData.emailError = 'Invalid email provided';
+                checkData.emailError = await translateSentence('Invalid email provided', req);
             }
             if (!username.match(/^[a-zA-Z0-9]{1,32}$/)) {
-                checkData.usernameError = 'Your username must be alphanumeric and less than 32 characters';
+                checkData.usernameError = await translateSentence('Your username must be alphanumeric and less than 32 characters', req);
             }
             if (firstname.length > 32 || !firstname.match(/^([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$/)) {
-                checkData.firstnameError = 'Your firstname must only contain letters and be less than 32 characters';
+                checkData.firstnameError = await translateSentence('Your firstname must only contain letters and be less than 32 characters', req);
             }
             if (lastname.length > 32 || !lastname.match(/^([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+([-]([a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+(( |')[a-zA-Zàáâäçèéêëìíîïñòóôöùúûü]+)*)+)*$/)) {
-                checkData.lastnameError = 'Your lastname must only contain letters and be less than 32 characters';
+                checkData.lastnameError = await translateSentence('Your lastname must only contain letters and be less than 32 characters', req);
             }
             User.find({
                 email: email
-            }).then((user, error) => {
+            }).then(async (user, error) => {
                 if (user.length) {
                     console.log('email already taken');
-                    checkData.emailError = 'Email already taken';
+                    checkData.emailError = await translateSentence('Email already taken', req);
                 } else if (error) {
                     console.log(error);
                     return res.status(500).send('error: ', error)
                 }
                 if (!schema.validate(password, {list: false})) {
-                    checkData.passwordError = 'Your password is missing: ' + schema.validate(password, {list: true});
+                    checkData.passwordError = await translateSentence('Your password lacks: ' + schema.validate(password, {list: true}), req);
                 }
                 User.findOne({
                     username: username
-                }).then((user, error) => {
+                }).then(async (user, error) => {
                     if (user) {
                         console.log('username already taken');
-                        checkData.usernameError = 'Username already taken';
+                        checkData.usernameError = await translateSentence('Username already taken', req);
                     } else if (error) {
                         console.log(error);
                         return res.status(500).send('error: ', error)
                     }
                     if (!profilePic) {
-                        checkData.profilePicError = 'Missing profile picture';
+                        checkData.profilePicError = await translateSentence('Missing profile picture', req);
                         return res.status(400).send(checkData);
                     }
                     if (module.exports.validateImage(profilePic) === false) {
@@ -131,9 +133,9 @@ module.exports = {
                 })(req, res, next);
             }
         },
-    loginFailure: (req, res) => {
+    loginFailure: async (req, res) => {
         let loginError = req.flash('errorMessage');
-        return res.status(400).send(loginError);
+        return res.status(400).send(await translateSentence(loginError, req));
     },
     modify: async (req, res) => {
         const connectedUser = getUserInfos(req.headers.authorization);
@@ -145,29 +147,29 @@ module.exports = {
             let profilePic = req.file ? req.file : null;
             let {email, username, password, confirm, firstname, lastname} = req.body;
             if (!acc_id || !email && !username && !password && !confirm && !firstname && !lastname && !profilePic) {
-                modifyData.errorMessage = 'Invalid request';
+                modifyData.errorMessage = await translateSentence('Invalid request', req);
                 return res.status(400).send(modifyData)
             } else {
                 // password check
                 if (password && password.length && confirm && confirm.length) {
                     let passwordCheck = await userUtils.checkPassword(password, confirm);
                     if (passwordCheck.errorCode === -1) {
-                        modifyData.passwordError = passwordCheck.errorMessage;
+                        modifyData.passwordError = await translateSentence(passwordCheck.errorMessage, req);
                     } else {
-                        modifyData.passwordCheck = passwordCheck.successMessage;
+                        modifyData.passwordCheck = await translateSentence(passwordCheck.successMessage, req);
                         modifyData.password = password;
                     }
                 } else if (!password && confirm || password && !confirm) {
                     console.log('missing password or confirm');
-                    modifyData.passwordError = 'error: missing password or password-confirmation';
+                    modifyData.passwordError = await translateSentence('Missing passwords', req);
                 }
                 // email check
                 if (email && email.length) {
                     let emailCheck = await userUtils.checkEmail(email, acc_id);
                     if (emailCheck.errorCode === -1) {
-                        modifyData.emailError = emailCheck.errorMessage;
+                        modifyData.emailError = await translateSentence(emailCheck.errorMessage, req);
                     } else {
-                        modifyData.emailCheck = emailCheck.successMessage;
+                        modifyData.emailCheck = await translateSentence(emailCheck.successMessage, req);
                         modifyData.email = email;
                     }
                 }
@@ -175,9 +177,9 @@ module.exports = {
                 if (username && username.length) {
                     let usernameCheck = await userUtils.checkUsername(username, acc_id);
                     if (usernameCheck.errorCode === -1) {
-                        modifyData.usernameError = usernameCheck.errorMessage;
+                        modifyData.usernameError = await translateSentence(usernameCheck.errorMessage, req);
                     } else {
-                        modifyData.usernameCheck = usernameCheck.successMessage;
+                        modifyData.usernameCheck = await translateSentence(usernameCheck.successMessage, req);
                         modifyData.username = username;
                     }
                 }
@@ -186,9 +188,9 @@ module.exports = {
                     firstname = firstname.trim();
                     let firstnameCheck = await userUtils.checkFirstname(firstname);
                     if (firstnameCheck.errorCode === -1) {
-                        modifyData.firstnameError = firstnameCheck.errorMessage;
+                        modifyData.firstnameError = await translateSentence(firstnameCheck.errorMessage, req);
                     } else {
-                        modifyData.firstnameCheck = firstnameCheck.successMessage;
+                        modifyData.firstnameCheck = await translateSentence(firstnameCheck.successMessage, req);
                         modifyData.firstname = firstname;
                     }
                 }
@@ -197,30 +199,30 @@ module.exports = {
                     lastname = lastname.trim();
                     let lastnameCheck = await userUtils.checkLastname(lastname);
                     if (lastnameCheck.errorCode === -1) {
-                        modifyData.lastnameError = lastnameCheck.errorMessage;
+                        modifyData.lastnameError = await translateSentence(lastnameCheck.errorMessage, req);
                     } else {
-                        modifyData.lastnameCheck = lastnameCheck.successMessage;
+                        modifyData.lastnameCheck = await translateSentence(lastnameCheck.successMessage, req);
                         modifyData.lastname = lastname;
                     }
                 }
                 // profile picture check
                 if (profilePic) {
                     if (await module.exports.validateImage(profilePic) !== false) {
-                        modifyData.pictureCheck = 'Profile picture updated';
+                        modifyData.pictureCheck = await translateSentence('Profile picture updated', req);
                         profilePic = profilePic.path;
                     } else {
                         console.log('error: invalid picture provided');
-                        modifyData.profilePicError = 'Invalid picture provided';
+                        modifyData.profilePicError = await translateSentence('Invalid picture provided', req);
                         profilePic = null;
                     }
                 }
                 // next
                 User.findOne({
                     acc_id: acc_id
-                }).then((user, error) => {
+                }).then(async (user, error) => {
                     if (!user) {
                         console.log('no account found');
-                        modifyData.errorMessage = 'Account not found';
+                        modifyData.errorMessage = await translateSentence('Account not found', req);
                         return res.status(401).send(modifyData)
                     } else if (error) {
                         console.log('error:', error);
@@ -232,13 +234,13 @@ module.exports = {
                         modifyData.firstname ? user.firstname = xss(firstname) : null;
                         modifyData.lastname ? user.lastname = xss(lastname) : null;
                         profilePic ? user.profilePic = '/uploads/' + profilePic : null;
-                        user.save((error) => {
+                        user.save(async error => {
                             if (error) {
                                 console.log('error:', error);
                                 return res.status(500).send('error: ', error)
                             } else {
                                 console.log('success: user info updated');
-                                modifyData.successMessage = 'User info updated';
+                                modifyData.successMessage = await translateSentence('User info updated', req);
                                 return res.status(200).send(modifyData);
                             }
                         })
@@ -247,24 +249,24 @@ module.exports = {
             }
         }
     },
-    validateAccount: (req, res) => {
+    validateAccount: async (req, res) => {
         let checkToken = {};
         let token = req.params.id;
         if (token) {
             return User.findOne({
                 validationToken: token
-            }).then((user, error) => {
+            }).then(async (user, error) => {
                 if (user) {
                     if (user.validation === true) {
                         console.log('error: account already confirmed');
-                        checkToken.errorMessage = 'Account not found';
+                        checkToken.errorMessage = await translateSentence('Account not found', req);
                         return res.status(401).send(checkToken)
                     } else {
                         User.findOneAndUpdate({
                             validationToken: token
-                        }, {validation: true}).then((user, error) => {
+                        }, {validation: true}).then(async (user, error) => {
                             if (user) {
-                                checkToken.successMessage = 'Account is not confirmed, you can log in';
+                                checkToken.successMessage = await translateSentence('Account is not confirmed, you cannot log in', req);
                                 return res.status(200).send(checkToken)
                             } else if (error) {
                                 console.log('error: ', error);
@@ -276,12 +278,12 @@ module.exports = {
                     console.log('error: ', error);
                     return res.status(500).send('error: ', error)
                 } else {
-                    checkToken.errorMessage = 'Account not found';
+                    checkToken.errorMessage = await translateSentence('Account not found', req);
                     return res.status(401).send(checkToken)
                 }
             })
         } else {
-            checkToken.errorMessage = 'Invalid token provided';
+            checkToken.errorMessage = await translateSentence('Invalid token provided', req);
             return res.status(400).send(checkToken)
         }
     },
@@ -290,18 +292,18 @@ module.exports = {
         let {email} = req.body;
         User.findOne({
             email: email
-        }).then((user, error) => {
+        }).then(async (user, error) => {
             if (user) {
                 const token = uuid.v4();
                 user.resetToken = token;
-                user.save((error) => {
+                user.save(async error => {
                     if (error) {
                         console.log('error:', error);
                         return res.status(500).send('error: ', error)
                     } else {
                         mailsUtils.resetMail(email, token);
                         console.log('success: reset email sent');
-                        checkData.successMessage = 'Password reset mail send';
+                        checkData.successMessage = await translateSentence('Password reset mail send', req);
                         return res.status(200).send(checkData)
                     }
                 })
@@ -310,7 +312,7 @@ module.exports = {
                 return res.status(500).send('error: ', error)
             } else {
                 console.log('error: invalid email provided');
-                checkData.errorMessage = 'Invalid email provided';
+                checkData.errorMessage = await translateSentence('Invalid email provided', req);
                 return res.status(400).send(checkData)
             }
         })
@@ -321,27 +323,27 @@ module.exports = {
         let {password, confirm} = req.body;
         User.findOne({
             resetToken: resetToken
-        }).then((user, error) => {
+        }).then(async (user, error) => {
             if (user) {
                 if (password && confirm) {
                     if (password !== confirm) {
                         console.log('passwords do not match');
-                        checkPassword.errorMessage = 'Passwords do not match';
+                        checkPassword.errorMessage = await translateSentence('Passwords do not match', req);
                         return res.status(400).send(checkPassword);
                     } else {
                         if (!schema.validate(password, {list: false})) {
                             console.log('invalid password provided: missing ' + schema.validate(password, {list: true}));
-                            checkPassword.errorMessage = 'Invalid password provided: missing ' + schema.validate(password, {list: true});
+                            checkPassword.errorMessage = await translateSentence('Invalid password provided: missing ' + schema.validate(password, {list: true}), req);
                             return res.status(400).send(checkPassword)
                         } else {
                             user.password = password;
-                            user.save((error) => {
+                            user.save(async error => {
                                 if (error) {
                                     console.log('error: ', error);
                                     return res.status(500).send('error: ', error)
                                 } else {
                                     console.log('success: password updated');
-                                    checkPassword.successMessage = 'Password updated successfully';
+                                    checkPassword.successMessage = await translateSentence('Password updated successfully', req);
                                     return res.status(200).send(checkPassword)
                                 }
                             })
@@ -349,7 +351,7 @@ module.exports = {
                     }
                 } else if (!password && confirm || password && !confirm) {
                     console.log('missing password or confirm');
-                    checkPassword.errorMessage = 'Missing password or password confirmation';
+                    checkPassword.errorMessage = await translateSentence('Missing password or password confirmation', req);
                     return res.status(400).send(checkPassword)
                 }
             } else if (error) {
@@ -357,12 +359,12 @@ module.exports = {
                 return res.status(500).send('error: ', error)
             } else {
                 console.log('error: invalid token provided');
-                checkPassword.errorMessage = 'Invalid token provided';
+                checkPassword.errorMessage = await translateSentence('Invalid token provided', req);
                 return res.status(400).send(checkPassword)
             }
         })
     },
-    changeLang: (req, res) => {
+    changeLang: async (req, res) => {
         let checkData = {};
         const connectedUser = getUserInfos(req.headers.authorization);
         if (!connectedUser) {
@@ -372,25 +374,39 @@ module.exports = {
             let {lang} = req.body;
             if (!acc_id || !lang) {
                 console.log('invalid request');
-                checkData.errorMessage = 'Invalid request';
+                checkData.errorMessage = await translateSentence('Invalid request', req);
                 return res.status(400).send(checkData)
             } else {
                 User.findOneAndUpdate({
                     acc_id: acc_id
-                }, {lang: lang}).then((user, error) => {
+                }, {lang: lang}).then(async (user, error) => {
                     if (error) {
                         console.log('error: ', error);
                         return res.status(500).send('error: ', error)
                     } else if (user) {
                         console.log('success: language updated');
-                        checkData.successMessage = 'Language updated';
-                        return res.status(200).send(checkData)
+                        checkData.successMessage = await translateSentence('Language updated', req);
+                        const payload = {
+                            acc_id: user.acc_id,
+                            email: user.email,
+                            firstname: user.firstname,
+                            lastname: user.lastname,
+                            lang: lang,
+                            profilePic: user.profilePic,
+                            username: user.username
+                        };
+                        jwt.sign(payload, 'hypertube', {expiresIn: "1d"}, (err, token) => {
+                            res.cookie('jwtToken', token, {
+                                maxAge: 1000 * 60 * 60 * 24
+                            });
+                            return res.status(200).send(checkData)
+                        });
                     }
                 })
             }
         }
     },
-    getProfile: (req, res) => {
+    getProfile: async (req, res) => {
         let checkProfile = {};
         const connectedUser = getUserInfos(req.headers.authorization);
         if (!connectedUser) {
@@ -399,19 +415,19 @@ module.exports = {
             const {acc_id} = connectedUser;
             const {user_id} = req.query;
             if (!user_id) {
-                checkProfile.errorMessage = 'Invalid request';
+                checkProfile.errorMessage = await translateSentence('Invalid request', req);
                 return res.status(400).send(checkProfile);
             } else {
                 User.findOne({
                     acc_id: acc_id
-                }).then((user, error) => {
+                }).then(async (user, error) => {
                     if (error) {
                         console.log(error);
                         return res.status(401).send('error: ', error)
                     } else if (user) {
                         User.findOne({
                             acc_id: xss(user_id)
-                        }).then((profile, error) => {
+                        }).then(async (profile, error) => {
                             if (error) {
                                 console.log(error);
                                 return res.status(500).send('error: ', error);
@@ -424,12 +440,12 @@ module.exports = {
                                     profilePic: profile.profilePic,
                                 });
                             } else {
-                                checkProfile.errorMessage = 'No profile found';
+                                checkProfile.errorMessage = await translateSentence('No profile found', req);
                                 return res.status(500).status(checkProfile)
                             }
                         })
                     } else {
-                        checkProfile.errorMessage = 'Account not found';
+                        checkProfile.errorMessage = await translateSentence('Account not found', req);
                         return res.status(401).send(checkProfile)
                     }
                 });
