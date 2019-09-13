@@ -30,7 +30,7 @@ module.exports = (passport) => {
                 githubId: null,
                 fortyTwoId: null,
                 accessToken: null,
-                profilePic: req.file.filename
+                profilePic: '/uploads/' + req.file.filename
             }).then((isCreated) => {
                 if (isCreated) {
                     mailUtils.sendValidationMail(email, validationToken);

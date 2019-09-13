@@ -3,6 +3,7 @@ const {YANDEX_API_KEY} = require('../config/apiKey');
 
 module.exports = {
     translateSentence: async sentence => {
+        // const lang =
         if (sentence && sentence.length) {
             let translation = await axios.get(`https://translate.yandex.net/api/v1.5/tr.json/translate?key=${YANDEX_API_KEY}&text=${sentence}&lang=en-fr`);
             if (translation.data) {

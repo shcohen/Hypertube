@@ -231,7 +231,7 @@ module.exports = {
                         modifyData.password ? user.password = xss(modifyData.password) : null;
                         modifyData.firstname ? user.firstname = xss(modifyData.firstname) : null;
                         modifyData.lastname ? user.lastname = xss(modifyData.lastname) : null;
-                        profilePic ? user.profilePic = profilePic : null;
+                        profilePic ? user.profilePic = '/uploads/' + profilePic : null;
                         user.save((error) => {
                             if (error) {
                                 console.log('error:', error);
