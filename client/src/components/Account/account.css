@@ -1,0 +1,53 @@
+/*MY ACCOUNT*/
+
+.account__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+}
+
+@media screen and (max-width: 800px) {
+    .account__grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.account__grid > div {
+    width: 95%;
+    height: fit-content;
+    margin: 2rem 0;
+    border-radius: 0.2rem;
+    padding: 2rem;
+}
+
+.account__infos {
+    max-width: 20rem;
+    background-color: var(--bg);
+    border: 1px solid var(--color-borders);
+}
+
+.account__movies {
+    max-width: 30rem;
+    background-color: var(--bg-contrast);
+    border: 1px solid var(--color-borders-contrast);
+}
+
+.account__movies * {
+    color: var(--color-text-contrast);
+}
+
+.account__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/*ACCOUNT INFOS*/
+
+.account__infos .hf__content {
+    padding: 0;
+    margin-top: 1rem;
+}
+
+/*ACCOUNT MOVIES*/
+
+

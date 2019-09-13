@@ -93,7 +93,7 @@ module.exports = {
                     }
                     if (module.exports.validateImage(profilePic) === false) {
                         console.log('error: invalid picture provided');
-                        checkData.pictureError = 'Only PNG or JPEG format allowed';
+                        checkData.profilePicError = 'Only PNG or JPEG format allowed';
                     }
                     if (checkData && !Object.values(checkData).length) {
                         passport.authenticate('local-signup', {
@@ -152,7 +152,7 @@ module.exports = {
                 if (password && password.length && confirm && confirm.length) {
                     let passwordCheck = await userUtils.checkPassword(password, confirm);
                     if (passwordCheck.errorCode === -1) {
-                        modifyData.passwordCheck = passwordCheck.errorMessage;
+                        modifyData.passwordError = passwordCheck.errorMessage;
                     } else {
                         modifyData.passwordCheck = passwordCheck.successMessage;
                         modifyData.password = password;
@@ -163,9 +163,9 @@ module.exports = {
                 }
                 // email check
                 if (email && email.length) {
-                    let emailCheck = await userUtils.checkEmail(email);
+                    let emailCheck = await userUtils.checkEmail(email, acc_id);
                     if (emailCheck.errorCode === -1) {
-                        modifyData.emailCheck = emailCheck.errorMessage;
+                        modifyData.emailError = emailCheck.errorMessage;
                     } else {
                         modifyData.emailCheck = emailCheck.successMessage;
                         modifyData.email = email;
@@ -173,9 +173,9 @@ module.exports = {
                 }
                 // username check
                 if (username && username.length) {
-                    let usernameCheck = await userUtils.checkUsername(username);
+                    let usernameCheck = await userUtils.checkUsername(username, acc_id);
                     if (usernameCheck.errorCode === -1) {
-                        modifyData.usernameCheck = usernameCheck.errorMessage;
+                        modifyData.usernameError = usernameCheck.errorMessage;
                     } else {
                         modifyData.usernameCheck = usernameCheck.successMessage;
                         modifyData.username = username;
@@ -186,7 +186,7 @@ module.exports = {
                     firstname = firstname.trim();
                     let firstnameCheck = await userUtils.checkFirstname(firstname);
                     if (firstnameCheck.errorCode === -1) {
-                        modifyData.firstnameCheck = firstnameCheck.errorMessage;
+                        modifyData.firstnameError = firstnameCheck.errorMessage;
                     } else {
                         modifyData.firstnameCheck = firstnameCheck.successMessage;
                         modifyData.firstname = firstname;
@@ -197,7 +197,7 @@ module.exports = {
                     lastname = lastname.trim();
                     let lastnameCheck = await userUtils.checkLastname(lastname);
                     if (lastnameCheck.errorCode === -1) {
-                        modifyData.lastnameCheck = lastnameCheck.errorMessage;
+                        modifyData.lastnameError = lastnameCheck.errorMessage;
                     } else {
                         modifyData.lastnameCheck = lastnameCheck.successMessage;
                         modifyData.lastname = lastname;
@@ -210,7 +210,8 @@ module.exports = {
                         profilePic = profilePic.path;
                     } else {
                         console.log('error: invalid picture provided');
-                        modifyData.pictureCheck = 'Invalid picture provided';
+                        modifyData.profilePicError = 'Invalid picture provided';
+                        profilePic = null;
                     }
                 }
                 // next
@@ -225,11 +226,11 @@ module.exports = {
                         console.log('error:', error);
                         return res.status(400).send('error: ', error)
                     } else {
-                        email ? user.email = xss(email) : null;
-                        username ? user.username = xss(username) : null;
+                        modifyData.email ? user.email = xss(modifyData.email) : null;
+                        modifyData.username ? user.username = xss(modifyData.username) : null;
                         modifyData.password ? user.password = xss(modifyData.password) : null;
-                        firstname ? user.firstname = xss(firstname) : null;
-                        lastname ? user.lastname = xss(lastname) : null;
+                        modifyData.firstname ? user.firstname = xss(modifyData.firstname) : null;
+                        modifyData.lastname ? user.lastname = xss(modifyData.lastname) : null;
                         profilePic ? user.profilePic = profilePic : null;
                         user.save((error) => {
                             if (error) {
@@ -238,7 +239,7 @@ module.exports = {
                             } else {
                                 console.log('success: user info updated');
                                 modifyData.successMessage = 'User info updated';
-                                return res.status(200).send(modifyData)
+                                return res.status(200).send(modifyData);
                             }
                         })
                     }
