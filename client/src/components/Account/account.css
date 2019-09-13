@@ -39,15 +39,25 @@
 .account__title {
     font-size: 1.5rem;
     font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--color-text-hover);
 }
 
 /*ACCOUNT INFOS*/
 
 .account__infos .hf__content {
     padding: 0;
-    margin-top: 1rem;
 }
 
 /*ACCOUNT MOVIES*/
 
+.account__movies_list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: -1rem;
+}
 
+.account__movies .account__title {
+    color: var(--color-headings) !important;
+    margin-bottom: 1.2rem !important;
+}
