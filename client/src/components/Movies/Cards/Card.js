@@ -1,5 +1,6 @@
 import React from 'react';
 import {NavLink} from 'react-router-dom';
+import classnames from 'classnames';
 
 import './card.css';
 import noImg from '../../../assets/img/movie-not-found.jpg';
@@ -21,8 +22,10 @@ const Card = (props) => {
             </div>
           ))}
         </div>
-        <div className="movie__poster-more with-toolbox">
-          <div className="toolbox">Aller sur la page du film</div>
+        <div className={classnames('movie__poster-more with-toolbox', {
+          'already-seen': true
+        })}>
+          <div className="toolbox">{true ? 'Vous avez déjà vu ce film' : 'Aller sur la page du film'}</div>
         </div>
         <div className="movie__poster-infos">
           <div className="movie__poster-info">{props.movie.year}</div>

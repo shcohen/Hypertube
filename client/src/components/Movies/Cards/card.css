@@ -148,6 +148,10 @@
     opacity: 0;
 }
 
+.movie__poster-more.already-seen {
+    filter: grayscale(1);
+}
+
 .movie__poster:hover .movie__poster-more {
     opacity: 1;
 }
