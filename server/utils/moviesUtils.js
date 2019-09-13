@@ -24,8 +24,9 @@ module.exports = {
                 res.data.yts = yts ? yts.data.data.movie : {};
             }
             let popcornTime = await popcornTimeModel.find({imdb_code: IMDBid});
+            console.log(popcornTime);
             res.data.popcornTime = popcornTime ? popcornTime[0] : {};
-            return res.data.imdbID === res.data.popcornTime.imdb_code ? res.data : null;
+            return res.data.imdbID ? res.data : null;
         })
     },
     filterDuplicateMovies: async (ytsMovies, popcornMovies) => {

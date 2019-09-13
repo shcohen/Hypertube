@@ -43,7 +43,6 @@ module.exports = {
         if (connectedUser && connectedUser.acc_id.length) {
             if (IMDBid !== undefined && IMDBid.length) {
                 let data = await getMovieInfo(IMDBid, YTSid);
-                console.log(data);
                 return data ? res.status(200).send(data) : res.status(400).send('IMDB id doesn\'t match');
             } else {
                 return res.status(400).send(await translateSentence('No ID provided'));

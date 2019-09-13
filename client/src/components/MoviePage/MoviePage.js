@@ -48,8 +48,9 @@ class MoviePage extends Component {
 
   render() {
     const {bigger, movie, rgb} = this.state;
+    const source = movie.popcornTime === undefined ? 'yts' : 'popcornTime';
     const t = this.props.text || {};
-    const runtime = movie.Runtime === 'N/A' ? movie.yts.runtime : movie.Runtime;
+    const runtime = movie.Runtime === 'N/A' ? movie[source].runtime : movie.Runtime;
     if (movie === 'empty') {
       return (<div style={{height: '8rem'}}>
         <Loading/>
@@ -68,7 +69,7 @@ class MoviePage extends Component {
           }}>
             {bigger ? 'Cliquer pour fermer' : 'Cliquer pour agrandir'}
           </div>
-          {movie.yts.yt_trailer_code !== '' && <iframe width="360px" height="200px" title="video"
+          {movie.yts && movie.yts.yt_trailer_code !== '' && <iframe width="360px" height="200px" title="video"
                                                        src={`https://www.youtube.com/embed/${movie.yts.yt_trailer_code}?playlist=${movie.yts.yt_trailer_code}&mute=${bigger ? '0' : '1'}&version=3&autoplay=1&controls=0&disablekb=1&fs=0&loop=1&modestbranding=1&showinfo=0&rel=0`}
                                                        frameBorder="0"
                                                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
@@ -85,7 +86,7 @@ class MoviePage extends Component {
               </div>
               <div className="side__download" style={{backgroundColor: `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`}}>
                 <h1 className="download__label">{t._SIDE_LABEL}</h1>
-                {movie.yts.torrents && movie.yts.torrents.map((torrent, i) => (
+                {movie.yts && movie.yts.torrents && movie.yts.torrents.map((torrent, i) => (
                   <NavLink key={i} to={`/watch/${movie.imdbID}/${encodeURI(movie.Title)}/${torrent.hash}`}>
                     <div className="download__torrent">
                       {torrent.type} {torrent.quality} <span>({torrent.size})</span>
@@ -97,6 +98,18 @@ class MoviePage extends Component {
                     </div>
                   </NavLink>
                 ))}
+                  {movie.popcornTime && movie.popcornTime.torrents && movie.popcornTime.torrents.map((torrent, i) => (
+                      <NavLink key={i} to={`/watch/${movie.imdbID}/${encodeURI(movie.Title)}/${torrent.hash}`}>
+                          <div className="download__torrent">
+                              {torrent.type} {torrent.quality} <span>({torrent.size})</span>
+                              <div className="download__p2p">
+                                  <div className="download__seeds">{torrent.seeds}</div>
+                                  <div className="download__peers">{torrent.peers}</div>
+                              </div>
+                              <div className="download__play"/>
+                          </div>
+                      </NavLink>
+                  ))}
               </div>
             </div>
             <div className="movie__main">
@@ -115,7 +128,7 @@ class MoviePage extends Component {
                 <div className="main__group special">
                   <div>
                     <div className="main__g_name">{t._SYNOPSIS}</div>
-                    <div className="main__g_text">{movie.Plot === 'N/A' ? movie.yts.description_full : movie.Plot}</div>
+                    <div className="main__g_text">{movie.Plot === 'N/A' ? movie[source].description_full : movie.Plot}</div>
                   </div>
                 </div>
                 <div className="main__group">

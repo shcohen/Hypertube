@@ -68,7 +68,7 @@ module.exports = {
                             return res.status(200).send(allComments);
                         } else {
                             checkComment.errorMessage = 'Comments not found';
-                            return (res.status(500).send([]))
+                            return (res.status(200).send([]))
                         }
                     })
                 } else {
