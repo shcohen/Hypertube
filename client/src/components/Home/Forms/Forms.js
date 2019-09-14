@@ -26,7 +26,7 @@ class Forms extends Component {
       });
     }
     if (params.action === 'validate') {
-      axios.post('/api/account/validate', params)
+      axios.patch('/api/account/validate', params)
         .then(() => {
           this.setState({
             step: 'validateSuccess'

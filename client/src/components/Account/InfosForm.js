@@ -40,7 +40,7 @@ const InfosForm = (props) => {
     form.append('firstname', formData.firstname);
     form.append('lastname', formData.lastname);
     form.append('profilePic', formData.profilePic);
-    axios.post('/api/account/modify', form)
+    axios.put('/api/account/modify', form)
       .then((res) => {
         console.log(res.data);
         setFormData({...formData, ...res.data});

@@ -14,7 +14,7 @@ const ForgotPassword = (props) => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
-    axios.post('/api/account/forgot_password', formData)
+    axios.patch('/api/account/forgot_password', formData)
       .then((res) => {
         console.log('forgot password sent');
         setFormData({...formData, errorMessage: '', success: true});

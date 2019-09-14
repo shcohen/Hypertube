@@ -60,7 +60,7 @@ export const setLanguage = (lang) => dispatch => {
   dispatch(getTranslation());
   const {user} = store.getState();
   if (user && user.isAuthenticated) {
-    axios.post('/api/account/language', {lang: lang})
+    axios.patch('/api/account/language', {lang: lang})
       .then(res => {})
       .catch(err => {});
   }

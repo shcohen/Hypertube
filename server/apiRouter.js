@@ -34,15 +34,15 @@ exports.router = (() => {
 
     /* ACCOUNT */
     apiRouter.route('/account/register').post(upload.single('profilePic'), userManagement.register);
-    apiRouter.route('/account/validate').post(userManagement.validateAccount);
+    apiRouter.route('/account/validate').patch(userManagement.validateAccount);
     apiRouter.route('/account/login').post(userManagement.authenticate);
     apiRouter.route('/account/registerSuccess').get(userManagement.registerSuccess);
     apiRouter.route('/account/registerFailure').get(userManagement.registerFailure);
     apiRouter.route('/account/loginFailure').get(userManagement.loginFailure);
-    apiRouter.route('/account/modify').post(upload.single('profilePic'), userManagement.modify);
-    apiRouter.route('/account/forgot_password').post(userManagement.sendForgotPassword);
-    apiRouter.route('/account/reset_password').post(userManagement.resetPassword);
-    apiRouter.route('/account/language').post(userManagement.changeLang);
+    apiRouter.route('/account/modify').put(upload.single('profilePic'), userManagement.modify);
+    apiRouter.route('/account/forgot_password').patch(userManagement.sendForgotPassword);
+    apiRouter.route('/account/reset_password').patch(userManagement.resetPassword);
+    apiRouter.route('/account/language').patch(userManagement.changeLang);
 
     /* STRATEGIES */
     apiRouter.route('/account/google/').get(strategies.google);
@@ -56,8 +56,8 @@ exports.router = (() => {
     /* MOVIE */
     apiRouter.route('/comments').get(postManagement.getComments);
     apiRouter.route('/comments/submit').post(postManagement.createComment);
-    apiRouter.route('/comments/modify').post(postManagement.modifyComment);
-    apiRouter.route('/comments/delete').post(postManagement.deleteComment);
+    apiRouter.route('/comments/modify').put(postManagement.modifyComment);
+    apiRouter.route('/comments/delete').delete(postManagement.deleteComment);
 
     /* MOVIE LIBRARY */
     apiRouter.route('/library/find_movie').post(libraryManagement.libraryManager);
