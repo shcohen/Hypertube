@@ -318,9 +318,14 @@ module.exports = {
             }
         })
     },
-    resetPassword: (req, res) => {
+    resetPassword: async (req, res) => {
         let checkPassword = {};
         let {password, confirm, resetToken} = req.body;
+        if (!resetToken) {
+            console.log('error: invalid token provided');
+            checkPassword.errorMessage = await translateSentence('Invalid token provided', req);
+            return res.status(400).send(checkPassword)
+        }
         User.findOne({
             resetToken: resetToken
         }).then(async (user, error) => {

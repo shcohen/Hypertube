@@ -72,13 +72,13 @@ class Forms extends Component {
           {step === 2 && <ForgotPassword text={t}/>}
           {step === 3 && <ChangePassword text={t} token={params.token}/>}
           {step === 'validateSuccess' && <h4 style={{color: 'var(--color-headings)', fontSize: '0.9rem'}}>
-            Your account is verified. You can now login.
+            {t._VALIDATE_SUCCESS}
           </h4>}
           {step === 'validateError' && <h4 style={{color: 'red', fontSize: '0.9rem'}}>
-            Invalid link. Check the email we sent you.
+            {t._VALIDATE_ERROR}
           </h4>}
           {step === 'forgotSuccess' && <h4 style={{color: 'var(--color-headings)', fontSize: '0.9rem'}}>
-            Your password have been changed. You can now login.
+            {t._FORGOT_SUCCESS}
           </h4>}
         </div>
         <hr className="or"/>

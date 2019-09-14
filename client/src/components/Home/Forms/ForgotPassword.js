@@ -4,7 +4,8 @@ import axios from 'axios';
 const ForgotPassword = (props) => {
   let [formData, setFormData] = useState({
     email: '',
-    emailError: '',
+    errorMessage: '',
+    success: false
   });
 
   const onInputChange = (e) => {
@@ -16,9 +17,10 @@ const ForgotPassword = (props) => {
     axios.post('/api/account/forgot_password', formData)
       .then((res) => {
         console.log('forgot password sent');
+        setFormData({...formData, errorMessage: '', success: true});
       })
       .catch((err) => {
-        setFormData({...err.response.data});
+        setFormData({...formData, ...err.response.data});
       });
   };
 
@@ -33,8 +35,8 @@ const ForgotPassword = (props) => {
              placeholder={t._FORGOT_PWD_EMAIL_PLACEHOLDER}
              onChange={onInputChange}
              value={formData.email}/><br/>
-      {formData.emailError !== '' && <p><i className="fas fa-times"/> {formData.emailError}</p>}
-      <input type="submit" value={' ' + t._FORGOT_PWD_BUTTON + ' '}/>
+      {formData.errorMessage !== '' && <p><i className="fas fa-times"/> {formData.errorMessage}</p>}
+      <input type="submit" value={' ' + t._FORGOT_PWD_BUTTON + ' '} disabled={formData.success} className={formData.success ? 'success' : ''}/>
     </form>
   );
 };

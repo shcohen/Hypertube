@@ -168,3 +168,11 @@ form:not(.custom) input[type="submit"]:disabled {
     filter: grayscale(100%);
     cursor: not-allowed;
 }
+
+button.custom.success,
+form:not(.custom) input[type="submit"].success {
+    background: #73d15c url("../assets/img/input-success.svg") no-repeat center !important;
+    background-size: 1rem !important;
+    filter: none !important;
+    color: transparent !important;
+}

@@ -7,8 +7,7 @@ const ResetPassword = (props) => {
   let [formData, setFormData] = useState({
     password: '',
     confirm: '',
-    passwordError: '',
-    confirmError: ''
+    errorMessage: ''
   });
 
   const onInputChange = (e) => {
@@ -20,10 +19,12 @@ const ResetPassword = (props) => {
     axios.post('/api/account/reset_password', {...formData, resetToken: props.token})
       .then(res => {
         console.log(res.data);
+        setFormData({...formData, errorMessage: '', success: true});
       })
       .catch(err => {
         console.log(err);
-      })
+        setFormData({...formData, ...err.response.data});
+      });
   };
 
   const t = props.text || {};
@@ -45,7 +46,6 @@ const ResetPassword = (props) => {
                value={formData.password}/><br/>
         <PasswordValidator password={formData.password}/>
       </div>
-      {formData.passwordError !== '' && <p><i className="fas fa-times"/> {formData.passwordError}</p>}
       <label>{t._CONFIRMATION}</label><br/>
       <input className="validation"
              name="confirm"
@@ -58,8 +58,8 @@ const ResetPassword = (props) => {
              required
              onChange={onInputChange}
              value={formData.confirm}/><br/>
-      {formData.confirmError !== '' && <p><i className="fas fa-times"/> {formData.confirmError}</p>}
-      <input type="submit" value={' ' + t._CHANGE_PWD_BUTTON + ' '}/>
+      {formData.errorMessage !== '' && <p><i className="fas fa-times"/> {formData.errorMessage}</p>}
+      <input type="submit" value={' ' + t._CHANGE_PWD_BUTTON + ' '} disabled={formData.success} className={formData.success ? 'success' : ''}/>
     </form>
   );
 };
