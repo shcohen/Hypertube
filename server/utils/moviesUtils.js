@@ -15,16 +15,19 @@ module.exports = {
                 "X-RapidAPI-Key": RAPIDAPI_KEY
             }
         }).then(async res => {
+            if (res.data.Response === 'False') {
+                return null;
+            }
             let genres = await translateSentence(res.data.Genre, req);
             res.data.Genre = genres.split(',').map((genre) => (genre.trim()));
             res.data.Plot = await translateSentence(res.data.Plot, req);
             if (YTSid !== 'undefined') {
                 let yts = await axios.get(`https://yts.lt/api/v2/movie_details.json?movie_id=${YTSid}`);
-                res.data.yts = yts ? yts.data.data.movie : {};
+                res.data.yts = yts && yts.data !== '' ? yts.data.data.movie : {};
                 res.data.yts.description_full =  await translateSentence(res.data.yts.description_full, req);
             }
             let popcornTime = await popcornTimeModel.find({imdb_code: IMDBid});
-            res.data.popcornTime = popcornTime ? popcornTime[0] : {};
+            res.data.popcornTime = popcornTime && popcornTime.length ? popcornTime[0] : {};
             return res.data.imdbID ? res.data : null;
         })
     },
