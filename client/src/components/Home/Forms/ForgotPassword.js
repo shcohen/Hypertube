@@ -16,7 +16,6 @@ const ForgotPassword = (props) => {
     e.preventDefault();
     axios.patch('/api/account/forgot_password', formData)
       .then((res) => {
-        console.log('forgot password sent');
         setFormData({...formData, errorMessage: '', success: true});
       })
       .catch((err) => {

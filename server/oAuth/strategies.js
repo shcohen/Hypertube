@@ -8,7 +8,6 @@ module.exports = {
         })(req, res, next)
     },
     googleRedirect: (req, res, next) => { // load data
-        console.log('been there');
         passport.authenticate('google', {
             successRedirect: '/api/jwt',
             failureRedirect: '/api/account/google',
@@ -21,7 +20,6 @@ module.exports = {
         })(req, res, next)
     },
     githubRedirect: (req, res, next) => { // load data
-        console.log('been there');
         passport.authenticate('github', {
             successRedirect: '/api/jwt',
             failureRedirect: '/api/account/github',
@@ -32,7 +30,6 @@ module.exports = {
         passport.authenticate('42')(req, res, next)
     },
     fortyTwoRedirect: (req, res, next) => { // load data
-        console.log('been there');
         passport.authenticate('42', {
             successRedirect: '/api/jwt',
             failureRedirect: '/api/account/42',

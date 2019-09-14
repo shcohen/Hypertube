@@ -39,7 +39,6 @@ class Comments extends Component {
 
   submitForm = (e) => {
     e.preventDefault();
-    console.log(this.state.newComment);
     axios.post('/api/comments/submit', {
       movie_id: this.props.movieId,
       message: this.state.newComment
@@ -61,13 +60,11 @@ class Comments extends Component {
   getComments = () => {
     axios.get(`/api/comments?movie_id=${this.props.movieId}`)
       .then(res => {
-        console.log(res.data);
         this.setState({
           comments: res.data
         })
       })
       .catch(err => {
-        console.log(err);
       });
   };
 
@@ -79,7 +76,6 @@ class Comments extends Component {
     const {t} = this.props || {};
     const {comments, newComment} = this.state;
     moment.locale(this.props.lang);
-    console.log(moment.locale());
 
     return (
       <React.Fragment>

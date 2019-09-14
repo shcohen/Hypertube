@@ -50,14 +50,12 @@ class Movies extends Component {
     const {movies, ...forms} = this.state;
     axios.post('/api/library/find_movie', {...forms, search: this.state.title, quantity: this.STEP * 3})
       .then((res) => {
-        console.log(res.data);
         this._isMounted && this.setState({
           movies: res.data,
           loadingSearch: false
         });
       })
       .catch((err) => {
-        console.log(err);
         this._isMounted && this.setState({
           loadingSearch: false
         });
@@ -71,7 +69,6 @@ class Movies extends Component {
       });
       axios.post('/api/library/find_movie', {...this.state, search: this.state.title})
         .then((res) => {
-          console.log(res.data);
           this._isMounted && this.setState({
             movies: res.data,
             quantity: this.state.quantity + this.STEP,
@@ -79,7 +76,6 @@ class Movies extends Component {
           });
         })
         .catch((err) => {
-          console.log(err);
           this._isMounted && this.setState({
             loadingInfinite: false
           });

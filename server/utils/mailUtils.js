@@ -38,10 +38,8 @@ module.exports = {
     sendValidationMail: function(email, token) {
         transporter.sendMail(mailOptions(email, token), (error) => {
             if (error) {
-                console.log(error);
                 return false
             } else {
-                console.log('success: validation mail sent');
                 return true
             }
         });
@@ -49,10 +47,8 @@ module.exports = {
     resetMail: (email, token) => {
         transporter.sendMail(resetMail(email, token), (error) => {
             if (error) {
-                console.log(error);
                 return false
             } else {
-                console.log('success: password reset mail sent');
                 return true
             }
         });

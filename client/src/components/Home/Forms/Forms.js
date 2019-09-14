@@ -17,7 +17,6 @@ class Forms extends Component {
   };
 
   componentWillMount() {
-    console.log(this.props.location.search);
     const params = queryString.parse(this.props.location.search);
     if (params.action === 'forgot-password') {
       this.setState({

@@ -51,10 +51,8 @@ module.exports = (passport) => {
                 username: username
             }).then((user, error) => { // check if user exists + user info in database
                 if (error) {
-                    console.log(error);
                     return done(error, false)
                 } else if (!user) {
-                    console.log('error: not registered');
                     return done(null, false, req.flash('errorMessage', {loginError: 'Incorrect username and/or password'}))
                 } else { // checking password
                     if (user.validation) {
@@ -62,15 +60,12 @@ module.exports = (passport) => {
                         Method.authenticate(password, user.password)
                             .then(isLogged => {
                                 if (isLogged) {
-                                    console.log('success: user logged in');
                                     return done(null, user, req.flash('successMessage', {loginSuccess: user.acc_id}))
                                 } else {
-                                    console.log('error: wrong password');
                                     return done(null, false, req.flash('errorMessage', {loginError: 'Incorrect username and/or password'}))
                                 }
                             })
                     } else {
-                        console.log('error: account not confirmed');
                         return done(null, false, req.flash('errorMessage', {loginError: 'Account not verified'}))
                     }
                 }
@@ -84,19 +79,15 @@ module.exports = (passport) => {
             callbackURL: '/api/account/google/redirect',
             passReqToCallback: true
         }, (req, accessToken, refreshToken, profile, done) => {
-            console.log("done that");
             if (!profile) {
-                console.log('error: missing profile data');
                 return done(null, false, req.flash('errorMessage', 'Missing profile data'))
             } else {
                 User.findOne({
                     googleId: profile.id,
                 }).then((user, error) => {
                     if (user) {
-                        console.log('success: user logged in');
                         return done(null, user, req.flash('successMessage', 'User logged in'))
                     } else if (error) {
-                        console.log(error);
                         return done(error, false);
                     } else {
                         User.findOne({
@@ -107,18 +98,14 @@ module.exports = (passport) => {
                                     email: profile._json.email
                                 }, {googleId: profile.id}).then((updated, error) => {
                                     if (error) {
-                                        console.log(error);
                                         return done(error, false);
                                     } else if (updated) {
-                                        console.log('success: user info updated');
                                         return done(null, updated, req.flash('successMessage', 'User info updated'))
                                     } else {
-                                        console.log('error: user not found');
                                         return done(null, false, req.flash('errorMessage', 'User not found'))
                                     }
                                 })
                             } else if (error) {
-                                console.log(error);
                                 return done(error, false);
                             } else {
                                 let validationToken = Math.random().toString(36).substr(2, 9);
@@ -140,10 +127,8 @@ module.exports = (passport) => {
                                     profilePic: profile._json.picture
                                 }).then((isCreated) => {
                                     if (!isCreated) {
-                                        console.log('error while creating user');
                                         return done(null, user, req.flash('errorMessage', 'User not created'))
                                     } else {
-                                        console.log('success: user created');
                                         return done(null, user, req.flash('successMessage', 'User created'))
                                     }
                                 })
@@ -161,19 +146,15 @@ module.exports = (passport) => {
             callbackURL: '/api/account/github/redirect',
             passReqToCallback: true
         }, (req, accessToken, refreshToken, profile, done) => {
-            console.log('done that');
             if (!profile) {
-                console.log('error: missing profile data');
                 return done(null, false, req.flash('errorMessage', 'Missing profile data'))
             } else {
                 User.findOne({
                     githubId: profile.id,
                 }).then((user, error) => {
                     if (user) {
-                        console.log('success: user logged in');
                         return done(null, user, req.flash('successMessage', 'User logged in'))
                     } else if (error) {
-                        // console.log(error);
                         return done(error, false);
                     } else {
                         User.findOne({
@@ -184,18 +165,14 @@ module.exports = (passport) => {
                                     email: profile._json.email
                                 }, {githubId: profile._json.id}).then((updated, error) => {
                                     if (error) {
-                                        // console.log(error);
                                         return done(error, false);
                                     } else if (updated) {
-                                        console.log('success: user info updated');
                                         return done(null, updated, req.flash('successMessage', 'User info updated'))
                                     } else {
-                                        console.log('error: user not found');
                                         return done(null, false, req.flash('errorMessage', 'User not found'))
                                     }
                                 })
                             } else if (error) {
-                                // console.log(error);
                                 return done(error, false);
                             } else {
                                 let validationToken = Math.random().toString(36).substr(2, 9);
@@ -217,10 +194,8 @@ module.exports = (passport) => {
                                     profilePic: profile._json.avatar_url
                                 }).then((isCreated) => {
                                     if (!isCreated) {
-                                        console.log('error while creating user');
                                         return done(null, user, req.flash('errorMessage', 'User not created'))
                                     } else {
-                                        console.log('success: user created');
                                         return done(null, user, req.flash('successMessage', 'User created'))
                                     }
                                 });
@@ -238,19 +213,15 @@ module.exports = (passport) => {
             callbackURL: '/api/account/42/redirect',
             passReqToCallback: true
         }, (req, accessToken, refreshToken, profile, done) => {
-            console.log('done that');
             if (!profile) {
-                console.log('error: missing profile data');
                 return done(null, false, req.flash('errorMessage', 'Missing profile data'))
             } else {
                 User.findOne({
                     fortyTwoId: profile.id,
                 }).then((user, error) => {
                     if (user) {
-                        console.log('success: user logged in');
                         return done(null, user, req.flash('successMessage', 'User logged in'))
                     } else if (error) {
-                        console.log(error);
                         return done(error, false);
                     } else {
                         User.findOne({
@@ -261,18 +232,14 @@ module.exports = (passport) => {
                                     email: profile._json.email
                                 }, {fortyTwoId: profile._json.id}).then((updated, error) => {
                                     if (error) {
-                                        console.log(error);
                                         return done(error, false);
                                     } else if (updated) {
-                                        console.log('success: user info updated');
                                         return done(null, updated, req.flash('successMessage', 'User info updated'))
                                     } else {
-                                        console.log('error: user not found');
                                         return done(null, false, req.flash('errorMessage', 'User not found'))
                                     }
                                 })
                             } else if (error) {
-                                console.log(error);
                                 return done(error, false);
                             } else {
                                 let validationToken = Math.random().toString(36).substr(2, 9);
@@ -294,10 +261,8 @@ module.exports = (passport) => {
                                     profilePic: profile._json.image_url
                                 }).then((isCreated) => {
                                     if (!isCreated) {
-                                        console.log('error while creating user');
                                         return done(null, user, req.flash('errorMessage', 'User not created'))
                                     } else {
-                                        console.log('success: user created');
                                         return done(null, user, req.flash('successMessage', 'User created'))
                                     }
                                 });

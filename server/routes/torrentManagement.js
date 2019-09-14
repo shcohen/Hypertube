@@ -10,7 +10,6 @@ const {trackDownloadedMovies} = require('../utils/moviesUtils');
 
 module.exports = {
     streamVideoWithConversion: (res, file) => {
-        console.log('Streaming with conversion');
         let stream = file.createReadStream();
         let video = ffmpeg(stream)
             .videoCodec('libvpx')
@@ -23,15 +22,10 @@ module.exports = {
                 '-error-resilient 1',
                 '-threads 4'])
             .on('progress', () => {
-                console.log('Processing...');
             })
             .on('error', function (err, stdout, stderr) {
-                console.log('Cannot process video: ' + err.message);
-                console.log("ffmpeg stdout:\n" + stdout);
-                console.log("ffmpeg stderr:\n" + stderr);
             })
             .on('end', function () {
-                console.log('Processing finished successfully');
             });
         const head = {
             'Cache-Control': 'no-cache, no-store',
@@ -39,7 +33,6 @@ module.exports = {
             'Content-Type': 'video/webm'
         };
         res.writeHead(200, head);
-        console.log('Header writted !');
         pump(video, res);
     },
     streamVideoWithoutConversion: (res, file, range) => {
@@ -87,15 +80,13 @@ module.exports = {
                     }
                 } else {
                     file.deselect();
-                    console.log('File deselected !');
                 }
             });
         });
         engine.on('download', () => {
-            console.log(Math.round((engine.swarm.downloaded / fileSize) * 100) + '% downloaded');
+            // console.log(Math.round((engine.swarm.downloaded / fileSize) * 100) + '% downloaded');
         });
         engine.on('error', () => {
-            console.log('WOLA');
         })
     },
     torrentManager: async (req, res) => {

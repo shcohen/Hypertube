@@ -16,7 +16,6 @@ const Login = (props) => {
     e.preventDefault();
     axios.post('/api/account/login', formData)
       .then(res => {
-          console.log('salut');
           window.location.reload(true);
       })
       .catch(err => {

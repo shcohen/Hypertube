@@ -16,15 +16,12 @@ module.exports = {
                 acc_id: acc_id
             }).then((user, error) => {
                 if (error) {
-                    console.log(error);
                     return res.status(500).send('error: ', error)
                 } else if (user) {
-                    console.log(user);
                     Movies.find({
                         accId: acc_id
                     }).then((seen, error) => {
                         if (error) {
-                            console.log(error);
                             return res.status(500).send('error: ', error)
                         } else if (seen.length) {
                             res.status(200).send(seen)
@@ -55,14 +52,12 @@ module.exports = {
                 acc_id: acc_id
             }).then((user, error) => {
                 if (error) {
-                    console.log(error);
                     return res.status(500).send('error: ', error)
                 } else if (user) {
                     Comment.find({
                         movie_id: xss(movie_id)
                     }).then((allComments, error) => {
                         if (error) {
-                            console.log(error);
                             return res.status(500).send('error: ', error);
                         } else if (allComments.length) {
                             return res.status(200).send(allComments);
@@ -94,7 +89,6 @@ module.exports = {
                     acc_id: acc_id
                 }).then((user, error) => {
                     if (error) {
-                        console.log(error);
                         return res.status(500).send('error: ', error)
                     } else if (user) {
                         Comment.create({
@@ -104,7 +98,6 @@ module.exports = {
                             message: xss(message)
                         }).then((isStored, error) => {
                             if (error) {
-                                console.log(error);
                                 return res.status(500).send('error: ', error)
                             } else if (isStored) {
                                 checkComment.successMessage = 'Comment stored';
@@ -138,7 +131,6 @@ module.exports = {
                     acc_id: acc_id
                 }).then((user, error) => {
                     if (error) {
-                        console.log(error);
                         return res.status(500).send('error: ', error)
                     } else if (user) {
                         Comment.findOneAndUpdate({
@@ -148,7 +140,6 @@ module.exports = {
                             message: xss(message)
                         }).then((isModified, error) => {
                             if (error) {
-                                console.log(error);
                                 return res.status(500).send('error: ', error)
                             } else if (isModified) {
                                 checkComment.successMessage = 'Comment modified';
@@ -182,7 +173,6 @@ module.exports = {
                     acc_id: acc_id
                 }).then((user, error) => {
                     if (error) {
-                        console.log(error);
                         return res.status(401).send('error: ', error)
                     } else if (user) {
                         Comment.findOneAndDelete({
@@ -190,7 +180,6 @@ module.exports = {
                             acc_id: xss(acc_id)
                         }).then((isDeleted, error) => {
                             if (error) {
-                                console.log(error);
                                 return res.status(500).send('error: ', error)
                             } else if (isDeleted) {
                                 checkComment.successMessage = 'Comment deleted';

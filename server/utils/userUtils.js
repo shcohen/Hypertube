@@ -13,11 +13,9 @@ schema // add properties to it
 module.exports = {
     checkPassword: (password, rpassword) => {
         if (password !== rpassword) {
-            console.log('passwords do not match');
             return { errorCode: -1, errorMessage: 'passwords do not match' };
         } else {
             if (!schema.validate(password, { list: false })) {
-                console.log('invalid password provided: missing ' + schema.validate(password, { list: true }));
                 return {
                     errorCode: -1, errorMessage: 'invalid password provided: missing ' + schema.validate(password, { list: true })
                 };
@@ -29,17 +27,13 @@ module.exports = {
     checkEmail: async (email, acc_id) => {
         let emailCheck = await User.findOne({ email: email });
         if (emailCheck && emailCheck.email && emailCheck.acc_id !== acc_id) {
-            console.log('email already taken');
             return { errorCode: -1, errorMessage: 'email already taken' }
         } else if (emailCheck && emailCheck.error) {
-            console.log(emailCheck.error);
             return { errorCode: -1, errorMessage: 'error: ' + emailCheck.error }
         } else {
             if (validator.validate(email) === true) {
-                console.log('email check passed');
                 return { successCode: 1, successMessage: 'email updated successfully' }
             } else {
-                console.log('invalid email provided');
                 return { errorCode: -1, errorMessage: 'invalid email provided' }
             }
         }
@@ -47,31 +41,24 @@ module.exports = {
     checkUsername: async (username, acc_id) => {
         let usernameCheck = await User.findOne({ username: username });
         if (usernameCheck && usernameCheck.username && usernameCheck.acc_id !== acc_id) {
-            console.log('username already taken');
             return { errorCode: -1, errorMessage: 'username already taken' }
         } else if (usernameCheck && usernameCheck.error) {
-            console.log(usernameCheck.error);
             return { errorCode: -1, errorMessage: 'error: ' + usernameCheck.error }
         } else {
-            console.log('username check passed');
             return { successCode: 1, successMessage: 'username updated successfully' }
         }
     },
     checkFirstname: (firstname) => {
         if (!firstname) {
-            console.log('invalid firstname provided');
             return { errorCode: -1, errorMessage: 'invalid firstname provided' }
         } else {
-            console.log('firstname check passed');
             return { successCode: 1, successMessage: 'firstname updated successfully' }
         }
     },
     checkLastname: (lastname) => {
         if (!lastname) {
-            console.log('invalid lastname provided');
             return { errorCode: -1, errorMessage: 'invalid lastname provided' }
         } else {
-            console.log('lastname check passed');
             return { successCode: 1, successMessage: 'lastname updated successfully' }
         }
     }

@@ -20,11 +20,8 @@ class MoviePage extends Component {
 
   componentWillMount() {
     const {IMDBid, YTSid} = this.props.match.params;
-    console.log(IMDBid);
-    console.log(YTSid);
     axios.get(`/api/library/find_movie_info?IMDBid=${IMDBid}&YTSid=${YTSid}`)
       .then((res) => {
-        console.log(res.data);
         this.setState({
           movie: res.data
         });
@@ -42,7 +39,6 @@ class MoviePage extends Component {
         this.setState({
           movie: 'error'
         });
-        console.log(err);
       });
   }
 

@@ -48,7 +48,6 @@ const Register = (props) => {
     form.append('profilePic', formData.profilePic);
     axios.post('/api/account/register', form)
       .then((res) => {
-        console.log(res.data);
         setFormData({...formData,
           emailError: '',
           usernameError: '',
@@ -71,7 +70,6 @@ const Register = (props) => {
       reader.onload = (evt) => {
         const preview = document.getElementById('profile_pic_preview');
         preview.src = evt.target.result;
-        console.log(input.files[0]);
         setFormData({
           ...formData,
           profilePic: input.files[0]

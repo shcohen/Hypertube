@@ -18,11 +18,9 @@ const ResetPassword = (props) => {
     e.preventDefault();
     axios.patch('/api/account/reset_password', {...formData, resetToken: props.token})
       .then(res => {
-        console.log(res.data);
         setFormData({...formData, errorMessage: '', success: true});
       })
       .catch(err => {
-        console.log(err);
         setFormData({...formData, ...err.response.data});
       });
   };
