@@ -6,6 +6,7 @@ let config = require('../oAuth/config.js');
 const xss = require('xss');
 const mailUtils = require('../utils/mailUtils');
 const User = require('../models/user'); // load up the user model
+const uuid = require('uuid');
 
 module.exports = (passport) => {
     /* local sign-up form */
@@ -14,7 +15,7 @@ module.exports = (passport) => {
             passwordField: 'password',
             passReqToCallback: true // access the request object in the callback
         }, (req, email, password, done) => { // retrieve data
-            let validationToken = Math.random().toString(36).substr(2, 9);
+            let validationToken = uuid.v4();
             User.create({
                 acc_id: Math.random().toString(36).substr(2, 9),
                 email: xss(email),

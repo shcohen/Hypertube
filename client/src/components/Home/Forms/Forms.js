@@ -7,7 +7,7 @@ import axios from 'axios';
 import Login from './Login';
 import Register from './Register';
 import ForgotPassword from './ForgotPassword';
-import ChangePassword from './ChangePassword';
+import ChangePassword from './ResetPassword';
 
 import './home-forms.css';
 
@@ -29,12 +29,12 @@ class Forms extends Component {
       axios.post('/api/account/validate', params)
         .then(() => {
           this.setState({
-            step: 4
+            step: 'validateSuccess'
           });
         })
         .catch(() => {
           this.setState({
-            step: 'error'
+            step: 'validateError'
           });
         });
     }
@@ -49,6 +49,7 @@ class Forms extends Component {
   render() {
     const {step} = this.state;
     const t = this.props.text || {};
+    const params = queryString.parse(this.props.location.search);
 
     return (
       <div className="right-side">
@@ -69,13 +70,16 @@ class Forms extends Component {
           {step === 0 && <Register text={t}/>}
           {step === 1 && <Login goToForgotPwd={() => this.goToStep(2)} text={t}/>}
           {step === 2 && <ForgotPassword text={t}/>}
-          {step === 3 && <ChangePassword text={t}/>}
-          {step === 4 && <div>
-            ok validate
-          </div>}
-          {step === 'error' && <div>
-            error validate
-          </div>}
+          {step === 3 && <ChangePassword text={t} token={params.token}/>}
+          {step === 'validateSuccess' && <h4 style={{color: 'var(--color-headings)', fontSize: '0.9rem'}}>
+            Your account is verified. You can now login.
+          </h4>}
+          {step === 'validateError' && <h4 style={{color: 'red', fontSize: '0.9rem'}}>
+            Invalid link. Check the email we sent you.
+          </h4>}
+          {step === 'forgotSuccess' && <h4 style={{color: 'var(--color-headings)', fontSize: '0.9rem'}}>
+            Your password have been changed. You can now login.
+          </h4>}
         </div>
         <hr className="or"/>
         <div className="hf__content">

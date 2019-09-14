@@ -25,7 +25,7 @@ let resetMail = (email, token) => {
         to: email,
         subject: 'Forgot your password? Let\'s get you a new one.',
         html: '<p>You are receiving this e-mail because you requested a password reset for your Hyper account. Click ' +
-            '<a href="http://localhost:3000?action=reset_password&token=' + token + '">here</a> ' +
+            '<a href="http://localhost:3000?action=forgot-password&token=' + token + '">here</a> ' +
             'to set up a new password. If you are not the author of this request, please contact our support team.</p>'
     };
     return mail;

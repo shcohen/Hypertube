@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
+import axios from 'axios';
 
 import PasswordValidator from "../../Utilities/PasswordValidator/PasswordValidator";
 
-const ChangePassword = (props) => {
+const ResetPassword = (props) => {
   let [formData, setFormData] = useState({
     password: '',
     confirm: '',
@@ -16,6 +17,13 @@ const ChangePassword = (props) => {
 
   const onFormSubmit = (e) => {
     e.preventDefault();
+    axios.post('/api/account/reset_password', {...formData, resetToken: props.token})
+      .then(res => {
+        console.log(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
   };
 
   const t = props.text || {};
@@ -56,4 +64,4 @@ const ChangePassword = (props) => {
   );
 };
 
-export default ChangePassword;
+export default ResetPassword;

@@ -94,7 +94,7 @@ module.exports = {
                         return res.status(400).send(checkData);
                     }
                     if (await module.exports.validateImage(profilePic) === false) {
-                        console.log(profilePic)
+                        console.log(profilePic);
                         console.log('error: invalid picture provided');
                         checkData.profilePicError = 'PNG or JPEG, less than 2MB';
                     }
