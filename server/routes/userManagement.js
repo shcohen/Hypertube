@@ -337,6 +337,7 @@ module.exports = {
                             return res.status(400).send(checkPassword)
                         } else {
                             user.password = password;
+                            user.resetToken = null;
                             user.save(async error => {
                                 if (error) {
                                     console.log('error: ', error);
