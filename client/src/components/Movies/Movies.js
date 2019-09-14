@@ -47,7 +47,8 @@ class Movies extends Component {
       quantity: this.STEP * 6,
       movies: []
     });
-    axios.post('/api/library/find_movie', {...this.state, search: this.state.title, quantity: this.STEP * 3})
+    const {movies, ...forms} = this.state;
+    axios.post('/api/library/find_movie', {...forms, search: this.state.title, quantity: this.STEP * 3})
       .then((res) => {
         console.log(res.data);
         this._isMounted && this.setState({
