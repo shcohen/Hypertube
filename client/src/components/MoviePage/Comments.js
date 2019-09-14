@@ -78,7 +78,7 @@ class Comments extends Component {
   render() {
     const {t} = this.props || {};
     const {comments, newComment} = this.state;
-    moment.locale('fr');
+    moment.locale(this.props.lang);
     console.log(moment.locale());
 
     return (

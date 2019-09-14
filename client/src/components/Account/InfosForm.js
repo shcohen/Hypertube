@@ -1,11 +1,17 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import classnames from 'classnames';
+import store from "../../store";
 
+import cookies from "../../utils/cookies";
+import {setCurrentUser} from "../../store/actions/auth";
+import {setLanguageNoDispatch} from "../../store/actions/translate";
 import PasswordValidator from '../Utilities/PasswordValidator/PasswordValidator';
 
 import '../Home/home.css';
 import '../Home/Forms/home-forms.css';
+import setAuthToken from "../../utils/setAuthToken";
+import jwt_decode from "jwt-decode";
 
 const InfosForm = (props) => {
   let [formData, setFormData] = useState({
@@ -44,6 +50,12 @@ const InfosForm = (props) => {
       .then((res) => {
         console.log(res.data);
         setFormData({...formData, ...res.data});
+        const jwtToken = cookies.get('jwtToken');
+        if (jwtToken && jwtToken !== 'undefined') {
+          setAuthToken(jwtToken);
+          const decoded = jwt_decode(jwtToken);
+          store.dispatch(setCurrentUser(decoded));
+        }
       })
       .catch((err) => {
         setFormData({...formData, ...err.response.data});

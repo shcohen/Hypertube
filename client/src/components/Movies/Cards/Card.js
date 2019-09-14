@@ -13,7 +13,7 @@ const Card = (props) => {
 
   return (props.movie &&
     <div className="movie__card">
-      <NavLink to={`/movie/${props.movie.imdb_code}/${props.movie.id}`}>
+      <NavLink to={`/movie/${props.movie.imdb_code}/${props.movie.id ? props.movie.id : 'no-id'}`}>
       <div className="movie__poster">
         <img className="movie__poster-background" src={image} alt="invisible"
              onError={(e) => {e.target.onerror = null; e.target.src = noImg}}/>
