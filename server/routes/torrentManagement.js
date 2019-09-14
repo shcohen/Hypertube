@@ -96,13 +96,16 @@ module.exports = {
         engine.on('download', () => {
             console.log(Math.round((engine.swarm.downloaded / fileSize) * 100) + '% downloaded');
         });
+        engine.on('error', () => {
+            console.log('WOLA');
+        })
     },
     torrentManager: async (req, res) => {
         let {movieId, movieNameEncoded, movieHash} = req.query;
         let {range} = req.headers;
 
         if (movieId && movieId.length && movieNameEncoded !== undefined && movieNameEncoded.length && movieHash
-            && movieHash.length || range === undefined) {
+            && movieHash.match(/^[a-zA-Z0-9]{40}$/) || range === undefined) {
             let magnet = `magnet:?xt=urn:btih:${movieHash}&dn=${movieNameEncoded}&tr=http://track.one:1234/announce&tr=udp://track.two:80`;
             if ((new RegExp(/magnet:\?xt=urn:.+/)).test(magnet)) {
                 let directoryName = crypto.createHash('md5').update(magnet).digest('hex');
