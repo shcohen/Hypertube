@@ -116,7 +116,7 @@ module.exports = {
         return res.status(409);
     },
     registerSuccess: (req, res) => {
-        return res.status(200);
+        return res.status(201);
     },
     authenticate:
         (req, res, next) => {
