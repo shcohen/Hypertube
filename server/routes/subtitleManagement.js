@@ -46,7 +46,8 @@ module.exports = {
                         })();
                     }));
                     res.status(200).send(subArr.sort((a, b) => ((a.label === b.label) ? 0 : ((a.label > b.label) ? 1 : -1))));
-                });
+                })
+                .catch(() => res.status(200).send([]))
         } else {
           return res.status(403).send('Unauthorized');
         }
