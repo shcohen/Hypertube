@@ -126,16 +126,16 @@ class Home extends Component {
           <div className="window">
             <h1>{auto + (dash ? '|' : ' ')}&nbsp;?</h1>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi harum minus non officiis quidem ratione, reiciendis temporibus ullam vitae? Deserunt.
+              {t._LEARN_MORE_TEXT}
             </p>
           </div>
         </div>
         <div className="triptych__part three">
           <div className="background"/>
           <div className="window">
-            <h1>Lorem Ipsum</h1>
+            <h1>{t._CONTACT_US}</h1>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi harum minus non officiis quidem ratione, reiciendis temporibus ullam vitae? Deserunt.
+              {t._CONTACT_US_TEXT}
             </p>
           </div>
         </div>

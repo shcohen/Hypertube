@@ -1,7 +1,10 @@
 module.exports = {
   _HOME: {
-    _INTRO: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur consequuntur est ex excepturi itaque labore maxime pariatur qui sint voluptatibus.",
+    _INTRO: "This project's purpose is to create a web application that allows the user to search and watch movies online fast and for free. Hyper is a true 21st century streaming website where videos are previously downloaded through the BitTorrent protocol.",
     _LEARN_MORE: "Learn more",
+    _LEARN_MORE_TEXT: "Now you have a good reason to procrastinate, because all of your favorites movies are available for free on Hyper.",
+    _CONTACT_US: "Contact Us",
+    _CONTACT_US_TEXT: "You can contact our support team at hypertube-no-reply@gmail.com.",
     _BACK_TO_THE_TOP: "Back to the top"
   },
   _FORMS: {
