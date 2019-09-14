@@ -1,7 +1,7 @@
 import cookies from '../../utils/cookies';
 import setAuthToken from '../../utils/setAuthToken';
 
-import {SET_CURRENT_USER, SET_LANGUAGE} from './constants';
+import {SET_CURRENT_USER} from './constants';
 import {setLanguage} from './translate';
 
 export const setCurrentUser = (decoded) => {

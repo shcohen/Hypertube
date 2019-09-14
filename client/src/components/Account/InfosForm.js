@@ -5,7 +5,6 @@ import store from "../../store";
 
 import cookies from "../../utils/cookies";
 import {setCurrentUser} from "../../store/actions/auth";
-import {setLanguageNoDispatch} from "../../store/actions/translate";
 import PasswordValidator from '../Utilities/PasswordValidator/PasswordValidator';
 
 import '../Home/home.css';
