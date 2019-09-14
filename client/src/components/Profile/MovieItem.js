@@ -15,6 +15,7 @@ class MovieItem extends Component {
         this.setState({
           ...res.data
         });
+        console.log(res.data);
       })
       .catch(err => {
         console.log(err);
@@ -25,7 +26,7 @@ class MovieItem extends Component {
     const m = this.state;
     return (
       <div className="movie-item">
-        <img src={m.Poster || notFound} alt="poster" className="m-item__poster"/>
+        <img src={m.Poster || notFound} alt="poster" className="m-item__poster" onError={(e) => {e.target.src = notFound}}/>
         <div className="m-item__infos">
           <div className="m-item__title">{m.Title}</div>
           <div className="m-item__subtitle">{m.Director}, {m.Year}</div>
