@@ -235,14 +235,28 @@ module.exports = {
                         modifyData.firstname ? user.firstname = xss(firstname) : null;
                         modifyData.lastname ? user.lastname = xss(lastname) : null;
                         profilePic ? user.profilePic = '/uploads/' + profilePic : null;
-                        user.save(async error => {
+                        user.save(async (error, user) => {
                             if (error) {
                                 console.log('error:', error);
                                 return res.status(500).send('error: ', error)
                             } else {
                                 console.log('success: user info updated');
                                 modifyData.successMessage = await translateSentence('User info updated', req);
-                                return res.status(200).send(modifyData);
+                                const payload = {
+                                    acc_id: user.acc_id,
+                                    email: user.email,
+                                    firstname: user.firstname,
+                                    lastname: user.lastname,
+                                    lang: user.lang,
+                                    profilePic: user.profilePic,
+                                    username: user.username
+                                };
+                                jwt.sign(payload, 'hypertube', {expiresIn: "1d"}, (err, token) => {
+                                    res.cookie('jwtToken', token, {
+                                        maxAge: 1000 * 60 * 60 * 24
+                                    });
+                                    return res.status(200).send(modifyData);
+                                });
                             }
                         })
                     }
