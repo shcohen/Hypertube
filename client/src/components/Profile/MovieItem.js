@@ -11,14 +11,11 @@ class MovieItem extends Component {
   componentWillMount() {
     axios.get(`/api/profile/watched/infos?IMDBid=${this.props.movieId}`)
       .then(res => {
-        console.log(res.data);
         this.setState({
           ...res.data
         });
-        console.log(res.data);
       })
       .catch(err => {
-        console.log(err);
       });
   }
 

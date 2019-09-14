@@ -23,7 +23,6 @@ const scrapPopcornTime = async () => {
     for (let i = 1; i < pages - 1; i++) {
         let movies = await axios.get(`https://tv-v2.api-fetch.website/movies/${i}`)
             .catch(err => {
-                console.log(err);
             });
         movies.data.map(movie => {
             allMovies = [...allMovies, {
@@ -66,7 +65,6 @@ const scrapPopcornTime = async () => {
     }
     await popcornTimesMovies.create(allMovies)
         .catch((err) => {
-            console.log(err);
         });
     process.exit(1);
 };

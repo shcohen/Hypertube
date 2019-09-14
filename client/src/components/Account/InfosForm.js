@@ -49,7 +49,6 @@ const InfosForm = (props) => {
     form.append('profilePic', formData.profilePic);
     axios.put('/api/account/modify', form)
       .then((res) => {
-        console.log(res.data);
         setFormData({...formData, ...res.data, success: true});
         const jwtToken = cookies.get('jwtToken');
         if (jwtToken && jwtToken !== 'undefined') {
@@ -70,7 +69,6 @@ const InfosForm = (props) => {
       reader.onload = (evt) => {
         const preview = document.getElementById('profile_pic_preview');
         preview.src = evt.target.result;
-        console.log(input.files[0]);
         setFormData({
           ...formData,
           profilePic: input.files[0]

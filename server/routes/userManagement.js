@@ -39,7 +39,6 @@ module.exports = {
         }
     },
     register: async (req, res, next) => {
-        console.log('been there');
         let checkData = {};
         let profilePic = req.file;
         let {email, username, password, firstname, confirm, lastname} = req.body;
@@ -54,7 +53,6 @@ module.exports = {
                 checkData.confirmError = await translateSentence('Passwords do not match', req);
             }
             if (validator.validate(email) === false) {
-                console.log('invalid email provided');
                 checkData.emailError = await translateSentence('Invalid email provided', req);
             }
             if (!username.match(/^[a-zA-Z0-9]{1,32}$/)) {
@@ -70,10 +68,8 @@ module.exports = {
                 email: email
             }).then(async (user, error) => {
                 if (user.length) {
-                    console.log('email already taken');
                     checkData.emailError = await translateSentence('Email already taken', req);
                 } else if (error) {
-                    console.log(error);
                     return res.status(500).send('error: ', error)
                 }
                 if (!schema.validate(password, {list: false})) {
@@ -83,10 +79,8 @@ module.exports = {
                     username: username
                 }).then(async (user, error) => {
                     if (user) {
-                        console.log('username already taken');
                         checkData.usernameError = await translateSentence('Username already taken', req);
                     } else if (error) {
-                        console.log(error);
                         return res.status(500).send('error: ', error)
                     }
                     if (!profilePic) {
@@ -94,8 +88,6 @@ module.exports = {
                         return res.status(400).send(checkData);
                     }
                     if (await module.exports.validateImage(profilePic) === false) {
-                        console.log(profilePic);
-                        console.log('error: invalid picture provided');
                         checkData.profilePicError = 'PNG or JPEG, less than 2MB';
                     }
                     if (checkData && !Object.values(checkData).length) {
@@ -120,13 +112,10 @@ module.exports = {
     },
     authenticate:
         (req, res, next) => {
-            console.log('been there');
             let {username, password} = req.body;
             if (!username || !password) {
-                console.log('error: invalid request');
                 return res.status(400).send('error: invalid request')
             } else {
-                console.log('done that');
                 passport.authenticate('local-signin', {
                     successRedirect: '/api/jwt',
                     failureRedirect: '/api/account/loginFailure',
@@ -161,7 +150,6 @@ module.exports = {
                         modifyData.password = password;
                     }
                 } else if (!password && confirm || password && !confirm) {
-                    console.log('missing password or confirm');
                     modifyData.passwordError = await translateSentence('Missing passwords', req);
                 }
                 // email check
@@ -212,7 +200,6 @@ module.exports = {
                         modifyData.pictureCheck = await translateSentence('Profile picture updated', req);
                         profilePic = profilePic.path;
                     } else {
-                        console.log('error: invalid picture provided');
                         modifyData.profilePicError = await translateSentence('Invalid picture provided', req);
                         profilePic = null;
                     }
@@ -222,11 +209,9 @@ module.exports = {
                     acc_id: acc_id
                 }).then(async (user, error) => {
                     if (!user) {
-                        console.log('no account found');
                         modifyData.errorMessage = await translateSentence('Account not found', req);
                         return res.status(401).send(modifyData)
                     } else if (error) {
-                        console.log('error:', error);
                         return res.status(400).send('error: ', error)
                     } else {
                         modifyData.email ? user.email = xss(modifyData.email) : null;
@@ -237,10 +222,8 @@ module.exports = {
                         profilePic ? user.profilePic = '/uploads/' + profilePic : null;
                         user.save(async (error, user) => {
                             if (error) {
-                                console.log('error:', error);
                                 return res.status(500).send('error: ', error)
                             } else {
-                                console.log('success: user info updated');
                                 modifyData.successMessage = await translateSentence('User info updated', req);
                                 const payload = {
                                     acc_id: user.acc_id,
@@ -273,7 +256,6 @@ module.exports = {
             }).then(async (user, error) => {
                 if (user) {
                     if (user.validation === true) {
-                        console.log('error: account already confirmed');
                         checkToken.errorMessage = await translateSentence('Account not found', req);
                         return res.status(401).send(checkToken)
                     } else {
@@ -284,13 +266,11 @@ module.exports = {
                                 checkToken.successMessage = await translateSentence('Account is not confirmed, you cannot log in', req);
                                 return res.status(200).send(checkToken)
                             } else if (error) {
-                                console.log('error: ', error);
                                 return res.status(500).send('error: ', error)
                             }
                         });
                     }
                 } else if (error) {
-                    console.log('error: ', error);
                     return res.status(500).send('error: ', error)
                 } else {
                     checkToken.errorMessage = await translateSentence('Account not found', req);
@@ -313,20 +293,16 @@ module.exports = {
                 user.resetToken = token;
                 user.save(async error => {
                     if (error) {
-                        console.log('error:', error);
                         return res.status(500).send('error: ', error)
                     } else {
                         mailsUtils.resetMail(email, token);
-                        console.log('success: reset email sent');
                         checkData.successMessage = await translateSentence('Password reset mail send', req);
                         return res.status(200).send(checkData)
                     }
                 })
             } else if (error) {
-                console.log('error: ', error);
                 return res.status(500).send('error: ', error)
             } else {
-                console.log('error: invalid email provided');
                 checkData.errorMessage = await translateSentence('Invalid email provided', req);
                 return res.status(400).send(checkData)
             }
@@ -336,7 +312,6 @@ module.exports = {
         let checkPassword = {};
         let {password, confirm, resetToken} = req.body;
         if (!resetToken) {
-            console.log('error: invalid token provided');
             checkPassword.errorMessage = await translateSentence('Invalid token provided', req);
             return res.status(400).send(checkPassword)
         }
@@ -346,12 +321,10 @@ module.exports = {
             if (user) {
                 if (password && confirm) {
                     if (password !== confirm) {
-                        console.log('passwords do not match');
                         checkPassword.errorMessage = await translateSentence('Passwords do not match', req);
                         return res.status(400).send(checkPassword);
                     } else {
                         if (!schema.validate(password, {list: false})) {
-                            console.log('invalid password provided: missing ' + schema.validate(password, {list: true}));
                             checkPassword.errorMessage = await translateSentence('Invalid password provided: missing ' + schema.validate(password, {list: true}), req);
                             return res.status(400).send(checkPassword)
                         } else {
@@ -359,10 +332,8 @@ module.exports = {
                             user.resetToken = null;
                             user.save(async error => {
                                 if (error) {
-                                    console.log('error: ', error);
                                     return res.status(500).send('error: ', error)
                                 } else {
-                                    console.log('success: password updated');
                                     checkPassword.successMessage = await translateSentence('Password updated successfully', req);
                                     return res.status(200).send(checkPassword)
                                 }
@@ -370,15 +341,12 @@ module.exports = {
                         }
                     }
                 } else if (!password && confirm || password && !confirm) {
-                    console.log('missing password or confirm');
                     checkPassword.errorMessage = await translateSentence('Missing password or password confirmation', req);
                     return res.status(400).send(checkPassword)
                 }
             } else if (error) {
-                console.log('error: ', error);
                 return res.status(500).send('error: ', error)
             } else {
-                console.log('error: invalid token provided');
                 checkPassword.errorMessage = await translateSentence('Invalid token provided', req);
                 return res.status(400).send(checkPassword)
             }
@@ -393,7 +361,6 @@ module.exports = {
             let acc_id = connectedUser.acc_id;
             let {lang} = req.body;
             if (!acc_id || !lang) {
-                console.log('invalid request');
                 checkData.errorMessage = await translateSentence('Invalid request', req);
                 return res.status(400).send(checkData)
             } else {
@@ -401,10 +368,8 @@ module.exports = {
                     acc_id: acc_id
                 }, {lang: lang}).then(async (user, error) => {
                     if (error) {
-                        console.log('error: ', error);
                         return res.status(500).send('error: ', error)
                     } else if (user) {
-                        console.log('success: language updated');
                         checkData.successMessage = await translateSentence('Language updated', req);
                         const payload = {
                             acc_id: user.acc_id,
@@ -442,14 +407,12 @@ module.exports = {
                     acc_id: acc_id
                 }).then(async (user, error) => {
                     if (error) {
-                        console.log(error);
                         return res.status(401).send('error: ', error)
                     } else if (user) {
                         User.findOne({
                             acc_id: xss(user_id)
                         }).then(async (profile, error) => {
                             if (error) {
-                                console.log(error);
                                 return res.status(500).send('error: ', error);
                             } else if (profile) {
                                 return res.status(200).send({
@@ -487,7 +450,6 @@ module.exports = {
             res.status(200).send(resp.data);
         })
           .catch(err => {
-              console.log(err);
               return res.status(400).send('error');
           });
     },
