@@ -113,10 +113,10 @@ module.exports = {
         }
     },
     registerFailure: (req, res) => {
-        return res.status(409);
+        return res.status(409).end();
     },
     registerSuccess: (req, res) => {
-        return res.status(201);
+        return res.status(201).end();
     },
     authenticate:
         (req, res, next) => {

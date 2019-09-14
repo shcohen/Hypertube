@@ -48,7 +48,15 @@ const Register = (props) => {
     axios.post('/api/account/register', form)
       .then((res) => {
         console.log(res.data);
-        setFormData({...formData, success: true});
+        setFormData({...formData,
+          emailError: '',
+          usernameError: '',
+          passwordError: '',
+          confirmError: '',
+          firstnameError: '',
+          lastnameError: '',
+          profilePicError: '',
+          success: true});
       })
       .catch((err) => {
         setFormData({...formData, ...err.response.data});
