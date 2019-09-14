@@ -31,7 +31,9 @@ module.exports = {
     _CHANGE_PWD_BUTTON: "Modify",
     _VALIDATE_SUCCESS: "Your account is verified. You can now login.",
     _VALIDATE_ERROR: "Invalid link. Check the email we sent you.",
-    _FORGOT_SUCCESS: "Your password has been changed. You can now login."
+    _FORGOT_SUCCESS: "Your password has been changed. You can now login.",
+    _SUCCESS_MESSAGE: "Registered ! We sent you a verification email.",
+    _UPDATE_SUCCESS_MESSAGE: "Your infos have been updated !"
   },
   _PASSWORD_VALIDATOR: {
     _8_CHARS: "At least 8 characters.",

@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import axios from 'axios';
 
 import PasswordValidator from '../../Utilities/PasswordValidator/PasswordValidator';
+import AlertMessage from '../../Utilities/AlertMessage/AlertMessage';
 
 const Register = (props) => {
   let [formData, setFormData] = useState({
@@ -174,6 +175,7 @@ const Register = (props) => {
              value={formData.confirm}/><br/>
       {formData.confirmError !== '' && <p><i className="fas fa-times"/> {formData.confirmError}</p>}
       <input type="submit" value={' ' + t._REGISTER_BUTTON + ' '} disabled={formData.success} className={formData.success ? 'success' : ''}/>
+      {formData.success && <AlertMessage message={t._SUCCESS_MESSAGE}/>}
     </form>
   );
 };

@@ -6,6 +6,7 @@ import store from "../../store";
 import cookies from "../../utils/cookies";
 import {setCurrentUser} from "../../store/actions/auth";
 import PasswordValidator from '../Utilities/PasswordValidator/PasswordValidator';
+import AlertMessage from '../Utilities/AlertMessage/AlertMessage';
 
 import '../Home/home.css';
 import '../Home/Forms/home-forms.css';
@@ -28,7 +29,8 @@ const InfosForm = (props) => {
     confirmError: '',
     firstnameError: '',
     lastnameError: '',
-    profilePicError: ''
+    profilePicError: '',
+    success: false
   });
 
   const onInputChange = (e) => {
@@ -48,7 +50,7 @@ const InfosForm = (props) => {
     axios.put('/api/account/modify', form)
       .then((res) => {
         console.log(res.data);
-        setFormData({...formData, ...res.data});
+        setFormData({...formData, ...res.data, success: true});
         const jwtToken = cookies.get('jwtToken');
         if (jwtToken && jwtToken !== 'undefined') {
           setAuthToken(jwtToken);
@@ -171,6 +173,7 @@ const InfosForm = (props) => {
              value={formData.confirm}/><br/>
       {formData.confirmError !== '' && <p><i className="fas fa-times"/> {formData.confirmError}</p>}
       <input type="submit" value={' ' + t._UPDATE_INFOS + ' '}/>
+      {formData.success && <AlertMessage message={t._UPDATE_SUCCESS_MESSAGE} cb={() => setFormData({...formData, success: false})}/>}
     </form>
   );
 };
