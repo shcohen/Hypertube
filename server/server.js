@@ -17,7 +17,11 @@ new CronJob('0 0 * * * *', () => {
 }, null, true, 'Europe/Paris');
 
 // connecting to database
-mongoose.connect('mongodb+srv://root:root@hypertube-yfmfl.mongodb.net/Hypertube?retryWrites=true&w=majority', {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect('mongodb+srv://root:root@hypertube-yfmfl.mongodb.net/Hypertube?retryWrites=true&w=majority', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true
+})
   .then(() => {
       console.log('Connected to mongoDB')
   }).catch(e => {
