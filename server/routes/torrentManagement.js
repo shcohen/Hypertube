@@ -9,13 +9,13 @@ const {getUserInfos} = require('../utils/jwt_check');
 const {trackDownloadedMovies} = require('../utils/moviesUtils');
 
 module.exports = {
-    streamVideoWithConversion: (res, file, directoryName, start, end) => {
+    streamVideoWithConversion: (res, file) => {
         console.log('Streaming with conversion');
-        let stream = file.createReadStream({start, end});
+        let stream = file.createReadStream();
         let video = ffmpeg(stream)
-            .format('webm')
             .videoCodec('libvpx')
             .audioCodec('libvorbis')
+            .outputFormat('webm')
             .videoBitrate(1024)
             .audioBitrate(128)
             .outputOption(['-cpu-used 2',
@@ -42,7 +42,10 @@ module.exports = {
         console.log('Header writted !');
         pump(video, res);
     },
-    streamVideoWithoutConversion: (res, file, start, end) => {
+    streamVideoWithoutConversion: (res, file, range) => {
+        let parts = range.replace(/bytes=/, "").split("-");
+        let start = parts ? parseInt(parts[0], 10) : 0;
+        let end = parts && parts[1] ? parseInt(parts[1], 10) : file.length - 1;
         let stream = file.createReadStream({start, end});
         const head = {
             'Accept-Ranges': 'bytes',
@@ -54,15 +57,10 @@ module.exports = {
         pump(stream, res);
     },
     streamingCenter: (res, file, range, directoryName, filePath, movieId, options) => {
-        let parts = range.replace(/bytes=/, "").split("-");
-        let start = parts ? parseInt(parts[0], 10) : 0;
-        let end = parts && parts[1] ? parseInt(parts[1], 10) : file.length - 1;
-        if (parts !== undefined && parts.length && start !== undefined && end !== undefined) {
-            if (options.convert === false && options.downloaded === false) {
-                module.exports.streamVideoWithoutConversion(res, file, start, end)
-            } else if (options.convert === true) {
-                module.exports.streamVideoWithConversion(res, file, start, end);
-            }
+        if (options.convert === false && options.downloaded === false) {
+            module.exports.streamVideoWithoutConversion(res, file, range)
+        } else if (options.convert === true) {
+            module.exports.streamVideoWithConversion(res, file);
         }
     },
     torrentDownloader: (res, range, directoryName, magnet, movieId, options) => {
