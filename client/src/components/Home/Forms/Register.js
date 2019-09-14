@@ -18,7 +18,8 @@ const Register = (props) => {
     confirmError: '',
     firstnameError: '',
     lastnameError: '',
-    profilePicError: ''
+    profilePicError: '',
+    success: false
   });
 
   const onInputChange = (e) => {
@@ -47,6 +48,7 @@ const Register = (props) => {
     axios.post('/api/account/register', form)
       .then((res) => {
         console.log(res.data);
+        setFormData({...formData, success: true});
       })
       .catch((err) => {
         setFormData({...formData, ...err.response.data});
@@ -163,7 +165,7 @@ const Register = (props) => {
              onChange={onInputChange}
              value={formData.confirm}/><br/>
       {formData.confirmError !== '' && <p><i className="fas fa-times"/> {formData.confirmError}</p>}
-      <input type="submit" value={' ' + t._REGISTER_BUTTON + ' '}/>
+      <input type="submit" value={' ' + t._REGISTER_BUTTON + ' '} disabled={formData.success} className={formData.success ? 'success' : ''}/>
     </form>
   );
 };

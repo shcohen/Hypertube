@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const credentials = require('../config/private/config');
+const {templateEmail} = require('../template/email');
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -13,8 +14,10 @@ function mailOptions(email, token) {
     let mailOption = {
         from: 'hypertube-no-reply@gmail.com',
         to: email,
-        subject: 'Welcome to Hyper!',
-        html: '<p>Click <a href="http://localhost:3000?action=validate&token=' + token + '">here</a> to validate your account!</p>'
+        subject: 'HYPER - Account verification',
+        html: templateEmail('Welcome to HYPER!', 'Hi there!',
+          'We are pleased to count you as a new user of our website.\nBefore logging in for the first time, please verify your account by clicking the button below.',
+          'Verify my account', 'http://localhost:3000?action=validate&token=' + token)
     };
     return mailOption;
 }
@@ -23,10 +26,13 @@ let resetMail = (email, token) => {
     let mail = {
         from: 'hypertube.no.reply@gmail.com',
         to: email,
-        subject: 'Forgot your password? Let\'s get you a new one.',
-        html: '<p>You are receiving this e-mail because you requested a password reset for your Hyper account. Click ' +
-            '<a href="http://localhost:3000?action=forgot-password&token=' + token + '">here</a> ' +
-            'to set up a new password. If you are not the author of this request, please contact our support team.</p>'
+        subject: 'HYPER - Password reset',
+        html: templateEmail('Forgot your password? Let\'s get you a new one.', 'Hi there!',
+          'You are receiving this email because you requested a password reset for your Hyper account. Click the button below to set a new password.\nIf you are not the author of this request, please contact us.',
+          'Reset my password', 'http://localhost:3000?action=forgot-password&token=' + token)
+        // html: '<p>You are receiving this e-mail because you requested a password reset for your Hyper account. Click ' +
+        //     '<a href="http://localhost:3000?action=forgot-password&token=' + token + '">here</a> ' +
+        //     'to set up a new password. If you are not the author of this request, please contact our support team.</p>'
     };
     return mail;
 };
