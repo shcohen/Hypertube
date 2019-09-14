@@ -87,7 +87,7 @@ class MoviePage extends Component {
               <div className="side__download" style={{backgroundColor: `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`}}>
                 <h1 className="download__label">{t._SIDE_LABEL}</h1>
                 {movie.yts && movie.yts.torrents && movie.yts.torrents.map((torrent, i) => (
-                  <NavLink key={i} to={`/watch/${movie.imdbID}/${encodeURI(movie.Title)}/${torrent.hash}`}>
+                  <NavLink key={i} to={`/watch/${movie.imdbID}/${encodeURIComponent(movie.Title)}/${torrent.hash}`}>
                     <div className="download__torrent">
                       {torrent.type} {torrent.quality} <span>({torrent.size})</span>
                       <div className="download__p2p">
@@ -99,7 +99,7 @@ class MoviePage extends Component {
                   </NavLink>
                 ))}
                   {movie.popcornTime && movie.popcornTime.torrents && movie.popcornTime.torrents.map((torrent, i) => (
-                      <NavLink key={i} to={`/watch/${movie.imdbID}/${encodeURI(movie.Title)}/${torrent.hash}`}>
+                      <NavLink key={i} to={`/watch/${movie.imdbID}/${encodeURIComponent(movie.Title)}/${torrent.hash}`}>
                           <div className="download__torrent">
                               {torrent.type} {torrent.quality} <span>({torrent.size})</span>
                               <div className="download__p2p">
