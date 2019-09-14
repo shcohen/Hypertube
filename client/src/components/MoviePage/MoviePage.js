@@ -138,7 +138,7 @@ class MoviePage extends Component {
                   </div>
                   <div>
                     <div className="main__g_name">{t._GENRES}</div>
-                    <div className="main__g_text">{movie.Genre}</div>
+                    <div className="main__g_text">{movie.Genre && movie.Genre.map((g, i) => (g + (i === movie.Genre.length || g === 'N/A' ? ' ' : ',')))}</div>
                   </div>
                 </div>
                 <div className="main__group">
